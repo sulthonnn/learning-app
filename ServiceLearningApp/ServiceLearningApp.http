@@ -1,0 +1,6 @@
+@ServiceLearningApp_HostAddress = http://localhost:5110
+
+GET {{ServiceLearningApp_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
