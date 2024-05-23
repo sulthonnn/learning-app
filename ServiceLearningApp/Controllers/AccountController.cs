@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,8 +9,8 @@ using ServiceLearningApp.Data;
 using ServiceLearningApp.Model;
 using ServiceLearningApp.Model.Dto;
 using ServiceLearningApp.Security;
+using ServiceLearningApp.Validators;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net;
 using System.Security.Claims;
 
 namespace ServiceLearningApp.Controllers
@@ -44,16 +45,27 @@ namespace ServiceLearningApp.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginDto model)
         {
-            var user = await dbContext.Set<ApplicationUser>()
-                .Where(e => e.UserName == model.UserName || e.NISN == model.NISN)
-                .FirstOrDefaultAsync();
+            ApplicationUser? user = null;
+
+            // Attempt to find user by username
+            if (!string.IsNullOrEmpty(model.UserName))
+            {
+                user = await userManager.FindByNameAsync(model.UserName);
+            }
+
+            if (user == null && !string.IsNullOrEmpty(model.NISN))
+            {
+                user = await dbContext.Set<ApplicationUser>()
+                    .Where(e => e.NISN == model.NISN)
+                    .FirstOrDefaultAsync();
+            }
 
             if (user == null)
             {
                 return BadRequest(new
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
-                    Message = "Username atau password salah"
+                    Message = "Username atau NISN tidak ditemukan"
                 });
             }
 
@@ -76,6 +88,60 @@ namespace ServiceLearningApp.Controllers
                 accessToken = token
             });
         }
+
+        [HttpPost("register")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Register([FromBody] RegistrationDto model)
+        {
+            try
+            {
+                var validator = new RegistrationValidators();
+                await validator.ValidateAndThrowAsync(model);
+
+                var user = await CreateStudentUser(model);
+
+                return Ok(new { StatusCode = StatusCodes.Status200OK, Message = "Success", Data = user.Id });
+            }
+            catch (ValidationException ex)
+            {
+                var errorMessage = ex.Errors.FirstOrDefault()?.ErrorMessage;
+                return BadRequest(new { StatusCode = StatusCodes.Status400BadRequest, Message = errorMessage });
+            }
+            catch (BadHttpRequestException ex)
+            {
+                var statusCode = ex.StatusCode;
+                var errorMessage = ex.Message;
+                return BadRequest(new { StatusCode = statusCode, Message = errorMessage });
+            }
+        }
+
+        private async Task<ApplicationUser> CreateStudentUser(RegistrationDto model)
+        {
+            var existingUserWithNISN = await userManager.FindByNameAsync(model.UserName);
+            if (existingUserWithNISN != null)
+            {
+                throw new BadHttpRequestException("Username sudah digunakan.", 400);
+            }
+
+            var user = new ApplicationUser
+            {
+                UserName = model.UserName,
+                FullName = model.FullName,
+                NISN = model.NISN
+            };
+
+            var result = await userManager.CreateAsync(user, model.Password);
+            if (!result.Succeeded)
+            {
+                throw new BadHttpRequestException(result.Errors.First().Description);
+            }
+
+            var claims = new List<Claim>() { new Claim(ClaimTypes.Role, Role.Student) };
+            await userManager.AddClaimsAsync(user, claims);
+
+            return user;
+        }
+
 
         private string GenerateToken(DateTime expires, ClaimsIdentity claims)
         {
@@ -113,7 +179,7 @@ namespace ServiceLearningApp.Controllers
             var isActivated = user.EmailConfirmed || user.PhoneNumberConfirmed;
 
             var id = new ClaimsIdentity(claims);
-            id.AddClaim(new Claim(ClaimTypes.Email, user.Email));
+            id.AddClaim(new Claim(ClaimTypes.Email, user.Email ?? string.Empty));
             id.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id));
             id.AddClaim(new Claim("NISN", user.NISN ?? string.Empty));
             id.AddClaim(new Claim("fullName", user.FullName ?? string.Empty));
