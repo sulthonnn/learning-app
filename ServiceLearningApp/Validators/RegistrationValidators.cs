@@ -5,9 +5,9 @@ namespace ServiceLearningApp.Validators
 {
     public class RegistrationValidators : AbstractValidator<RegistrationDto>
     {
-        private readonly string EmptyUserName = "Username tidak boleh kosong";
-        private readonly string EmptyFullName = "Nama lengkap tidak boleh kosong";
-        private readonly string EmptyNISN = "NISN tidak boleh kosong";
+        private readonly string EmptyUserName = "Username tidak boleh kosong.";
+        private readonly string EmptyFullName = "Nama lengkap tidak boleh kosong.";
+        private readonly string EmptyNISN = "NISN tidak boleh kosong.";
         private readonly string EmptyPassword = "Kata sandi tidak boleh kosong.";
         private readonly string EmptyPasswordRepeat = "Ulangi kata sandi tidak boleh kosong.";
         private readonly string PasswordNotEqual = "Kata sandi dan ulangi kata sandi harus sama.";
