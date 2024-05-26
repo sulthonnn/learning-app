@@ -10,9 +10,9 @@ namespace ServiceLearningApp.Model
         public int Score { get; set; }
 
 
-        [ForeignKey(nameof(FkExerciseId))]
-        public Exercise? Exercise { get; set; }
-        public int FkExerciseId { get; set; }
+        [ForeignKey(nameof(FkSubChapterId))]
+        public SubChapter? SubChapter { get; set; }
+        public int FkSubChapterId { get; set; }
 
         [ForeignKey(nameof(FkUserId))]
         public ApplicationUser? User { get; set; }

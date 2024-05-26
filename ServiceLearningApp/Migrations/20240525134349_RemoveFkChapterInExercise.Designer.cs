@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ServiceLearningApp.Data;
@@ -11,9 +12,11 @@ using ServiceLearningApp.Data;
 namespace ServiceLearningApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240525134349_RemoveFkChapterInExercise")]
+    partial class RemoveFkChapterInExercise
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -255,6 +258,40 @@ namespace ServiceLearningApp.Migrations
                     b.ToTable("Chapters");
                 });
 
+            modelBuilder.Entity("ServiceLearningApp.Model.Exercise", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<int>("FkSubChapterId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FkSubChapterId");
+
+                    b.ToTable("Exercises");
+                });
+
             modelBuilder.Entity("ServiceLearningApp.Model.ExerciseTransaction", b =>
                 {
                     b.Property<int>("Id")
@@ -266,7 +303,7 @@ namespace ServiceLearningApp.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("FkSubChapterId")
+                    b.Property<int>("FkExerciseId")
                         .HasColumnType("integer");
 
                     b.Property<string>("FkUserId")
@@ -281,7 +318,7 @@ namespace ServiceLearningApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FkSubChapterId");
+                    b.HasIndex("FkExerciseId");
 
                     b.HasIndex("FkUserId");
 
@@ -340,12 +377,13 @@ namespace ServiceLearningApp.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("FeedBack")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("FkImageId")
+                    b.Property<int>("FkExerciseId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("FkSubChapterId")
+                    b.Property<int>("FkImageId")
                         .HasColumnType("integer");
 
                     b.Property<string>("QuestionText")
@@ -360,9 +398,9 @@ namespace ServiceLearningApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FkImageId");
+                    b.HasIndex("FkExerciseId");
 
-                    b.HasIndex("FkSubChapterId");
+                    b.HasIndex("FkImageId");
 
                     b.ToTable("Questions");
                 });
@@ -384,7 +422,7 @@ namespace ServiceLearningApp.Migrations
                     b.Property<int>("FkChapterId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("FkImageId")
+                    b.Property<int>("FkImageId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Reference")
@@ -485,11 +523,22 @@ namespace ServiceLearningApp.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ServiceLearningApp.Model.ExerciseTransaction", b =>
+            modelBuilder.Entity("ServiceLearningApp.Model.Exercise", b =>
                 {
                     b.HasOne("ServiceLearningApp.Model.SubChapter", "SubChapter")
                         .WithMany()
                         .HasForeignKey("FkSubChapterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SubChapter");
+                });
+
+            modelBuilder.Entity("ServiceLearningApp.Model.ExerciseTransaction", b =>
+                {
+                    b.HasOne("ServiceLearningApp.Model.Exercise", "Exercise")
+                        .WithMany()
+                        .HasForeignKey("FkExerciseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -499,7 +548,7 @@ namespace ServiceLearningApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("SubChapter");
+                    b.Navigation("Exercise");
 
                     b.Navigation("User");
                 });
@@ -517,19 +566,21 @@ namespace ServiceLearningApp.Migrations
 
             modelBuilder.Entity("ServiceLearningApp.Model.Question", b =>
                 {
-                    b.HasOne("ServiceLearningApp.Model.Upload", "Image")
+                    b.HasOne("ServiceLearningApp.Model.Exercise", "Exercise")
                         .WithMany()
-                        .HasForeignKey("FkImageId");
-
-                    b.HasOne("ServiceLearningApp.Model.SubChapter", "SubChapter")
-                        .WithMany()
-                        .HasForeignKey("FkSubChapterId")
+                        .HasForeignKey("FkExerciseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Image");
+                    b.HasOne("ServiceLearningApp.Model.Upload", "Image")
+                        .WithMany()
+                        .HasForeignKey("FkImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("SubChapter");
+                    b.Navigation("Exercise");
+
+                    b.Navigation("Image");
                 });
 
             modelBuilder.Entity("ServiceLearningApp.Model.SubChapter", b =>
@@ -542,7 +593,9 @@ namespace ServiceLearningApp.Migrations
 
                     b.HasOne("ServiceLearningApp.Model.Upload", "Image")
                         .WithMany()
-                        .HasForeignKey("FkImageId");
+                        .HasForeignKey("FkImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Chapter");
 

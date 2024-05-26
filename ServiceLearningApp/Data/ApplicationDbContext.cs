@@ -17,7 +17,6 @@ namespace ServiceLearningApp.Data
         public DbSet<Option> Options { get; set; }
         public DbSet<Chapter> Chapters { get; set; }
         public DbSet<SubChapter> SubChapters { get; set; }
-        public DbSet<Exercise> Exercises { get; set; }
         public DbSet<ExerciseTransaction> ExerciseTransactions { get; set; }
         public DbSet<Upload> Uploads { get; set; }
 

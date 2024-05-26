@@ -1,0 +1,352 @@
+[
+  {
+    "QuestionText": "Prinsip desain ada ?",
+    "FeedBack": "Jawab: c",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Prinsip yang mengatur elemen visual agar terlihat seimbang dan harmonis adalah ?",
+    "FeedBack": "Jawab: c",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Emphasis adalah penggunaan elemen yang ?",
+    "FeedBack": "Jawab: a",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Dibawah ini yang termasuk elemen desain adalah ?",
+    "FeedBack": "Jawab: e",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Elemen desain yang menunjukkan tampilan atau permukaan visual yang dapat memebrikan dimensi tembahan, disebut ?",
+    "FeedBack": "Jawab: b",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Elemen desain yang mengacu pada kejelasan dan kekuatan visual adalah ?",
+    "FeedBack": "Jawab: d",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Desain komunikasi visual merupakan cabang ilmu dari ?",
+    "FeedBack": "Jawab: a",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Di bawah ini yang termasuk fungsi DKV, kecuali ?",
+    "FeedBack": "Jawab: d",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Shortcut keyboar untuk menduplikat objek di Adobe illustrator adalah ?",
+    "FeedBack": "Jawab: a",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Orang yang menjadi komunikan dalam perancangan desain komunikasi visual adalah ?",
+    "FeedBack": "Jawab: e",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Membuat desain menjadi lebih bermakna merupakan peran dari ?",
+    "FeedBack": "Jawab: c",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Yang termasuk fungsi dari media komunikasi adalah ?",
+    "FeedBack": "Jawab: b",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Hubungan antara komunikator dan komunikan dalam perancangan DKV, yaitu ?",
+    "FeedBack": "Jawab: a",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Orang yang membuat desain brief adalah ?",
+    "FeedBack": "Jawab: b",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Tujuan dari desain brief, kecuali ?",
+    "FeedBack": "Jawab: c",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Hal penting dalam menyimpulkan ruang lingkup desain, kecuali ?",
+    "FeedBack": "Jawab: a",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Contoh dari media desain above the line adalah",
+    "FeedBack": "Jawab: e",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Shortcut keyboard Adobe Illustrator Ctrl + [ digunakan untuk",
+    "FeedBack": "Jawab: b",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Proses yang dilakukan desainer setelah mendapat desain brief adalah ?",
+    "FeedBack": "Jawab: d",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Alasan desain brief dalam proses desain, adalah ?",
+    "FeedBack": "Jawab: b",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Fungsi dari sebuah logo adalah ?",
+    "FeedBack": "Jawab: e",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Yang termasuk kriteria logo adalah ?",
+    "FeedBack": "Jawab: d",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Pernyataan yang benar di bawah ini adalah ?",
+    "FeedBack": "Jawab: a",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Arti kesederhanaan dalam desain logo, kecuali ?",
+    "FeedBack": "Jawab: e",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Shortcut untuk selection tool dan direct selection tool di adobe illustrator adalah ?",
+    "FeedBack": "Jawab: c",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Jenis logo ada ?",
+    "FeedBack": "Jawab: e",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Urutan jenis logo di atas mulai dari kiri ke kanan, adalah ?",
+    "FeedBack": "Jawab: b",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Shift+C di AI merupakan shortcut dari ?",
+    "FeedBack": "Jawab: a",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Pernyataan yang tidak tepat di bawah ini adalah ?",
+    "FeedBack": "Jawab: d",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Di bawah ini yang termasuk elemen packaging, kecuali ?",
+    "FeedBack": "Jawab: c",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Alasan paling tepat mengapa packaging bisa menjadi alat promosi adalah ?",
+    "FeedBack": "Jawab: e",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Keuntungan dari packaging yang dibuat menarik secara visual adalah ?",
+    "FeedBack": "Jawab: e",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Produk yang umumnya bisa menggunakan kemasan karton, plastic, kaleng, kertas, dan kaca, adalah ?",
+    "FeedBack": "Jawab: a",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Tool untuk menggambar dengan efek seperti kuas cat, disebut ?",
+    "FeedBack": "Jawab: e",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Kemasan yang langsung melindungi produk atau yang langsung bersentuhan dengan produk disebut kemasan ?",
+    "FeedBack": "Jawab: b",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Produk yang biasanya menggunakan kemasan blitser, kecuali ?",
+    "FeedBack": "Jawab: e",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Fungsi dari ?Eyedropper Tool? dalam Adobe Illustrator adalah ?",
+    "FeedBack": "Jawab: a",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Pengertian dari website adalah ?",
+    "FeedBack": "Jawab: d",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Hosting dalam konteks website adalah ?",
+    "FeedBack": "Jawab: e",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Perbedaan antara website statis dan website dinamis adalah ?",
+    "FeedBack": "Jawab: b",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Berapa banyak jenis ? jenis website ?",
+    "FeedBack": "Jawab: c",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Website yang digunakan untuk membangun citra dan identitas dari sebuah perusahaan, merupakan pengertian dari ?",
+    "FeedBack": "Jawab: a",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Contoh website pendidikan adalah ?",
+    "FeedBack": "Jawab: e",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Pernyataan di bawah ini yang benar tentang user interface adalah ?",
+    "FeedBack": "Jawab: b",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Pernyataan di bawah ini yang benar tentang user experience adalah ?",
+    "FeedBack": "Jawab: c",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Perbedaan antara user interface dan user experience, yaitu ?",
+    "FeedBack": "Jawab: d",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Yang termasuk komponen user interface, yaitu ?",
+    "FeedBack": "Jawab: a",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Tempat atau bagian yang digunakan desainer untuk membuat atau memasukkan konten ke dalam website, disebut ?",
+    "FeedBack": "Jawab: c",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Arti 'purposeful' dalam UI goals adalah ?",
+    "FeedBack": "Jawab: e",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  },
+  {
+    "QuestionText": "Tool yang digunakan untuk membuat garis lurus adalah ?",
+    "FeedBack": "Jawab: d",
+    "Image": null,
+    "FkImageId": null,
+    "FkExerciseId": 1
+  }
+]

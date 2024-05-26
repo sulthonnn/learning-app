@@ -107,9 +107,20 @@ app.UseAuthorization();
 app.MapControllers();
 
 // initialize the database
-using (var scope = app.Services.CreateScope())
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+var dbContext = services.GetRequiredService<ApplicationDbContext>();
+var logger = services.GetRequiredService<ILogger<Program>>();
+
+try
 {
     await DbInitializer.InitializeAsync(scope.ServiceProvider);
+    await DbContextSeed.SeedAsync(dbContext);
 }
+catch (Exception e)
+{
+    logger.LogError(e, "An error occured during migrations");
+}
+
 
 app.Run();

@@ -1,0 +1,1252 @@
+[
+  {
+    "OptionText": "6",
+    "IsAnswer": false,
+    "FkQuestionId": 1
+  },
+  {
+    "OptionText": "7",
+    "IsAnswer": false,
+    "FkQuestionId": 1
+  },
+  {
+    "OptionText": "8",
+    "IsAnswer": true,
+    "FkQuestionId": 1
+  },
+  {
+    "OptionText": "9",
+    "IsAnswer": false,
+    "FkQuestionId": 1
+  },
+  {
+    "OptionText": "10",
+    "IsAnswer": false,
+    "FkQuestionId": 1
+  },
+  {
+    "OptionText": "Proporsi",
+    "IsAnswer": false,
+    "FkQuestionId": 2
+  },
+  {
+    "OptionText": "Rhythm",
+    "IsAnswer": false,
+    "FkQuestionId": 2
+  },
+  {
+    "OptionText": "Komposisi",
+    "IsAnswer": true,
+    "FkQuestionId": 2
+  },
+  {
+    "OptionText": "Kontras",
+    "IsAnswer": false,
+    "FkQuestionId": 2
+  },
+  {
+    "OptionText": "Simetri",
+    "IsAnswer": false,
+    "FkQuestionId": 2
+  },
+  {
+    "OptionText": "Menarik perhatian",
+    "IsAnswer": true,
+    "FkQuestionId": 3
+  },
+  {
+    "OptionText": "Menciptakan ilusi",
+    "IsAnswer": false,
+    "FkQuestionId": 3
+  },
+  {
+    "OptionText": "Menciptakan keseimbangan",
+    "IsAnswer": false,
+    "FkQuestionId": 3
+  },
+  {
+    "OptionText": "Utuh dan harmonis",
+    "IsAnswer": false,
+    "FkQuestionId": 3
+  },
+  {
+    "OptionText": "Menciptakan pola",
+    "IsAnswer": false,
+    "FkQuestionId": 3
+  },
+  {
+    "OptionText": "Garis, bentuk, kontras, nilai",
+    "IsAnswer": false,
+    "FkQuestionId": 4
+  },
+  {
+    "OptionText": "Bentuk, tekstur, rhythm, movement",
+    "IsAnswer": false,
+    "FkQuestionId": 4
+  },
+  {
+    "OptionText": "Warna, kontras, ruang, rhythm",
+    "IsAnswer": false,
+    "FkQuestionId": 4
+  },
+  {
+    "OptionText": "Ukuran, proporsi, warna, teksture",
+    "IsAnswer": false,
+    "FkQuestionId": 4
+  },
+  {
+    "OptionText": "Bentuk, nilai, ruang, ukuran",
+    "IsAnswer": true,
+    "FkQuestionId": 4
+  },
+  {
+    "OptionText": "Bentuk",
+    "IsAnswer": false,
+    "FkQuestionId": 5
+  },
+  {
+    "OptionText": "Tekstur",
+    "IsAnswer": true,
+    "FkQuestionId": 5
+  },
+  {
+    "OptionText": "Nilai",
+    "IsAnswer": false,
+    "FkQuestionId": 5
+  },
+  {
+    "OptionText": "Ruang",
+    "IsAnswer": false,
+    "FkQuestionId": 5
+  },
+  {
+    "OptionText": "Warna",
+    "IsAnswer": false,
+    "FkQuestionId": 5
+  },
+  {
+    "OptionText": "Warna",
+    "IsAnswer": false,
+    "FkQuestionId": 6
+  },
+  {
+    "OptionText": "Bentuk",
+    "IsAnswer": false,
+    "FkQuestionId": 6
+  },
+  {
+    "OptionText": "Tektur",
+    "IsAnswer": false,
+    "FkQuestionId": 6
+  },
+  {
+    "OptionText": "Garis",
+    "IsAnswer": true,
+    "FkQuestionId": 6
+  },
+  {
+    "OptionText": "Nilai",
+    "IsAnswer": false,
+    "FkQuestionId": 6
+  },
+  {
+    "OptionText": "Desain",
+    "IsAnswer": true,
+    "FkQuestionId": 7
+  },
+  {
+    "OptionText": "Seni",
+    "IsAnswer": false,
+    "FkQuestionId": 7
+  },
+  {
+    "OptionText": "Gambar",
+    "IsAnswer": false,
+    "FkQuestionId": 7
+  },
+  {
+    "OptionText": "Visual",
+    "IsAnswer": false,
+    "FkQuestionId": 7
+  },
+  {
+    "OptionText": "Kesenian",
+    "IsAnswer": false,
+    "FkQuestionId": 7
+  },
+  {
+    "OptionText": "Sarana identifikasi",
+    "IsAnswer": false,
+    "FkQuestionId": 8
+  },
+  {
+    "OptionText": "Sarana informasi",
+    "IsAnswer": false,
+    "FkQuestionId": 8
+  },
+  {
+    "OptionText": "Sarana intruksi",
+    "IsAnswer": false,
+    "FkQuestionId": 8
+  },
+  {
+    "OptionText": "Sarana belajar",
+    "IsAnswer": false,
+    "FkQuestionId": 8
+  },
+  {
+    "OptionText": "Sarana promosi",
+    "IsAnswer": true,
+    "FkQuestionId": 8
+  },
+  {
+    "OptionText": "Ctrl + D",
+    "IsAnswer": true,
+    "FkQuestionId": 9
+  },
+  {
+    "OptionText": "Ctrl + R",
+    "IsAnswer": false,
+    "FkQuestionId": 9
+  },
+  {
+    "OptionText": "Ctrl + A",
+    "IsAnswer": false,
+    "FkQuestionId": 9
+  },
+  {
+    "OptionText": "Ctrl + G",
+    "IsAnswer": false,
+    "FkQuestionId": 9
+  },
+  {
+    "OptionText": "Ctrl + T",
+    "IsAnswer": false,
+    "FkQuestionId": 9
+  },
+  {
+    "OptionText": "Klien",
+    "IsAnswer": false,
+    "FkQuestionId": 10
+  },
+  {
+    "OptionText": "Pengguna produk",
+    "IsAnswer": false,
+    "FkQuestionId": 10
+  },
+  {
+    "OptionText": "Masyarakat",
+    "IsAnswer": false,
+    "FkQuestionId": 10
+  },
+  {
+    "OptionText": "Audiens",
+    "IsAnswer": false,
+    "FkQuestionId": 10
+  },
+  {
+    "OptionText": "Desainer",
+    "IsAnswer": true,
+    "FkQuestionId": 10
+  },
+  {
+    "OptionText": "Komunikasi",
+    "IsAnswer": false,
+    "FkQuestionId": 11
+  },
+  {
+    "OptionText": "Media komunikasi",
+    "IsAnswer": false,
+    "FkQuestionId": 11
+  },
+  {
+    "OptionText": "Komunikan",
+    "IsAnswer": true,
+    "FkQuestionId": 11
+  },
+  {
+    "OptionText": "Komunikator",
+    "IsAnswer": false,
+    "FkQuestionId": 11
+  },
+  {
+    "OptionText": "Alat komunikasi",
+    "IsAnswer": false,
+    "FkQuestionId": 11
+  },
+  {
+    "OptionText": "Menyimpulkan pesan",
+    "IsAnswer": false,
+    "FkQuestionId": 12
+  },
+  {
+    "OptionText": "Meningkatkan minat audiens",
+    "IsAnswer": true,
+    "FkQuestionId": 12
+  },
+  {
+    "OptionText": "Menentukan tujuan pesan",
+    "IsAnswer": false,
+    "FkQuestionId": 12
+  },
+  {
+    "OptionText": "Menerima umpan balik",
+    "IsAnswer": false,
+    "FkQuestionId": 12
+  },
+  {
+    "OptionText": "Memahami pesan",
+    "IsAnswer": false,
+    "FkQuestionId": 12
+  },
+  {
+    "OptionText": "Komunikator membuat desain, komunikan hanya menerima pesan",
+    "IsAnswer": false,
+    "FkQuestionId": 13
+  },
+  {
+    "OptionText": "Komunikator dan komunikan saling bertukar pesan",
+    "IsAnswer": false,
+    "FkQuestionId": 13
+  },
+  {
+    "OptionText": "Komunikator dan komunikan membuat desain bersama",
+    "IsAnswer": false,
+    "FkQuestionId": 13
+  },
+  {
+    "OptionText": "Komunikan membuat desain, komunikator hanya menerima pesan",
+    "IsAnswer": true,
+    "FkQuestionId": 13
+  },
+  {
+    "OptionText": "Komunikan membuat desain, komunikator yang memberi saran",
+    "IsAnswer": false,
+    "FkQuestionId": 13
+  },
+  {
+    "OptionText": "Desainer, co-ownership, anak dkv",
+    "IsAnswer": false,
+    "FkQuestionId": 14
+  },
+  {
+    "OptionText": "Ownership, skateholder, script witer",
+    "IsAnswer": true,
+    "FkQuestionId": 14
+  },
+  {
+    "OptionText": "Masyarakat, klien, skateholder",
+    "IsAnswer": false,
+    "FkQuestionId": 14
+  },
+  {
+    "OptionText": "Script writer, pihak ketiga, audiens",
+    "IsAnswer": false,
+    "FkQuestionId": 14
+  },
+  {
+    "OptionText": "Desainer, audiens, ownership",
+    "IsAnswer": false,
+    "FkQuestionId": 14
+  },
+  {
+    "OptionText": "Memberikan intruksi yang jelas kepada desainer",
+    "IsAnswer": false,
+    "FkQuestionId": 15
+  },
+  {
+    "OptionText": "Menggambarkan konsep visual yang diinginkan",
+    "IsAnswer": false,
+    "FkQuestionId": 15
+  },
+  {
+    "OptionText": "Memberikan informasi yang tidak berhubungan dengan desain",
+    "IsAnswer": true,
+    "FkQuestionId": 15
+  },
+  {
+    "OptionText": "Menyampaikan pesan dan tujuan proyek desain",
+    "IsAnswer": false,
+    "FkQuestionId": 15
+  },
+  {
+    "OptionText": "Memeberikan data dan imformasi selengkap mungkin untuk kebutuhan desain",
+    "IsAnswer": false,
+    "FkQuestionId": 15
+  },
+  {
+    "OptionText": "Profil",
+    "IsAnswer": true,
+    "FkQuestionId": 16
+  },
+  {
+    "OptionText": "Deadline",
+    "IsAnswer": false,
+    "FkQuestionId": 16
+  },
+  {
+    "OptionText": "Tenggat waktu",
+    "IsAnswer": false,
+    "FkQuestionId": 16
+  },
+  {
+    "OptionText": "Ketentuan khusus",
+    "IsAnswer": false,
+    "FkQuestionId": 16
+  },
+  {
+    "OptionText": "Biaya",
+    "IsAnswer": false,
+    "FkQuestionId": 16
+  },
+  {
+    "OptionText": "Majalah",
+    "IsAnswer": true,
+    "FkQuestionId": 17
+  },
+  {
+    "OptionText": "Koran",
+    "IsAnswer": true,
+    "FkQuestionId": 17
+  },
+  {
+    "OptionText": "Brosur",
+    "IsAnswer": true,
+    "FkQuestionId": 17
+  },
+  {
+    "OptionText": "Postingan media social",
+    "IsAnswer": true,
+    "FkQuestionId": 17
+  },
+  {
+    "OptionText": "Semua benar",
+    "IsAnswer": false,
+    "FkQuestionId": 17
+  },
+  {
+    "OptionText": "Mengatur opacity pada objek",
+    "IsAnswer": false,
+    "FkQuestionId": 18
+  },
+  {
+    "OptionText": "Mengatur ukuran brush",
+    "IsAnswer": true,
+    "FkQuestionId": 18
+  },
+  {
+    "OptionText": "Mengganti warna stroke",
+    "IsAnswer": false,
+    "FkQuestionId": 18
+  },
+  {
+    "OptionText": "Mengubah warna pada objek",
+    "IsAnswer": false,
+    "FkQuestionId": 18
+  },
+  {
+    "OptionText": "Memperbesar shape",
+    "IsAnswer": false,
+    "FkQuestionId": 18
+  },
+  {
+    "OptionText": "Penguraian proyek secara mendasar",
+    "IsAnswer": false,
+    "FkQuestionId": 19
+  },
+  {
+    "OptionText": "Mencari tujuan desain",
+    "IsAnswer": false,
+    "FkQuestionId": 19
+  },
+  {
+    "OptionText": "Langsung eksekusi desain",
+    "IsAnswer": false,
+    "FkQuestionId": 19
+  },
+  {
+    "OptionText": "Menentukan target audiens",
+    "IsAnswer": true,
+    "FkQuestionId": 19
+  },
+  {
+    "OptionText": "Mengerjakan secara bergantian",
+    "IsAnswer": false,
+    "FkQuestionId": 19
+  },
+  {
+    "OptionText": "Agar komunikasi antara desainer dan klien tidak berlangsung lama",
+    "IsAnswer": false,
+    "FkQuestionId": 20
+  },
+  {
+    "OptionText": "Agar tujuan dan desain yang diinginkan klien tercapai",
+    "IsAnswer": true,
+    "FkQuestionId": 20
+  },
+  {
+    "OptionText": "Agar dapat merevisi terus menerus",
+    "IsAnswer": false,
+    "FkQuestionId": 20
+  },
+  {
+    "OptionText": "Agar klien tidak usah menjelaskan secara langsung kepada desainer tentang desain yang diinginkan",
+    "IsAnswer": false,
+    "FkQuestionId": 20
+  },
+  {
+    "OptionText": "Agar desainer tidak banyak bertanya kepada klien",
+    "IsAnswer": false,
+    "FkQuestionId": 20
+  },
+  {
+    "OptionText": "Pengutara emosi, sarana pengawas, sarana presentasi",
+    "IsAnswer": true,
+    "FkQuestionId": 21
+  },
+  {
+    "OptionText": "Sarana presentasi, sarana pengontrol, gaya",
+    "IsAnswer": false,
+    "FkQuestionId": 21
+  },
+  {
+    "OptionText": "Branding, motivasi, curahan hati",
+    "IsAnswer": false,
+    "FkQuestionId": 21
+  },
+  {
+    "OptionText": "Sarana informasi, gaya, pengutara emosi",
+    "IsAnswer": false,
+    "FkQuestionId": 21
+  },
+  {
+    "OptionText": "Branding, curahan hati, motivasi",
+    "IsAnswer": false,
+    "FkQuestionId": 21
+  },
+  {
+    "OptionText": "Serba guna, pasaran, mudah diingat",
+    "IsAnswer": false,
+    "FkQuestionId": 22
+  },
+  {
+    "OptionText": "Mudah diingat, susah, tahan lama",
+    "IsAnswer": false,
+    "FkQuestionId": 22
+  },
+  {
+    "OptionText": "Sederhana, susah, unik",
+    "IsAnswer": false,
+    "FkQuestionId": 22
+  },
+  {
+    "OptionText": "Diterima Masyarakat, tahan lama, unik",
+    "IsAnswer": true,
+    "FkQuestionId": 22
+  },
+  {
+    "OptionText": "Serba guna, pasaran, mudah diingat",
+    "IsAnswer": false,
+    "FkQuestionId": 22
+  },
+  {
+    "OptionText": "Logo harus dibuat secara unik agar mudah diingat oleh masyarakat",
+    "IsAnswer": true,
+    "FkQuestionId": 23
+  },
+  {
+    "OptionText": "Logo harus dibuat serumit mungkin agar tidak mudah ditiru oleh Perusahaan lain",
+    "IsAnswer": false,
+    "FkQuestionId": 23
+  },
+  {
+    "OptionText": "Logo dibuat sesuai dengan gaya yang sedang terjadi di pasaran",
+    "IsAnswer": false,
+    "FkQuestionId": 23
+  },
+  {
+    "OptionText": "Logo dibuat sesuka hati desainer tanpa memikirnya makna logo",
+    "IsAnswer": false,
+    "FkQuestionId": 23
+  },
+  {
+    "OptionText": "Logo harus terdiri dari gambar, kata, dan banyak warna",
+    "IsAnswer": false,
+    "FkQuestionId": 23
+  },
+  {
+    "OptionText": "Arti kesederhanaan dalam desain logo, kecuali �",
+    "IsAnswer": true,
+    "FkQuestionId": 24
+  },
+  {
+    "OptionText": "Menggunakan sedikit warna dan elemen",
+    "IsAnswer": false,
+    "FkQuestionId": 24
+  },
+  {
+    "OptionText": "Desain mudah diingat oleh Masyarakat",
+    "IsAnswer": false,
+    "FkQuestionId": 24
+  },
+  {
+    "OptionText": "Tidak menggunakan detail yang berlebih",
+    "IsAnswer": false,
+    "FkQuestionId": 24
+  },
+  {
+    "OptionText": "Pesan dapat tersampaikan dengan baik",
+    "IsAnswer": false,
+    "FkQuestionId": 24
+  },
+  {
+    "OptionText": "V dan D",
+    "IsAnswer": false,
+    "FkQuestionId": 25
+  },
+  {
+    "OptionText": "A dan D",
+    "IsAnswer": false,
+    "FkQuestionId": 25
+  },
+  {
+    "OptionText": "V dan A",
+    "IsAnswer": false,
+    "FkQuestionId": 25
+  },
+  {
+    "OptionText": "A dan V",
+    "IsAnswer": false,
+    "FkQuestionId": 25
+  },
+  {
+    "OptionText": "D dan V",
+    "IsAnswer": true,
+    "FkQuestionId": 25
+  },
+  {
+    "OptionText": "5",
+    "IsAnswer": false,
+    "FkQuestionId": 26
+  },
+  {
+    "OptionText": "6",
+    "IsAnswer": false,
+    "FkQuestionId": 26
+  },
+  {
+    "OptionText": "9",
+    "IsAnswer": false,
+    "FkQuestionId": 26
+  },
+  {
+    "OptionText": "8",
+    "IsAnswer": false,
+    "FkQuestionId": 26
+  },
+  {
+    "OptionText": "7",
+    "IsAnswer": true,
+    "FkQuestionId": 26
+  },
+  {
+    "OptionText": "Lettermark, pictorial mark, wordmark, pictorial mark",
+    "IsAnswer": false,
+    "FkQuestionId": 27
+  },
+  {
+    "OptionText": "Lettermark, abstract, wordmark, pictorial mark",
+    "IsAnswer": true,
+    "FkQuestionId": 27
+  },
+  {
+    "OptionText": "Lettermark, pictorial mark, wordmark, abstract",
+    "IsAnswer": false,
+    "FkQuestionId": 27
+  },
+  {
+    "OptionText": "Abstract, pictorial mark, wordmark, abstract",
+    "IsAnswer": false,
+    "FkQuestionId": 27
+  },
+  {
+    "OptionText": "Lettermark, abstract, wordmark, abstract",
+    "IsAnswer": false,
+    "FkQuestionId": 27
+  },
+  {
+    "OptionText": "Anchor point tool",
+    "IsAnswer": true,
+    "FkQuestionId": 28
+  },
+  {
+    "OptionText": "Curvature tool",
+    "IsAnswer": false,
+    "FkQuestionId": 28
+  },
+  {
+    "OptionText": "Copy",
+    "IsAnswer": false,
+    "FkQuestionId": 28
+  },
+  {
+    "OptionText": "Eraser tool",
+    "IsAnswer": false,
+    "FkQuestionId": 28
+  },
+  {
+    "OptionText": "Artboard tool",
+    "IsAnswer": false,
+    "FkQuestionId": 28
+  },
+  {
+    "OptionText": "Kemasan dibuat agar produk yang dikemas terlindungi kualitasnya",
+    "IsAnswer": false,
+    "FkQuestionId": 29
+  },
+  {
+    "OptionText": "Kemasan bertujuan agar produk aman dalam penyimpanan dan pengiriman",
+    "IsAnswer": false,
+    "FkQuestionId": 29
+  },
+  {
+    "OptionText": "Kemasan harus sesuai dengan produk yang dikemas",
+    "IsAnswer": false,
+    "FkQuestionId": 29
+  },
+  {
+    "OptionText": "Kemasan dibuat dari bahan seadanya",
+    "IsAnswer": true,
+    "FkQuestionId": 29
+  },
+  {
+    "OptionText": "Kemasan dibuat agar lebih menarik perhatian pembeli",
+    "IsAnswer": false,
+    "FkQuestionId": 29
+  },
+  {
+    "OptionText": "Materi kemasan, warna, bentuk",
+    "IsAnswer": false,
+    "FkQuestionId": 30
+  },
+  {
+    "OptionText": "Ukuran, label, keamanan",
+    "IsAnswer": false,
+    "FkQuestionId": 30
+  },
+  {
+    "OptionText": "Materi kemasan, lubang, tipografi",
+    "IsAnswer": false,
+    "FkQuestionId": 30
+  },
+  {
+    "OptionText": "Tata letak, ukuran, bentuk",
+    "IsAnswer": false,
+    "FkQuestionId": 30
+  },
+  {
+    "OptionText": "Tidak ada yang benar",
+    "IsAnswer": true,
+    "FkQuestionId": 30
+  },
+  {
+    "OptionText": "Karena desain packging dapat menarik perhatian orang lain",
+    "IsAnswer": false,
+    "FkQuestionId": 31
+  },
+  {
+    "OptionText": "Karena packaging ada di luar produk",
+    "IsAnswer": false,
+    "FkQuestionId": 31
+  },
+  {
+    "OptionText": "Karena packaging terlihat oleh orang laing",
+    "IsAnswer": false,
+    "FkQuestionId": 31
+  },
+  {
+    "OptionText": "Karena packaging dapat dibawa kemana-mana",
+    "IsAnswer": false,
+    "FkQuestionId": 31
+  },
+  {
+    "OptionText": "Karena packaging terdapat informasi yang dapat dilihat pelanggan maupun orang lain",
+    "IsAnswer": true,
+    "FkQuestionId": 31
+  },
+  {
+    "OptionText": "Meminimalisir biaya produksi",
+    "IsAnswer": false,
+    "FkQuestionId": 32
+  },
+  {
+    "OptionText": "Produk menjadi tahan lama",
+    "IsAnswer": false,
+    "FkQuestionId": 32
+  },
+  {
+    "OptionText": "Produk dapat berfungsi dengan baik",
+    "IsAnswer": false,
+    "FkQuestionId": 32
+  },
+  {
+    "OptionText": "Memudahkan dalam pengiriman produk",
+    "IsAnswer": false,
+    "FkQuestionId": 32
+  },
+  {
+    "OptionText": "Meningkatkan daya jual produk",
+    "IsAnswer": true,
+    "FkQuestionId": 32
+  },
+  {
+    "OptionText": "Teh dan kopi",
+    "IsAnswer": false,
+    "FkQuestionId": 33
+  },
+  {
+    "OptionText": "Elektronik",
+    "IsAnswer": false,
+    "FkQuestionId": 33
+  },
+  {
+    "OptionText": "Alcohol",
+    "IsAnswer": false,
+    "FkQuestionId": 33
+  },
+  {
+    "OptionText": "Daging",
+    "IsAnswer": false,
+    "FkQuestionId": 33
+  },
+  {
+    "OptionText": "Obat � obatan",
+    "IsAnswer": true,
+    "FkQuestionId": 33
+  },
+  {
+    "OptionText": "Type tool",
+    "IsAnswer": false,
+    "FkQuestionId": 34
+  },
+  {
+    "OptionText": "Pen tool",
+    "IsAnswer": false,
+    "FkQuestionId": 34
+  },
+  {
+    "OptionText": "Brush tool",
+    "IsAnswer": false,
+    "FkQuestionId": 34
+  },
+  {
+    "OptionText": "Pencil tool",
+    "IsAnswer": false,
+    "FkQuestionId": 34
+  },
+  {
+    "OptionText": "Paintbrush tool",
+    "IsAnswer": true,
+    "FkQuestionId": 34
+  },
+  {
+    "OptionText": "Siap pakai",
+    "IsAnswer": false,
+    "FkQuestionId": 35
+  },
+  {
+    "OptionText": "Primer",
+    "IsAnswer": true,
+    "FkQuestionId": 35
+  },
+  {
+    "OptionText": "Sekunder",
+    "IsAnswer": false,
+    "FkQuestionId": 35
+  },
+  {
+    "OptionText": "Tersier",
+    "IsAnswer": false,
+    "FkQuestionId": 35
+  },
+  {
+    "OptionText": "Tambahan",
+    "IsAnswer": false,
+    "FkQuestionId": 35
+  },
+  {
+    "OptionText": "Obat � obatan",
+    "IsAnswer": false,
+    "FkQuestionId": 36
+  },
+  {
+    "OptionText": "Baterai",
+    "IsAnswer": false,
+    "FkQuestionId": 36
+  },
+  {
+    "OptionText": "Headphone",
+    "IsAnswer": false,
+    "FkQuestionId": 36
+  },
+  {
+    "OptionText": "Charger",
+    "IsAnswer": false,
+    "FkQuestionId": 36
+  },
+  {
+    "OptionText": "Handphone",
+    "IsAnswer": true,
+    "FkQuestionId": 36
+  },
+  {
+    "OptionText": "Tool untuk mengubah warna pada objek",
+    "IsAnswer": true,
+    "FkQuestionId": 37
+  },
+  {
+    "OptionText": "Tool untuk menggabungkan dua objek menjadi satu",
+    "IsAnswer": false,
+    "FkQuestionId": 37
+  },
+  {
+    "OptionText": "Tool untuk menggambar garis lurus",
+    "IsAnswer": false,
+    "FkQuestionId": 37
+  },
+  {
+    "OptionText": "Tool untuk mengedit bentuk vector",
+    "IsAnswer": false,
+    "FkQuestionId": 37
+  },
+  {
+    "OptionText": "Tool untuk memilih grup objek",
+    "IsAnswer": false,
+    "FkQuestionId": 37
+  },
+  {
+    "OptionText": "Sebuah halaman atau sekumpulan dari halaman yang dapat diakses jika mempunyai layanan internet",
+    "IsAnswer": true,
+    "FkQuestionId": 38
+  },
+  {
+    "OptionText": "Sebuah aplikasi yang terdapat di handphone maupun desktop",
+    "IsAnswer": false,
+    "FkQuestionId": 38
+  },
+  {
+    "OptionText": "Sebuah software yang dapat berjalan di desktop",
+    "IsAnswer": false,
+    "FkQuestionId": 38
+  },
+  {
+    "OptionText": "Sebuah jaringan yang dapat menghubungkan antara satu perangkan dengan perangkat lainnya",
+    "IsAnswer": false,
+    "FkQuestionId": 38
+  },
+  {
+    "OptionText": "Sebuah alat yang dibuat Perusahaan untuk membranding produknya",
+    "IsAnswer": false,
+    "FkQuestionId": 38
+  },
+  {
+    "OptionText": "Desain visual dari website",
+    "IsAnswer": false,
+    "FkQuestionId": 39
+  },
+  {
+    "OptionText": "Fitur yang diciptakan unuk pengguna dapat berintekasi dengan website",
+    "IsAnswer": false,
+    "FkQuestionId": 39
+  },
+  {
+    "OptionText": "Alat yang digunakan untuk mengembangakan sebuah website",
+    "IsAnswer": false,
+    "FkQuestionId": 39
+  },
+  {
+    "OptionText": "Software yang digunakan agar nama website ditemukan pada search engine",
+    "IsAnswer": false,
+    "FkQuestionId": 39
+  },
+  {
+    "OptionText": "Tempat penyimpanan dan kelola website secara real time",
+    "IsAnswer": true,
+    "FkQuestionId": 39
+  },
+  {
+    "OptionText": "Website statis mempunyai banyak halaman web, website dinamis hanya mempunyai satu halaman web",
+    "IsAnswer": false,
+    "FkQuestionId": 40
+  },
+  {
+    "OptionText": "Website statis hanya mempunyai satu halaman web. Website dinamis mempunyai banyak halaman web",
+    "IsAnswer": true,
+    "FkQuestionId": 40
+  },
+  {
+    "OptionText": "Website statis banyak berinterkasi dengan pengguna, website dinamis tidak banyak berinteraksi dengan pengguna",
+    "IsAnswer": false,
+    "FkQuestionId": 40
+  },
+  {
+    "OptionText": "Website statis sering digunakan, website dinamis jarang digunakan",
+    "IsAnswer": false,
+    "FkQuestionId": 40
+  },
+  {
+    "OptionText": "Website statis jarang digunakan, website dinamis sering digunakan",
+    "IsAnswer": false,
+    "FkQuestionId": 40
+  },
+  {
+    "OptionText": "7",
+    "IsAnswer": false,
+    "FkQuestionId": 41
+  },
+  {
+    "OptionText": "8",
+    "IsAnswer": false,
+    "FkQuestionId": 41
+  },
+  {
+    "OptionText": "9",
+    "IsAnswer": true,
+    "FkQuestionId": 41
+  },
+  {
+    "OptionText": "10",
+    "IsAnswer": false,
+    "FkQuestionId": 41
+  },
+  {
+    "OptionText": "11",
+    "IsAnswer": false,
+    "FkQuestionId": 41
+  },
+  {
+    "OptionText": "Website company profile",
+    "IsAnswer": true,
+    "FkQuestionId": 42
+  },
+  {
+    "OptionText": "Website pribadi atau blog",
+    "IsAnswer": false,
+    "FkQuestionId": 42
+  },
+  {
+    "OptionText": "Website berita dan media",
+    "IsAnswer": false,
+    "FkQuestionId": 42
+  },
+  {
+    "OptionText": "Website layanan masyarakat",
+    "IsAnswer": false,
+    "FkQuestionId": 42
+  },
+  {
+    "OptionText": "Website komunikasi",
+    "IsAnswer": false,
+    "FkQuestionId": 42
+  },
+  {
+    "OptionText": "Ruang guru dan Dribble",
+    "IsAnswer": false,
+    "FkQuestionId": 43
+  },
+  {
+    "OptionText": "Behance dan Quipper",
+    "IsAnswer": false,
+    "FkQuestionId": 43
+  },
+  {
+    "OptionText": "RevoU dan Bhineka",
+    "IsAnswer": false,
+    "FkQuestionId": 43
+  },
+  {
+    "OptionText": "Tumblr dan Digitalent",
+    "IsAnswer": false,
+    "FkQuestionId": 43
+  },
+  {
+    "OptionText": "Hari Senin dan Tempat Belajar",
+    "IsAnswer": true,
+    "FkQuestionId": 43
+  },
+  {
+    "OptionText": "User interface merupakan proses pengembangan dari sebuah website",
+    "IsAnswer": false,
+    "FkQuestionId": 44
+  },
+  {
+    "OptionText": "User interface merupakan desain visual dari sebuah website",
+    "IsAnswer": true,
+    "FkQuestionId": 44
+  },
+  {
+    "OptionText": "User interface merupakan interaksi antara pengguna dan website",
+    "IsAnswer": false,
+    "FkQuestionId": 44
+  },
+  {
+    "OptionText": "User interface merupakan sebuah cara untuk mengoptimalkan website",
+    "IsAnswer": false,
+    "FkQuestionId": 44
+  },
+  {
+    "OptionText": "User interface merupakan pengola website agar tetap aktif",
+    "IsAnswer": false,
+    "FkQuestionId": 44
+  },
+  {
+    "OptionText": "User experience merupakan proses pengembangan dari sebuah website",
+    "IsAnswer": false,
+    "FkQuestionId": 45
+  },
+  {
+    "OptionText": "User experience merupakan desain visual dari sebuah website",
+    "IsAnswer": false,
+    "FkQuestionId": 45
+  },
+  {
+    "OptionText": "User experience merupakan interaksi antara pengguna dan website",
+    "IsAnswer": true,
+    "FkQuestionId": 45
+  },
+  {
+    "OptionText": "User experience merupakan sebuah cara untuk mengoptimalkan website",
+    "IsAnswer": false,
+    "FkQuestionId": 45
+  },
+  {
+    "OptionText": "User experience merupakan pengola website agar tetap aktif",
+    "IsAnswer": false,
+    "FkQuestionId": 45
+  },
+  {
+    "OptionText": "Keduanya merupakan dua hal yang sama, hanya saja berbeda dalam penyebutan",
+    "IsAnswer": false,
+    "FkQuestionId": 46
+  },
+  {
+    "OptionText": "User interface berkaitan dengan interaksi pengguna, user experience berkaitan dengan tampilan visual",
+    "IsAnswer": false,
+    "FkQuestionId": 46
+  },
+  {
+    "OptionText": "User interface menciptakan alur penggunaan, user experience menciptakan identitas merek",
+    "IsAnswer": false,
+    "FkQuestionId": 46
+  },
+  {
+    "OptionText": "User interface fokus pada estetika dan keindahan, user experience fokus pada pengalaman pengguna",
+    "IsAnswer": true,
+    "FkQuestionId": 46
+  },
+  {
+    "OptionText": "User interface meliputi kebutuhan pengguna dan konteks penggunaan, user experience meliputi warna, ikon, dan tata letak",
+    "IsAnswer": false,
+    "FkQuestionId": 46
+  },
+  {
+    "OptionText": "Modal, slider, list, navigasi",
+    "IsAnswer": true,
+    "FkQuestionId": 47
+  },
+  {
+    "OptionText": "Tombol, informasi, input, tampilan",
+    "IsAnswer": false,
+    "FkQuestionId": 47
+  },
+  {
+    "OptionText": "Keterangan, checkbox, list, usability",
+    "IsAnswer": false,
+    "FkQuestionId": 47
+  },
+  {
+    "OptionText": "Dropdown, slider, copywriting, tombol",
+    "IsAnswer": false,
+    "FkQuestionId": 47
+  },
+  {
+    "OptionText": "Tampilan, keterangan, modal, content strategi",
+    "IsAnswer": false,
+    "FkQuestionId": 47
+  },
+  {
+    "OptionText": "Margin",
+    "IsAnswer": false,
+    "FkQuestionId": 48
+  },
+  {
+    "OptionText": "Grid",
+    "IsAnswer": false,
+    "FkQuestionId": 48
+  },
+  {
+    "OptionText": "Breakpoint",
+    "IsAnswer": true,
+    "FkQuestionId": 48
+  },
+  {
+    "OptionText": "Kolom",
+    "IsAnswer": false,
+    "FkQuestionId": 48
+  },
+  {
+    "OptionText": "Spacing",
+    "IsAnswer": false,
+    "FkQuestionId": 48
+  },
+  {
+    "OptionText": "Tampilan visual yang dipengaruhi oleh pasaran yang sedang tren",
+    "IsAnswer": false,
+    "FkQuestionId": 49
+  },
+  {
+    "OptionText": "Arahan dan informasi diberikan secara jelas",
+    "IsAnswer": false,
+    "FkQuestionId": 49
+  },
+  {
+    "OptionText": "Adanya kesamaan antar halaman baik berupa warna, jenis font, dan lainnya",
+    "IsAnswer": false,
+    "FkQuestionId": 49
+  },
+  {
+    "OptionText": "Penggunaan elemen cocok sehingga dapat membranding produk",
+    "IsAnswer": false,
+    "FkQuestionId": 49
+  },
+  {
+    "OptionText": "Terdapat alasan setiap tampilan yang dibuat pada website",
+    "IsAnswer": true,
+    "FkQuestionId": 49
+  },
+  {
+    "OptionText": "Ellipse tool",
+    "IsAnswer": false,
+    "FkQuestionId": 50
+  },
+  {
+    "OptionText": "Retangel tool",
+    "IsAnswer": false,
+    "FkQuestionId": 50
+  },
+  {
+    "OptionText": "Shape builder",
+    "IsAnswer": false,
+    "FkQuestionId": 50
+  },
+  {
+    "OptionText": "Line segment tool",
+    "IsAnswer": true,
+    "FkQuestionId": 50
+  },
+  {
+    "OptionText": "Pen tool",
+    "IsAnswer": false,
+    "FkQuestionId": 50
+  }
+]
