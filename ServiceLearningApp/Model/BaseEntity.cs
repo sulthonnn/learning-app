@@ -1,4 +1,6 @@
-﻿namespace ServiceLearningApp.Model
+﻿using ServiceLearningApp.Interfaces;
+
+namespace ServiceLearningApp.Model
 {
     public class BaseEntity : IAuditableEntity
     {

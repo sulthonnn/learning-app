@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using ServiceLearningApp.Data;
 using ServiceLearningApp.Interfaces;
 using ServiceLearningApp.Model;
 using ServiceLearningApp.Model.Dto;
@@ -14,7 +13,7 @@ using ServiceLearningApp.Validators;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-namespace ServiceLearningApp.Repository
+namespace ServiceLearningApp.Data
 {
     public class UserRepository : IUserRepository
     {
@@ -46,12 +45,12 @@ namespace ServiceLearningApp.Repository
             // Attempt to find user by username
             if (!string.IsNullOrEmpty(model.UserName))
             {
-                user = await this.userManager.FindByNameAsync(model.UserName);
+                user = await userManager.FindByNameAsync(model.UserName);
             }
 
             if (user == null && !string.IsNullOrEmpty(model.NISN))
             {
-                user = await this.dbContext.Set<ApplicationUser>()
+                user = await dbContext.Set<ApplicationUser>()
                     .Where(e => e.NISN == model.NISN)
                     .FirstOrDefaultAsync();
             }
@@ -111,13 +110,13 @@ namespace ServiceLearningApp.Repository
 
         private async Task<ApplicationUser> CreateStudentUser(RegistrationDto model)
         {
-            var existingUser= await this.userManager.FindByNameAsync(model.UserName);
+            var existingUser = await userManager.FindByNameAsync(model.UserName);
             if (existingUser != null)
             {
                 throw new BadHttpRequestException("Username sudah digunakan.", 400);
             }
 
-            var existingUserWithNISN = await this.dbContext.Users.Where(u => u.NISN == model.NISN).FirstOrDefaultAsync();
+            var existingUserWithNISN = await dbContext.Users.Where(u => u.NISN == model.NISN).FirstOrDefaultAsync();
             if (existingUserWithNISN != null)
             {
                 throw new BadHttpRequestException("NISN sudah digunakan.", 400);

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ServiceEsgDataHub.Services;
+using ServiceLearningApp.Interfaces;
 using ServiceLearningApp.Model;
 
 namespace ServiceLearningApp.Data

@@ -9,7 +9,6 @@ using ServiceEsgDataHub.Services;
 using ServiceLearningApp.Data;
 using ServiceLearningApp.Interfaces;
 using ServiceLearningApp.Model;
-using ServiceLearningApp.Repository;
 using ServiceLearningApp.Security;
 using System.Text;
 
@@ -18,6 +17,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddTransient<UserResolverService, UserResolverService>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IChapterRepository, ChapterRepository>();
+builder.Services.AddScoped<ISubChapterRepository, SubChapterRepository>();
+builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
+builder.Services.AddScoped<IOptionRepository, OptionRepository>();
+builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

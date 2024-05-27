@@ -4,10 +4,8 @@ using ServiceLearningApp.Model.Dto;
 
 namespace ServiceLearningApp.Interfaces
 {
-    public interface IUserRepository
+    public interface IOptionRepository : IGenericRepository<Option>
     {
-        Task<IActionResult> Login(LoginDto loginDto);
-        Task<IActionResult> Register(RegistrationDto loginDto);
 
     }
 }
