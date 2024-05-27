@@ -95,6 +95,7 @@ namespace ServiceLearningApp.Controllers
 
             existingOption.OptionText = updatedOption.OptionText;
             existingOption.IsAnswer = updatedOption.IsAnswer;
+            existingOption.FkQuestionId = updatedOption.FkQuestionId;
             //this.mapper.Map(updatedOption, existingOption);
 
             await this.OptionRepository.PutAsync(existingOption);

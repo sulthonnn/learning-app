@@ -63,11 +63,6 @@ namespace ServiceLearningApp.Controllers
         [Authorize(Policy = "Teacher")]
         public async Task<IActionResult> CreateChapter([FromBody] Chapter chapter)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             await this.chapterRepository.PostAsync(chapter);
 
             return new OkObjectResult(new

@@ -12,9 +12,9 @@ namespace ServiceLearningApp.Model
         public Chapter? Chapter { get; set; }
         public int FkChapterId { get; set; }
 
-        [ForeignKey(nameof(FkImageId))]
-        public Upload? Image { get; set; }
-        public int? FkImageId { get; set; }
+        [ForeignKey(nameof(FkUploadId))]
+        public Upload? Upload { get; set; }
+        public int? FkUploadId { get; set; }
 
     }
 }

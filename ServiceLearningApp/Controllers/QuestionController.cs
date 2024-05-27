@@ -96,6 +96,7 @@ namespace ServiceLearningApp.Controllers
             existingQuestion.QuestionText = updatedQuestion.QuestionText;
             existingQuestion.FeedBack = updatedQuestion.FeedBack;
             existingQuestion.FkImageId = updatedQuestion.FkImageId;
+            existingQuestion.FkSubChapterId = updatedQuestion.FkSubChapterId;
             //this.mapper.Map(updatedQuestion, existingQuestion);
 
             await this.QuestionRepository.PutAsync(existingQuestion);

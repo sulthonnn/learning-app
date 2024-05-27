@@ -10,6 +10,7 @@ using ServiceLearningApp.Data;
 using ServiceLearningApp.Interfaces;
 using ServiceLearningApp.Model;
 using ServiceLearningApp.Security;
+using ServiceLearningApp.Storage;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,10 +18,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddTransient<UserResolverService, UserResolverService>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<IStorageService, FileStorageService>();
+
 builder.Services.AddScoped<IChapterRepository, ChapterRepository>();
 builder.Services.AddScoped<ISubChapterRepository, SubChapterRepository>();
 builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
 builder.Services.AddScoped<IOptionRepository, OptionRepository>();
+builder.Services.AddScoped<IUploadRepository, UploadRepository>();
+
 builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddControllers();

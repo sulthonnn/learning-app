@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ServiceLearningApp.Data;
@@ -11,9 +12,11 @@ using ServiceLearningApp.Data;
 namespace ServiceLearningApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240527095441_AddPropertyUpload")]
+    partial class AddPropertyUpload
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -384,7 +387,7 @@ namespace ServiceLearningApp.Migrations
                     b.Property<int>("FkChapterId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("FkUploadId")
+                    b.Property<int?>("FkImageId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Reference")
@@ -404,7 +407,7 @@ namespace ServiceLearningApp.Migrations
 
                     b.HasIndex("FkChapterId");
 
-                    b.HasIndex("FkUploadId");
+                    b.HasIndex("FkImageId");
 
                     b.ToTable("SubChapters");
                 });
@@ -431,6 +434,7 @@ namespace ServiceLearningApp.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("ThumbnailUrl")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("Type")
@@ -557,13 +561,13 @@ namespace ServiceLearningApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ServiceLearningApp.Model.Upload", "Upload")
+                    b.HasOne("ServiceLearningApp.Model.Upload", "Image")
                         .WithMany()
-                        .HasForeignKey("FkUploadId");
+                        .HasForeignKey("FkImageId");
 
                     b.Navigation("Chapter");
 
-                    b.Navigation("Upload");
+                    b.Navigation("Image");
                 });
 #pragma warning restore 612, 618
         }

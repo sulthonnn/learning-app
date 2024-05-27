@@ -2,7 +2,7 @@
 
 namespace ServiceLearningApp.Interfaces
 {
-    public interface ISubChapterRepository : IGenericRepository<SubChapter>
+    public interface IChapterRepository : IGenericRepository<Chapter>
     {
     }
 }
