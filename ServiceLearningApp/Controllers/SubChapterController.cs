@@ -15,13 +15,13 @@ namespace ServiceLearningApp.Controllers
     //[Authorize(Policy = "Bearer")]
     public class SubChapterController : Controller
     {
-        private readonly ISubChapterRepository SubChapterRepository;
+        private readonly ISubChapterRepository subChapterRepository;
         private readonly IMapper mapper;
         private readonly IUploadRepository uploadRepository;
 
         public SubChapterController(ISubChapterRepository SubChapterRepository, IMapper mapper, IUploadRepository uploadRepository)
         {
-            this.SubChapterRepository = SubChapterRepository;
+            this.subChapterRepository = SubChapterRepository;
             this.mapper = mapper;
             this.uploadRepository = uploadRepository;
         }
@@ -30,7 +30,7 @@ namespace ServiceLearningApp.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetAllSubChapter(QueryParams? queryParams)
         {
-            var SubChapters = await this.SubChapterRepository.GetAllAsync(queryParams);
+            var SubChapters = await this.subChapterRepository.GetAllAsync(queryParams);
 
             return new OkObjectResult(new
             {
@@ -44,7 +44,7 @@ namespace ServiceLearningApp.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetSubChapter(int id)
         {
-            var SubChapter = await this.SubChapterRepository.GetAsync(id);
+            var SubChapter = await this.subChapterRepository.GetAsync(id);
             if (SubChapter == null)
             {
                 return new BadRequestObjectResult(new
@@ -71,7 +71,7 @@ namespace ServiceLearningApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            await this.SubChapterRepository.PostAsync(SubChapter);
+            await this.subChapterRepository.PostAsync(SubChapter);
 
             return new OkObjectResult(new
             {
@@ -85,7 +85,7 @@ namespace ServiceLearningApp.Controllers
         [Authorize(Policy = "Teacher")]
         public async Task<IActionResult> UpdateSubChapter(int id, [FromBody] SubChapter updatedSubChapter)
         {
-            var existingSubChapter = await this.SubChapterRepository.GetAsync(id);
+            var existingSubChapter = await this.subChapterRepository.GetAsync(id);
 
             if (existingSubChapter == null)
             {
@@ -101,7 +101,7 @@ namespace ServiceLearningApp.Controllers
             existingSubChapter.FkChapterId = updatedSubChapter.FkChapterId;
             existingSubChapter.FkUploadId = updatedSubChapter.FkUploadId;
 
-            await this.SubChapterRepository.PutAsync(existingSubChapter);
+            await this.subChapterRepository.PutAsync(existingSubChapter);
 
             return new OkObjectResult(new
             {
@@ -115,7 +115,7 @@ namespace ServiceLearningApp.Controllers
         [Authorize(Policy = "Teacher")]
         public async Task<IActionResult> DeleteSubChapter(int id)
         {
-            var SubChapter = await this.SubChapterRepository.GetAsync(id);
+            var SubChapter = await this.subChapterRepository.GetAsync(id);
             if (SubChapter == null)
             {
                 return new BadRequestObjectResult(new
@@ -125,7 +125,7 @@ namespace ServiceLearningApp.Controllers
                 });
             }
 
-            await this.SubChapterRepository.DeleteAsync(SubChapter.Id);
+            await this.subChapterRepository.DeleteAsync(SubChapter.Id);
 
             return new OkObjectResult(new
             {
@@ -141,7 +141,12 @@ namespace ServiceLearningApp.Controllers
             try
             {
                 var upload = await uploadRepository.UploadFileAsync(model);
-                return upload;
+                return new OkObjectResult(new
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "Success",
+                    Data = upload
+                });
             }
             catch (Exception ex)
             {

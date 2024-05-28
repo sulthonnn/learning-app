@@ -108,6 +108,17 @@ namespace ServiceLearningApp.Data
 
         public async Task<Upload> UploadImageAsync(UploadType type, IFormFile file, bool compress = false)
         {
+            // Validasi jika file null
+            if (file == null)
+            {
+                throw new ArgumentNullException("File tidak boleh kosong.");
+            }
+
+            var allowedContentTypes = new List<string> { "image/jpeg", "image/png", "image/gif", "image/svg+xml", "image/webp", "image/jpg" };
+            if (!allowedContentTypes.Contains(file.ContentType.ToLower()))
+            {
+                throw new ArgumentException("Hanya file gambar (JPEG, PNG, GIF, SVG, WEBP, JPG) yang diizinkan.");
+            }
 
             var directoryPath = Path.Combine(uploadPath, Guid.NewGuid().ToString());
             await storageService.CreateDirectoryAsync(directoryPath);
@@ -166,6 +177,7 @@ namespace ServiceLearningApp.Data
             {
                 throw new ArgumentException("Hanya file pdf yang diizinkan.");
             }
+
             var directoryPath = Path.Combine(uploadPath, Guid.NewGuid().ToString());
             await this.storageService.CreateDirectoryAsync(directoryPath);
 

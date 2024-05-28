@@ -31,6 +31,7 @@ namespace ServiceLearningApp.Data
         public async Task<SubChapter> GetAsync(int id)
         {
             return await this.dbContext.SubChapters
+                .Include(e => e.Upload)
                 .AsNoTracking()
                 .SingleOrDefaultAsync(c => c.Id == id);
         }

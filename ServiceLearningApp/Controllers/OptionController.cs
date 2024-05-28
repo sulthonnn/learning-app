@@ -14,12 +14,12 @@ namespace ServiceLearningApp.Controllers
     [Authorize(Policy = "Bearer")]
     public class OptionController : Controller
     {
-        private readonly IOptionRepository OptionRepository;
+        private readonly IOptionRepository optionRepository;
         private readonly IMapper mapper;
 
         public OptionController(IOptionRepository OptionRepository, IMapper mapper)
         {
-            this.OptionRepository = OptionRepository;
+            this.optionRepository = OptionRepository;
             this.mapper = mapper;
         }
 
@@ -27,7 +27,7 @@ namespace ServiceLearningApp.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetAllOption([FromQuery] QueryParams? queryParams)
         {
-            var Options = await this.OptionRepository.GetAllAsync(queryParams);
+            var Options = await this.optionRepository.GetAllAsync(queryParams);
 
             return new OkObjectResult(new
             {
@@ -41,7 +41,7 @@ namespace ServiceLearningApp.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetOption(int id)
         {
-            var Option = await this.OptionRepository.GetAsync(id);
+            var Option = await this.optionRepository.GetAsync(id);
             if (Option == null)
             {
                 return new BadRequestObjectResult(new
@@ -68,7 +68,7 @@ namespace ServiceLearningApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            await this.OptionRepository.PostAsync(Option);
+            await this.optionRepository.PostAsync(Option);
 
             return new OkObjectResult(new
             {
@@ -82,7 +82,7 @@ namespace ServiceLearningApp.Controllers
         [Authorize(Policy = "Teacher")]
         public async Task<IActionResult> UpdateOption(int id, [FromBody] Option updatedOption)
         {
-            var existingOption = await this.OptionRepository.GetAsync(id);
+            var existingOption = await this.optionRepository.GetAsync(id);
 
             if (existingOption == null)
             {
@@ -98,7 +98,7 @@ namespace ServiceLearningApp.Controllers
             existingOption.FkQuestionId = updatedOption.FkQuestionId;
             //this.mapper.Map(updatedOption, existingOption);
 
-            await this.OptionRepository.PutAsync(existingOption);
+            await this.optionRepository.PutAsync(existingOption);
 
             return new OkObjectResult(new
             {
@@ -112,7 +112,7 @@ namespace ServiceLearningApp.Controllers
         [Authorize(Policy = "Teacher")]
         public async Task<IActionResult> DeleteOption(int id)
         {
-            var Option = await this.OptionRepository.GetAsync(id);
+            var Option = await this.optionRepository.GetAsync(id);
             if (Option == null)
             {
                 return new BadRequestObjectResult(new
@@ -122,7 +122,7 @@ namespace ServiceLearningApp.Controllers
                 });
             }
 
-            await this.OptionRepository.DeleteAsync(Option.Id);
+            await this.optionRepository.DeleteAsync(Option.Id);
             
             return new OkObjectResult(new
             {

@@ -27,6 +27,8 @@ builder.Services.AddScoped<IOptionRepository, OptionRepository>();
 builder.Services.AddScoped<IUploadRepository, UploadRepository>();
 
 builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddSingleton<string>(provider => "Assets");
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

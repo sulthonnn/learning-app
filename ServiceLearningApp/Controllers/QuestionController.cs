@@ -5,6 +5,7 @@ using ServiceLearningApp.Data;
 using ServiceLearningApp.Helpers;
 using ServiceLearningApp.Interfaces;
 using ServiceLearningApp.Model;
+using ServiceLearningApp.Model.Dto;
 using ServiceLearningApp.Security;
 
 namespace ServiceLearningApp.Controllers
@@ -14,12 +15,14 @@ namespace ServiceLearningApp.Controllers
     [Authorize(Policy = "Bearer")]
     public class QuestionController : Controller
     {
-        private readonly IQuestionRepository QuestionRepository;
+        private readonly IQuestionRepository questionRepository;
+        private readonly IUploadRepository uploadRepository;
         private readonly IMapper mapper;
 
-        public QuestionController(IQuestionRepository QuestionRepository, IMapper mapper)
+        public QuestionController(IQuestionRepository QuestionRepository, IMapper mapper, IUploadRepository uploadRepository)
         {
-            this.QuestionRepository = QuestionRepository;
+            this.questionRepository = QuestionRepository;
+            this.uploadRepository = uploadRepository;
             this.mapper = mapper;
         }
 
@@ -27,7 +30,7 @@ namespace ServiceLearningApp.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetAllQuestion([FromQuery] QueryParams? queryParams)
         {
-            var Questions = await this.QuestionRepository.GetAllAsync(queryParams);
+            var Questions = await this.questionRepository.GetAllAsync(queryParams);
 
             return new OkObjectResult(new
             {
@@ -41,7 +44,7 @@ namespace ServiceLearningApp.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetQuestion(int id)
         {
-            var Question = await this.QuestionRepository.GetAsync(id);
+            var Question = await this.questionRepository.GetAsync(id);
             if (Question == null)
             {
                 return new BadRequestObjectResult(new
@@ -68,7 +71,7 @@ namespace ServiceLearningApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            await this.QuestionRepository.PostAsync(Question);
+            await this.questionRepository.PostAsync(Question);
 
             return new OkObjectResult(new
             {
@@ -82,7 +85,7 @@ namespace ServiceLearningApp.Controllers
         [Authorize(Policy = "Teacher")]
         public async Task<IActionResult> UpdateQuestion(int id, [FromBody] Question updatedQuestion)
         {
-            var existingQuestion = await this.QuestionRepository.GetAsync(id);
+            var existingQuestion = await this.questionRepository.GetAsync(id);
 
             if (existingQuestion == null)
             {
@@ -99,7 +102,7 @@ namespace ServiceLearningApp.Controllers
             existingQuestion.FkSubChapterId = updatedQuestion.FkSubChapterId;
             //this.mapper.Map(updatedQuestion, existingQuestion);
 
-            await this.QuestionRepository.PutAsync(existingQuestion);
+            await this.questionRepository.PutAsync(existingQuestion);
 
             return new OkObjectResult(new
             {
@@ -113,7 +116,7 @@ namespace ServiceLearningApp.Controllers
         [Authorize(Policy = "Teacher")]
         public async Task<IActionResult> DeleteQuestion(int id)
         {
-            var Question = await this.QuestionRepository.GetAsync(id);
+            var Question = await this.questionRepository.GetAsync(id);
             if (Question == null)
             {
                 return new BadRequestObjectResult(new
@@ -123,7 +126,7 @@ namespace ServiceLearningApp.Controllers
                 });
             }
 
-            await this.QuestionRepository.DeleteAsync(Question.Id);
+            await this.questionRepository.DeleteAsync(Question.Id);
             
             return new OkObjectResult(new
             {
@@ -131,6 +134,41 @@ namespace ServiceLearningApp.Controllers
                 Message = "Success",
                 Data = Question
             });
+        }
+
+        [HttpPost("image")]
+        //[HttpPut("image")]
+        //[Authorize(Policy = "Administrator")]
+        public async Task<ActionResult<Upload>> UploadImageAsync([FromForm] UploadDto model)
+        {
+            try
+            {
+                var upload = await this.uploadRepository.UploadImageAsync(UploadType.Image, model.File);
+                return new OkObjectResult(new
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "Success",
+                    Data = upload
+                }); ;
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(new
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = ex.Message,
+                });
+            }
+        }
+
+
+        [HttpGet("image/{folder}/{file}")]
+        [AllowAnonymous]
+        [ResponseCache(Duration = 3600)]
+        public async Task<FileStreamResult> Download(string folder, string file)
+        {
+            var url = folder + "/" + file;
+            return await this.uploadRepository.DownloadAsync(url, Request.Headers.Range);
         }
     }
 }
