@@ -42,13 +42,7 @@ namespace ServiceLearningApp.Data
         {
             return await this.dbContext.Uploads
                 .AsNoTracking()
-                .SingleOrDefaultAsync(c => c.Id == id);
-        }
-        public async Task<Upload> GetByUrlAsync(string url)
-        {
-            return await this.dbContext.Uploads
-                .AsNoTracking()
-                .SingleOrDefaultAsync(c => c.Url == url);
+                .FirstAsync(c => c.Id == id);
         }
 
         public async Task PostAsync(Upload entity)

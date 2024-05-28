@@ -3,6 +3,7 @@
     public enum UploadType
     {
         Document = 10,
-        Image = 20
+        QuestionImage = 20,
+        ProfileImage = 21
     }
 }

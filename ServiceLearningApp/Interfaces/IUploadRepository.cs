@@ -11,8 +11,5 @@ namespace ServiceLearningApp.Interfaces
         Task<Upload> UploadImageAsync(UploadType type, IFormFile file, bool compress = false);
         Task<Upload> UploadFileAsync(UploadDto model);
         Task<Upload> UploadFileAsync(Stream file, string fileName, long length, UploadType type);
-
-        Task<Upload> GetByUrlAsync(string url);
-
     }
 }

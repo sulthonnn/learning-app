@@ -27,6 +27,7 @@ namespace ServiceLearningApp.Data
             query = ApplyPagination(query, queryParams);            
 
             return await query
+                .Include(e => e.Question)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -35,7 +36,7 @@ namespace ServiceLearningApp.Data
         {
             return await this.dbContext.Options
                 .AsNoTracking()
-                .SingleOrDefaultAsync(c => c.Id == id);
+                .FirstAsync(c => c.Id == id);
         }
 
         public async Task PostAsync(Option entity)
@@ -74,6 +75,11 @@ namespace ServiceLearningApp.Data
             if (!string.IsNullOrEmpty(queryParams.Search))
             {
                 query = query.Where(e => EF.Functions.ILike(e.OptionText, "%" + queryParams.Search + "%"));
+            }
+
+            if (queryParams.FkQuestionId.HasValue)
+            {
+                query = query.Where(e => e.FkQuestionId == queryParams.FkQuestionId);
             }
 
             // Sorting

@@ -24,6 +24,8 @@ namespace ServiceLearningApp.Data
             query = ApplyPagination(query, queryParams);
 
             return await query
+                .Include(e => e.Chapter)
+                .Include(e => e.Upload)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -31,9 +33,10 @@ namespace ServiceLearningApp.Data
         public async Task<SubChapter> GetAsync(int id)
         {
             return await this.dbContext.SubChapters
+                .Include(e => e.Chapter)
                 .Include(e => e.Upload)
                 .AsNoTracking()
-                .SingleOrDefaultAsync(c => c.Id == id);
+                .FirstAsync(c => c.Id == id);
         }
 
         public async Task PostAsync(SubChapter entity)
@@ -72,6 +75,11 @@ namespace ServiceLearningApp.Data
             if (!string.IsNullOrEmpty(queryParams.Search))
             {
                 query = query.Where(e => EF.Functions.ILike(e.Title, "%" + queryParams.Search + "%"));
+            }
+
+            if (queryParams.FkChapterId.HasValue)
+            {
+                query = query.Where(e => e.FkChapterId == queryParams.FkChapterId);
             }
 
             // Sorting
