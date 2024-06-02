@@ -5,6 +5,7 @@ using ServiceLearningApp.Data;
 using ServiceLearningApp.Helpers;
 using ServiceLearningApp.Interfaces;
 using ServiceLearningApp.Model;
+using ServiceLearningApp.Model.Dto;
 using ServiceLearningApp.Security;
 
 namespace ServiceLearningApp.Controllers
@@ -60,7 +61,7 @@ namespace ServiceLearningApp.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "Teacher")]
+        [Authorize(Policy = "Student")]
         public async Task<IActionResult> CreateExerciseTransaction([FromBody] ExerciseTransaction ExerciseTransaction)
         {
             await this.ExerciseTransactionRepository.PostAsync(ExerciseTransaction);
@@ -69,12 +70,12 @@ namespace ServiceLearningApp.Controllers
             {
                 StatusCode = StatusCodes.Status200OK,
                 Message = "Success",
-                Data = ExerciseTransaction
+                Data = this.mapper.Map<ExerciseTransaction, ExerciseTransactionDto>(ExerciseTransaction)
             });
         }
 
         //[HttpPut("{id}")]
-        //[Authorize(Policy = "Teacher")]
+        //[Authorize(Policy = "Student")]
         //public async Task<IActionResult> UpdateExerciseTransaction(int id, [FromBody] ExerciseTransaction updatedExerciseTransaction)
         //{
         //    var existingExerciseTransaction = await this.ExerciseTransactionRepository.GetAsync(id);
@@ -121,7 +122,7 @@ namespace ServiceLearningApp.Controllers
             {
                 StatusCode = StatusCodes.Status200OK,
                 Message = "Success",
-                Data = ExerciseTransaction
+                Data = this.mapper.Map<ExerciseTransaction, ExerciseTransactionDto>(ExerciseTransaction)
             });
         }
     }

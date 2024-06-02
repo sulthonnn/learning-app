@@ -35,7 +35,7 @@ namespace ServiceLearningApp.Data
         {
             return await this.dbContext.Chapters
                 .AsNoTracking()
-                .FirstAsync(c => c.Id == id);
+                .FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task PostAsync(Chapter entity)

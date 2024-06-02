@@ -33,7 +33,7 @@ namespace ServiceLearningApp.Data
             return await this.dbContext.SubChapters
                 .Include(e => e.Upload)
                 .AsNoTracking()
-                .FirstAsync(c => c.Id == id);
+                .FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task PostAsync(SubChapter entity)

@@ -42,7 +42,7 @@ namespace ServiceLearningApp.Data
         {
             return await this.dbContext.Uploads
                 .AsNoTracking()
-                .FirstAsync(c => c.Id == id);
+                .FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task PostAsync(Upload entity)

@@ -25,6 +25,7 @@ builder.Services.AddScoped<IChapterRepository, ChapterRepository>();
 builder.Services.AddScoped<ISubChapterRepository, SubChapterRepository>();
 builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
 builder.Services.AddScoped<IOptionRepository, OptionRepository>();
+builder.Services.AddScoped<IExerciseTransactionRepository, ExerciseTransactionRepository>();
 builder.Services.AddScoped<IUploadRepository, UploadRepository>();
 
 builder.Services.AddAutoMapper(typeof(Program));

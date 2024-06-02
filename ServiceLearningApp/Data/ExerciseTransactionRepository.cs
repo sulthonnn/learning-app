@@ -35,11 +35,12 @@ namespace ServiceLearningApp.Data
         {
             return await this.dbContext.ExerciseTransactions
                 .AsNoTracking()
-                .FirstAsync(c => c.Id == id);
+                .FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task PostAsync(ExerciseTransaction entity)
         {
+            entity.Score = CalculateScore(entity.CorrectAnswer, entity.IncorrectAnswer);
             await this.dbContext.ExerciseTransactions.AddAsync(entity);
             await this.dbContext.SaveChangesAsync();
         }
@@ -64,6 +65,17 @@ namespace ServiceLearningApp.Data
                 await this.dbContext.SaveChangesAsync();
             }
         }
+
+        private int CalculateScore(int correctAnswer, int incorrectAnswer)
+        {
+            var totalQuestion = correctAnswer + incorrectAnswer;
+            if (totalQuestion == 0) return 0; 
+
+            double score = (double)correctAnswer / totalQuestion * 100;
+
+            return (int)Math.Round(score);
+        }
+
 
         private IQueryable<ExerciseTransaction> ApplyFilterAndSort(IQueryable<ExerciseTransaction> query, QueryParams? queryParams)
         {            

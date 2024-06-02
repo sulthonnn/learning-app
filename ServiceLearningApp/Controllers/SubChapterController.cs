@@ -66,10 +66,6 @@ namespace ServiceLearningApp.Controllers
         [Authorize(Policy = "Teacher")]
         public async Task<IActionResult> CreateSubChapter([FromBody] SubChapter SubChapter)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
 
             await this.subChapterRepository.PostAsync(SubChapter);
 
@@ -77,7 +73,7 @@ namespace ServiceLearningApp.Controllers
             {
                 StatusCode = StatusCodes.Status200OK,
                 Message = "Success",
-                Data = SubChapter
+                Data = this.mapper.Map<SubChapter, SubChapterDto>(SubChapter)
             });
         }
 
@@ -107,7 +103,7 @@ namespace ServiceLearningApp.Controllers
             {
                 StatusCode = StatusCodes.Status200OK,
                 Message = "Success",
-                Data = existingSubChapter
+                Data = this.mapper.Map<SubChapter, SubChapterDto>(existingSubChapter)
             });
         }
 
@@ -131,7 +127,7 @@ namespace ServiceLearningApp.Controllers
             {
                 StatusCode = StatusCodes.Status200OK,
                 Message = "Success",
-                Data = SubChapter
+                Data = this.mapper.Map<SubChapter, SubChapterDto>(SubChapter)
             });
         }
 

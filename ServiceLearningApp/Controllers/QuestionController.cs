@@ -77,7 +77,7 @@ namespace ServiceLearningApp.Controllers
             {
                 StatusCode = StatusCodes.Status200OK,
                 Message = "Success",
-                Data = Question
+                Data = this.mapper.Map<Question, QuestionDto>(Question)
             });
         }
 
@@ -108,7 +108,7 @@ namespace ServiceLearningApp.Controllers
             {
                 StatusCode = StatusCodes.Status200OK,
                 Message = "Success",
-                Data = existingQuestion
+                Data = this.mapper.Map<Question, QuestionDto>(existingQuestion)
             });
         }
 
@@ -132,7 +132,7 @@ namespace ServiceLearningApp.Controllers
             {
                 StatusCode = StatusCodes.Status200OK,
                 Message = "Success",
-                Data = Question
+                Data = this.mapper.Map<Question, QuestionDto>(Question)
             });
         }
 
@@ -164,7 +164,7 @@ namespace ServiceLearningApp.Controllers
 
         [HttpPost("image")]
         //[HttpPut("image")]
-        //[Authorize(Policy = "Administrator")]
+        [Authorize(Policy = "Teacher")]
         public async Task<ActionResult<Upload>> UploadImageAsync([FromForm] UploadDto model)
         {
             try

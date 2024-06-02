@@ -76,7 +76,7 @@ namespace ServiceLearningApp.Controllers
             {
                 StatusCode = StatusCodes.Status200OK,
                 Message = "Success",
-                Data = upload
+                Data = upload.Id
             });
         }
 

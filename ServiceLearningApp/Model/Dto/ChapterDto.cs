@@ -2,12 +2,10 @@
 
 namespace ServiceLearningApp.Model.Dto
 {
-    public class SubChapterDto
+    public class ChapterDto
     {
         public int Id { get; set; }
         public required string Title { get; set; }
-        public string? Reference { get; set; }
-        public int FkChapterId { get; set; }
-        public int? FkUploadId { get; set; }
+
     }
 }

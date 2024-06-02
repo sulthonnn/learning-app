@@ -36,7 +36,7 @@ namespace ServiceLearningApp.Data
             return await this.dbContext.Options
                 .Include(e => e.Question)
                 .AsNoTracking()
-                .FirstAsync(c => c.Id == id);
+                .FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task PostAsync(Option entity)

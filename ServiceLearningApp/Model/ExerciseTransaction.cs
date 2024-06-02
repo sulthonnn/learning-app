@@ -7,6 +7,8 @@ namespace ServiceLearningApp.Model
         public int Id { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public int CorrectAnswer {  get; set; }
+        public int IncorrectAnswer { get; set; }
         public int Score { get; set; }
 
 

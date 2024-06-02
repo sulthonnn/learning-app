@@ -5,6 +5,7 @@ using ServiceLearningApp.Data;
 using ServiceLearningApp.Helpers;
 using ServiceLearningApp.Interfaces;
 using ServiceLearningApp.Model;
+using ServiceLearningApp.Model.Dto;
 using ServiceLearningApp.Security;
 
 namespace ServiceLearningApp.Controllers
@@ -74,7 +75,7 @@ namespace ServiceLearningApp.Controllers
             {
                 StatusCode = StatusCodes.Status200OK,
                 Message = "Success",
-                Data = Option
+                Data = this.mapper.Map<Option, OptionDto>(Option)
             });
         }
 
@@ -104,7 +105,7 @@ namespace ServiceLearningApp.Controllers
             {
                 StatusCode = StatusCodes.Status200OK,
                 Message = "Success",
-                Data = existingOption
+                Data = this.mapper.Map<Option, OptionDto>(existingOption)
             });
         }
 
@@ -128,7 +129,7 @@ namespace ServiceLearningApp.Controllers
             {
                 StatusCode = StatusCodes.Status200OK,
                 Message = "Success",
-                Data = Option
+                Data = this.mapper.Map<Option, OptionDto>(Option)
             });
         }
     }

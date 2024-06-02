@@ -37,7 +37,7 @@ namespace ServiceLearningApp.Data
                 .Include(e => e.SubChapter)
                 .Include(e => e.Image)
                 .AsNoTracking()
-                .FirstAsync(c => c.Id == id);
+                .FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task PostAsync(Question entity)
