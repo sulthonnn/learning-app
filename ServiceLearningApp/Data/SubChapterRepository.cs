@@ -24,8 +24,6 @@ namespace ServiceLearningApp.Data
             query = ApplyPagination(query, queryParams);
 
             return await query
-                .Include(e => e.Chapter)
-                .Include(e => e.Upload)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -33,7 +31,6 @@ namespace ServiceLearningApp.Data
         public async Task<SubChapter> GetAsync(int id)
         {
             return await this.dbContext.SubChapters
-                .Include(e => e.Chapter)
                 .Include(e => e.Upload)
                 .AsNoTracking()
                 .FirstAsync(c => c.Id == id);
@@ -98,8 +95,9 @@ namespace ServiceLearningApp.Data
 
         private IQueryable<SubChapter> ApplyPagination(IQueryable<SubChapter> query, QueryParams? queryParams)
         {
-            if (queryParams == null)
-                return query;
+            query = query
+               .Include(e => e.Chapter)
+               .Include(e => e.Upload);
 
             // Pagination
             if (queryParams.Page > 0 && queryParams.PerPage > 0)

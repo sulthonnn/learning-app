@@ -9,17 +9,17 @@ using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 
 namespace ServiceLearningApp.Data
 {
-    public class OptionRepository : IOptionRepository
+    public class ExerciseTransactionRepository : IExerciseTransactionRepository
     {
         private readonly ApplicationDbContext dbContext;
 
-        public OptionRepository(ApplicationDbContext dbContext)
+        public ExerciseTransactionRepository(ApplicationDbContext dbContext)
         {
             this.dbContext = dbContext;
         }
-        public async Task<IReadOnlyList<Option>> GetAllAsync(QueryParams? queryParams)
+        public async Task<IReadOnlyList<ExerciseTransaction>> GetAllAsync(QueryParams? queryParams)
         {
-            IQueryable<Option> query = this.dbContext.Options;
+            IQueryable<ExerciseTransaction> query = this.dbContext.ExerciseTransactions;
 
             // Filtering&Sorting
             query = ApplyFilterAndSort(query, queryParams);
@@ -31,26 +31,25 @@ namespace ServiceLearningApp.Data
                 .ToListAsync();
         }
 
-        public async Task<Option> GetAsync(int id)
+        public async Task<ExerciseTransaction> GetAsync(int id)
         {
-            return await this.dbContext.Options
-                .Include(e => e.Question)
+            return await this.dbContext.ExerciseTransactions
                 .AsNoTracking()
                 .FirstAsync(c => c.Id == id);
         }
 
-        public async Task PostAsync(Option entity)
+        public async Task PostAsync(ExerciseTransaction entity)
         {
-            await this.dbContext.Options.AddAsync(entity);
+            await this.dbContext.ExerciseTransactions.AddAsync(entity);
             await this.dbContext.SaveChangesAsync();
         }
 
         public async Task<int> CountAsync()
         {
-            return await this.dbContext.Options.CountAsync();
+            return await this.dbContext.ExerciseTransactions.CountAsync();
         }
 
-        public async Task PutAsync(Option entity)
+        public async Task PutAsync(ExerciseTransaction entity)
         {
             this.dbContext.Entry(entity).State = EntityState.Modified;
             await this.dbContext.SaveChangesAsync();
@@ -58,27 +57,21 @@ namespace ServiceLearningApp.Data
 
         public async Task DeleteAsync(int id)
         {
-            var Option = await this.dbContext.Options.FindAsync(id);
-            if (Option != null)
+            var ExerciseTransaction = await this.dbContext.ExerciseTransactions.FindAsync(id);
+            if (ExerciseTransaction != null)
             {
-                this.dbContext.Options.Remove(Option);
+                this.dbContext.ExerciseTransactions.Remove(ExerciseTransaction);
                 await this.dbContext.SaveChangesAsync();
             }
         }
 
-        private IQueryable<Option> ApplyFilterAndSort(IQueryable<Option> query, QueryParams? queryParams)
-        {
-            query = query.Include(e => e.Question);
+        private IQueryable<ExerciseTransaction> ApplyFilterAndSort(IQueryable<ExerciseTransaction> query, QueryParams? queryParams)
+        {            
 
             // Filtering
             if (!string.IsNullOrEmpty(queryParams.Search))
             {
-                query = query.Where(e => EF.Functions.ILike(e.OptionText, "%" + queryParams.Search + "%"));
-            }
-
-            if (queryParams.FkQuestionId.HasValue)
-            {
-                query = query.Where(e => e.FkQuestionId == queryParams.FkQuestionId);
+                query = query.Where(e => EF.Functions.ILike(e.User.UserName, "%" + queryParams.Search + "%"));
             }
 
             // Sorting
@@ -86,8 +79,8 @@ namespace ServiceLearningApp.Data
             {
                 query = queryParams.Sort switch
                 {
-                    "option" => query.OrderBy(e => e.OptionText),
-                    "-option" => query.OrderByDescending(e => e.OptionText),
+                    "startDate" => query.OrderBy(e => e.StartDate),
+                    "-startDate" => query.OrderByDescending(e => e.StartDate),
                     _ => query.OrderBy(e => e.Id),
                 };
             }
@@ -95,7 +88,7 @@ namespace ServiceLearningApp.Data
             return query;
         }
 
-        private IQueryable<Option> ApplyPagination(IQueryable<Option> query, QueryParams? queryParams)
+        private IQueryable<ExerciseTransaction> ApplyPagination(IQueryable<ExerciseTransaction> query, QueryParams? queryParams)
         {
             if (queryParams == null)
                 return query;

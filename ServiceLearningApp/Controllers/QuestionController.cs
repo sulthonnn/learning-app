@@ -136,6 +136,32 @@ namespace ServiceLearningApp.Controllers
             });
         }
 
+        [HttpGet("random/sub-chapter/{subChapterId}/count/{count}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<Question>> GetRandomQuestionsBySubChapter(int subChapterId, int count)
+        {
+            var randomQuestion = await this.questionRepository.GetRandomQuestionsBySubChapterIdAsync(subChapterId, count);
+            return new OkObjectResult(new
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = "Success",
+                Data = randomQuestion
+            });
+        }
+
+        [HttpGet("random/chapter/{chapterId}/count/{count}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<Question>> GetRandomQuestionByChapter(int chapterId, int count)
+        {
+            var randomQuestion = await this.questionRepository.GetRandomQuestionsByChapterIdAsync(chapterId, count);
+            return new OkObjectResult(new
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = "Success",
+                Data = randomQuestion
+            });
+        }
+
         [HttpPost("image")]
         //[HttpPut("image")]
         //[Authorize(Policy = "Administrator")]
@@ -143,7 +169,7 @@ namespace ServiceLearningApp.Controllers
         {
             try
             {
-                var upload = await this.uploadRepository.UploadImageAsync(UploadType.Image, model.File);
+                var upload = await this.uploadRepository.UploadImageAsync(UploadType.QuestionImage, model.File);
                 return new OkObjectResult(new
                 {
                     StatusCode = StatusCodes.Status200OK,

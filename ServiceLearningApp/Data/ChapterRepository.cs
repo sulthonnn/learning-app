@@ -66,9 +66,7 @@ namespace ServiceLearningApp.Data
         }
 
         private IQueryable<Chapter> ApplyFilterAndSort(IQueryable<Chapter> query, QueryParams? queryParams)
-        {
-            if (queryParams == null)
-                return query;
+        {            
 
             // Filtering
             if (!string.IsNullOrEmpty(queryParams.Search))

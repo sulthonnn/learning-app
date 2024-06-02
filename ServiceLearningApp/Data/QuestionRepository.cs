@@ -27,8 +27,6 @@ namespace ServiceLearningApp.Data
             query = ApplyPagination(query, queryParams);            
 
             return await query
-                .Include(e => e.SubChapter)
-                .Include(e => e.Image)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -69,10 +67,33 @@ namespace ServiceLearningApp.Data
             }
         }
 
+        public async Task<List<Question>> GetRandomQuestionsBySubChapterIdAsync(int subChapterId, int count)
+        {
+            return await dbContext.Questions
+                .Include(q => q.SubChapter)
+                .Include(q => q.Image)
+                .Where(q => q.FkSubChapterId == subChapterId)
+                .OrderBy(r => EF.Functions.Random())
+                .Take(count)
+                .ToListAsync();
+        }
+
+        public async Task<List<Question>> GetRandomQuestionsByChapterIdAsync(int chapterId, int count)
+        {
+            return await dbContext.Questions
+                .Include(q => q.SubChapter)
+                .Include(q => q.Image)
+                .Where(q => q.SubChapter.FkChapterId == chapterId)
+                .OrderBy(r => EF.Functions.Random())
+                .Take(count)
+                .ToListAsync();
+        }
+
         private IQueryable<Question> ApplyFilterAndSort(IQueryable<Question> query, QueryParams? queryParams)
         {
-            if (queryParams == null)
-                return query;
+            query = query
+                .Include(e => e.SubChapter)
+                .Include(e => e.Image);
 
             // Filtering
             if (!string.IsNullOrEmpty(queryParams.Search))
