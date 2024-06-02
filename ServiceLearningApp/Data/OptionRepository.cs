@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using ServiceLearningApp.Helpers;
 using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ServiceLearningApp.Data
 {
@@ -41,6 +42,18 @@ namespace ServiceLearningApp.Data
 
         public async Task PostAsync(Option entity)
         {
+            if (entity.IsAnswer)
+            {
+                var isAnswerExists = await this.dbContext.Options
+                    .Where(e => e.FkQuestionId == entity.FkQuestionId && e.IsAnswer)
+                    .AnyAsync();
+
+                if (isAnswerExists)
+                {
+                    throw new BadHttpRequestException("Opsi jawaban benar sudah ada");
+                }
+            }
+
             await this.dbContext.Options.AddAsync(entity);
             await this.dbContext.SaveChangesAsync();
         }
@@ -52,6 +65,18 @@ namespace ServiceLearningApp.Data
 
         public async Task PutAsync(Option entity)
         {
+            if (entity.IsAnswer)
+            {
+                var isAnswerExists = await this.dbContext.Options
+                    .Where(e => e.FkQuestionId == entity.FkQuestionId && e.IsAnswer)
+                    .AnyAsync();
+
+                if (isAnswerExists)
+                {
+                    throw new BadHttpRequestException("Opsi jawaban benar sudah ada");
+                }
+            }
+
             this.dbContext.Entry(entity).State = EntityState.Modified;
             await this.dbContext.SaveChangesAsync();
         }

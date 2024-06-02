@@ -64,19 +64,25 @@ namespace ServiceLearningApp.Controllers
         [Authorize(Policy = "Teacher")]
         public async Task<IActionResult> CreateOption([FromBody] Option Option)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                await this.optionRepository.PostAsync(Option);
+
+                return new OkObjectResult(new
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "Success",
+                    Data = this.mapper.Map<Option, OptionDto>(Option)
+                });
             }
-
-            await this.optionRepository.PostAsync(Option);
-
-            return new OkObjectResult(new
+            catch (Exception ex)
             {
-                StatusCode = StatusCodes.Status200OK,
-                Message = "Success",
-                Data = this.mapper.Map<Option, OptionDto>(Option)
-            });
+                return new OkObjectResult(new
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = ex.Message
+                });
+            }
         }
 
         [HttpPut("{id}")]
@@ -94,19 +100,29 @@ namespace ServiceLearningApp.Controllers
                 });
             }
 
-            existingOption.OptionText = updatedOption.OptionText;
-            existingOption.IsAnswer = updatedOption.IsAnswer;
-            existingOption.FkQuestionId = updatedOption.FkQuestionId;
-            //this.mapper.Map(updatedOption, existingOption);
-
-            await this.optionRepository.PutAsync(existingOption);
-
-            return new OkObjectResult(new
+            try
             {
-                StatusCode = StatusCodes.Status200OK,
-                Message = "Success",
-                Data = this.mapper.Map<Option, OptionDto>(existingOption)
-            });
+                existingOption.OptionText = updatedOption.OptionText;
+                existingOption.IsAnswer = updatedOption.IsAnswer;
+                existingOption.FkQuestionId = updatedOption.FkQuestionId;
+
+                await this.optionRepository.PutAsync(existingOption);
+
+                return new OkObjectResult(new
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "Success",
+                    Data = this.mapper.Map<Option, OptionDto>(existingOption)
+                });
+            }
+            catch (Exception ex)
+            {
+                return new OkObjectResult(new
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = ex.Message
+                });
+            }
         }
 
         [HttpDelete("{id}")]
