@@ -19,6 +19,7 @@ namespace ServiceLearningApp.Data
         public DbSet<Chapter> Chapters { get; set; }
         public DbSet<SubChapter> SubChapters { get; set; }
         public DbSet<ExerciseTransaction> ExerciseTransactions { get; set; }
+        public DbSet<HistoryAnswer> HistoryAnswers { get; set; }
         public DbSet<Upload> Uploads { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)

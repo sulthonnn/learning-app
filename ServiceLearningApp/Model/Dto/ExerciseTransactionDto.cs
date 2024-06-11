@@ -12,5 +12,7 @@ namespace ServiceLearningApp.Model.Dto
         public int Score { get; set; }
         public int FkSubChapterId { get; set; }
         public required string FkUserId { get; set; }
+
+        public List<HistoryAnswerDto> HistoryAnswer { get; set; }
     }
 }

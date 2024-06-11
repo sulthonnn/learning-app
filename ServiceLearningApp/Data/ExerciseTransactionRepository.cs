@@ -66,6 +66,26 @@ namespace ServiceLearningApp.Data
             }
         }
 
+        public async Task PostHistoryAnswerAsync(List<HistoryAnswer> historyAnswers)
+        {
+            if (historyAnswers == null)
+                throw new ArgumentNullException(nameof(historyAnswers));
+
+            this.dbContext.HistoryAnswers.AddRange(historyAnswers);
+            await this.dbContext.SaveChangesAsync();
+        }
+
+        public async Task<IReadOnlyList<HistoryAnswer>> GetHistoryAnswerByExerciseId(int id)
+        {
+            return await this.dbContext.HistoryAnswers
+                .Include(e => e.Question)
+                .Include(e => e.Option)
+                .Include(e => e.ExerciseTransaction)
+                .Where(e => e.FkExerciseTransactionId == id)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
         private int CalculateScore(int correctAnswer, int incorrectAnswer)
         {
             var totalQuestion = correctAnswer + incorrectAnswer;
@@ -78,7 +98,7 @@ namespace ServiceLearningApp.Data
 
 
         private IQueryable<ExerciseTransaction> ApplyFilterAndSort(IQueryable<ExerciseTransaction> query, QueryParams? queryParams)
-        {            
+        {
 
             // Filtering
             if (!string.IsNullOrEmpty(queryParams.Search))
@@ -93,6 +113,8 @@ namespace ServiceLearningApp.Data
                 {
                     "startDate" => query.OrderBy(e => e.StartDate),
                     "-startDate" => query.OrderByDescending(e => e.StartDate),
+                    "score" => query.OrderBy(e => e.Score),
+                    "-score" => query.OrderByDescending(e => e.Score),
                     _ => query.OrderBy(e => e.Id),
                 };
             }

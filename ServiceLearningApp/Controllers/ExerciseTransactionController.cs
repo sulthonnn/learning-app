@@ -15,12 +15,12 @@ namespace ServiceLearningApp.Controllers
     [Authorize(Policy = "Bearer")]
     public class ExerciseTransactionController : Controller
     {
-        private readonly IExerciseTransactionRepository ExerciseTransactionRepository;
+        private readonly IExerciseTransactionRepository exerciseTransactionRepository;
         private readonly IMapper mapper;
 
-        public ExerciseTransactionController(IExerciseTransactionRepository ExerciseTransactionRepository, IMapper mapper)
+        public ExerciseTransactionController(IExerciseTransactionRepository exerciseTransactionRepository, IMapper mapper)
         {
-            this.ExerciseTransactionRepository = ExerciseTransactionRepository;
+            this.exerciseTransactionRepository = exerciseTransactionRepository;
             this.mapper = mapper;
         }
 
@@ -28,7 +28,7 @@ namespace ServiceLearningApp.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetAllExerciseTransaction([FromQuery] QueryParams? queryParams)
         {
-            var ExerciseTransactions = await this.ExerciseTransactionRepository.GetAllAsync(queryParams);
+            var ExerciseTransactions = await this.exerciseTransactionRepository.GetAllAsync(queryParams);
 
             return new OkObjectResult(new
             {
@@ -42,7 +42,7 @@ namespace ServiceLearningApp.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetExerciseTransaction(int id)
         {
-            var ExerciseTransaction = await this.ExerciseTransactionRepository.GetAsync(id);
+            var ExerciseTransaction = await this.exerciseTransactionRepository.GetAsync(id);
             if (ExerciseTransaction == null)
             {
                 return new BadRequestObjectResult(new
@@ -62,15 +62,73 @@ namespace ServiceLearningApp.Controllers
 
         [HttpPost]
         [Authorize(Policy = "Student")]
-        public async Task<IActionResult> CreateExerciseTransaction([FromBody] ExerciseTransaction ExerciseTransaction)
+        public async Task<IActionResult> CreateExerciseTransaction([FromBody] ExerciseTransaction exerciseTransaction)
         {
-            await this.ExerciseTransactionRepository.PostAsync(ExerciseTransaction);
+            try
+            {
+                await this.exerciseTransactionRepository.PostAsync(exerciseTransaction);
+
+                var exercisceTransactionId = exerciseTransaction.Id;
+
+                var historyAnswers = exerciseTransaction.HistoryAnswer;
+                exerciseTransaction.HistoryAnswer = [];
+
+                foreach (var historyAnswer in historyAnswers)
+                {
+                    historyAnswer.FkExerciseTransactionId = exercisceTransactionId;
+                }
+
+                await this.exerciseTransactionRepository.PostHistoryAnswerAsync(historyAnswers);
+
+                var historyAnswerDtos = historyAnswers.Select(ha => new HistoryAnswerDto
+                {
+                    FkQuestionId = ha.FkQuestionId,
+                    FkOptionId = ha.FkOptionId,
+                    FkExerciseTransactionId = ha.FkExerciseTransactionId
+                }).ToList();
+
+                var exerciseTransactionDto = this.mapper.Map<ExerciseTransaction, ExerciseTransactionDto>(exerciseTransaction);
+                exerciseTransactionDto.HistoryAnswer = historyAnswerDtos;
+
+                exerciseTransaction.HistoryAnswer = historyAnswers;
+
+                return new OkObjectResult(new
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "Success",
+                    Data = exerciseTransactionDto
+                });
+            }
+            catch (Exception ex)
+            {
+
+                return new BadRequestObjectResult(new
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = ex.Message
+                });
+            }
+        }
+
+        [HttpGet("{id}/history-answer")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetHistoryAnswerByExerciseId(int id)
+        {
+            var historyAnswers = await this.exerciseTransactionRepository.GetHistoryAnswerByExerciseId(id);
+            if (historyAnswers == null || historyAnswers.Count == 0)
+            {
+                return new BadRequestObjectResult(new
+                {
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = "Data tidak ditemukan"
+                });
+            }
 
             return new OkObjectResult(new
             {
                 StatusCode = StatusCodes.Status200OK,
                 Message = "Success",
-                Data = this.mapper.Map<ExerciseTransaction, ExerciseTransactionDto>(ExerciseTransaction)
+                Data = historyAnswers
             });
         }
 
@@ -78,7 +136,7 @@ namespace ServiceLearningApp.Controllers
         //[Authorize(Policy = "Student")]
         //public async Task<IActionResult> UpdateExerciseTransaction(int id, [FromBody] ExerciseTransaction updatedExerciseTransaction)
         //{
-        //    var existingExerciseTransaction = await this.ExerciseTransactionRepository.GetAsync(id);
+        //    var existingExerciseTransaction = await this.exerciseTransactionRepository.GetAsync(id);
 
         //    if (existingExerciseTransaction == null)
         //    {
@@ -92,7 +150,7 @@ namespace ServiceLearningApp.Controllers
         //    existingExerciseTransaction.Title = updatedExerciseTransaction.Title;
         //    //this.mapper.Map(updatedExerciseTransaction, existingExerciseTransaction);
 
-        //    await this.ExerciseTransactionRepository.PutAsync(existingExerciseTransaction);
+        //    await this.exerciseTransactionRepository.PutAsync(existingExerciseTransaction);
 
         //    return new OkObjectResult(new
         //    {
@@ -106,7 +164,7 @@ namespace ServiceLearningApp.Controllers
         [Authorize(Policy = "Teacher")]
         public async Task<IActionResult> DeleteExerciseTransaction(int id)
         {
-            var ExerciseTransaction = await this.ExerciseTransactionRepository.GetAsync(id);
+            var ExerciseTransaction = await this.exerciseTransactionRepository.GetAsync(id);
             if (ExerciseTransaction == null)
             {
                 return new BadRequestObjectResult(new
@@ -116,7 +174,7 @@ namespace ServiceLearningApp.Controllers
                 });
             }
 
-            await this.ExerciseTransactionRepository.DeleteAsync(ExerciseTransaction.Id);
+            await this.exerciseTransactionRepository.DeleteAsync(ExerciseTransaction.Id);
             
             return new OkObjectResult(new
             {

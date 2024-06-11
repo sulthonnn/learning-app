@@ -19,5 +19,7 @@ namespace ServiceLearningApp.Model
         [ForeignKey(nameof(FkUserId))]
         public ApplicationUser? User { get; set; }
         public string FkUserId { get; set; }
+
+        public List<HistoryAnswer> HistoryAnswer { get; set; }
     }
 }

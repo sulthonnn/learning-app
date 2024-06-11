@@ -12,7 +12,9 @@ namespace ServiceLearningApp.Helpers
             CreateMap<SubChapter, SubChapterDto>();
             CreateMap<Question, QuestionDto>();
             CreateMap<Option, OptionDto>();
-            CreateMap<ExerciseTransaction, ExerciseTransactionDto>();
+            CreateMap<ExerciseTransaction, ExerciseTransactionDto>()
+                .ForMember(dest => dest.HistoryAnswer, opt => opt.MapFrom(src => src.HistoryAnswer));
+            ;
         }
     }
 }
