@@ -69,24 +69,59 @@ namespace ServiceLearningApp.Data
 
         public async Task<List<Question>> GetRandomQuestionsBySubChapterIdAsync(int subChapterId, int count)
         {
-            return await dbContext.Questions
+            var questions = await dbContext.Questions
                 .Include(q => q.SubChapter)
                 .Include(q => q.Image)
                 .Where(q => q.FkSubChapterId == subChapterId)
                 .OrderBy(r => EF.Functions.Random())
                 .Take(count)
                 .ToListAsync();
+
+            // Ambil semua opsi yang sesuai dengan pertanyaan yang diambil
+            var questionIds = questions.Select(q => q.Id).ToList();
+            var options = await dbContext.Options
+                .Where(o => questionIds.Contains(o.FkQuestionId))
+                .AsNoTracking()
+                .ToListAsync();
+
+            var random = new Random();
+            foreach (var question in questions)
+            {
+                question.Options = options
+                    .Where(o => o.FkQuestionId == question.Id)
+                    .OrderBy(o => random.Next()) // Acak opsi
+                    .ToList();
+            }
+
+            return questions;
         }
 
         public async Task<List<Question>> GetRandomQuestionsByChapterIdAsync(int chapterId, int count)
         {
-            return await dbContext.Questions
+            var questions = await dbContext.Questions
                 .Include(q => q.SubChapter)
                 .Include(q => q.Image)
                 .Where(q => q.SubChapter.FkChapterId == chapterId)
                 .OrderBy(r => EF.Functions.Random())
                 .Take(count)
                 .ToListAsync();
+
+            var questionIds = questions.Select(q => q.Id).ToList();
+            var options = await dbContext.Options
+                .Where(o => questionIds.Contains(o.FkQuestionId))
+                .AsNoTracking()
+                .ToListAsync();
+
+            var random = new Random();
+            foreach (var question in questions)
+            {
+                question.Options = options
+                    .Where(o => o.FkQuestionId == question.Id)
+                    .OrderBy(o => random.Next()) // Acak opsi
+                    .ToList();
+            }
+
+            return questions;
         }
 
         private IQueryable<Question> ApplyFilterAndSort(IQueryable<Question> query, QueryParams? queryParams)

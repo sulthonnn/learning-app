@@ -14,5 +14,7 @@ namespace ServiceLearningApp.Model
         [ForeignKey(nameof(FkSubChapterId))]
         public SubChapter? SubChapter { get; set; }
         public int FkSubChapterId { get; set; }
+
+        public List<Option> Options { get; set; }
     }
 }
