@@ -128,7 +128,6 @@ namespace ServiceLearningApp.Data
 
         public async Task<IReadOnlyList<RankingDto>> GetRankAsync(QueryParams queryParams)
         {
-
             // Ambil query dari DbContext
             IQueryable<ExerciseTransaction> query = this.dbContext.ExerciseTransactions
                 .Include(e => e.SubChapter)
@@ -138,39 +137,65 @@ namespace ServiceLearningApp.Data
             query = ApplyFilterAndSort(query, queryParams);
             query = ApplyPagination(query, queryParams);
 
-            var maxScoreTransactions = await query
-                .GroupBy(e => e.FkUserId)
+            // Grouping berdasarkan FkUserId dan SubChapterId, lalu mengambil nilai tertinggi untuk setiap subchapter
+            var maxScoreTransactionsBySubChapter = await query
+                .GroupBy(e => new { e.FkUserId, e.FkSubChapterId, e.SubChapter.FkChapterId })
                 .Select(g => g.OrderByDescending(e => e.Score)
                              .ThenBy(e => (e.EndDate - e.StartDate).TotalSeconds)
                              .FirstOrDefault())
                 .ToListAsync();
 
-            // Projection ke ExerciseTransactionDto
-            var rankings = maxScoreTransactions
-                .Select(e => new RankingDto
+            // Grouping hasil berdasarkan FkUserId dan ChapterId, lalu menjumlahkan skor
+            var userScoresByChapter = maxScoreTransactionsBySubChapter
+                .GroupBy(e => new { e.FkUserId, e.SubChapter.FkChapterId })
+                .Select(g => new
                 {
-                    StartDate = e.StartDate,
-                    EndDate = e.EndDate,
-                    Score = e.Score,
-                    SubChapter = e.SubChapter.Title,
-                    UserFullName = e.User.FullName
+                    User = g.First().User,
+                    ChapterId = g.Key.FkChapterId,
+                    TotalScore = g.Sum(e => e.Score),
+                    TotalSeconds = g.Sum(e => (decimal)(e.EndDate - e.StartDate).TotalSeconds),
+                    Transactions = g.ToList()
                 })
                 .ToList();
 
+            // Projection ke RankingDto
+            var rankings = userScoresByChapter
+                .Select(u => new RankingDto
+                {
+                    ChapterId = u.ChapterId,
+                    UserFullName = u.User.FullName,
+                    TotalScore = u.TotalScore,
+                    AverageTime = u.Transactions.Count > 0 ? (u.TotalSeconds / u.Transactions.Count) : 0m,
+                    ExerciseTransactions = u.Transactions.Select(t => new ExerciseTransactionDto
+                    {
+                        Id = t.Id,
+                        StartDate = t.StartDate,
+                        EndDate = t.EndDate,
+                        CorrectAnswer = t.CorrectAnswer,
+                        IncorrectAnswer = t.IncorrectAnswer,
+                        Score = t.Score,
+                        SubChapter = t.SubChapter.Title,
+                        UserFullName = t.User.FullName
+                    }).ToList()
+                })
+                .ToList();
+
+            // Sorting berdasarkan queryParams.Sort
             if (!string.IsNullOrEmpty(queryParams.Sort))
             {
                 rankings = queryParams.Sort switch
                 {
-                    "score" => rankings.OrderBy(e => e.Score).ToList(),
-                    "-score" => rankings.OrderByDescending(e => e.Score).ToList(),
-                    "time" => rankings.OrderBy(e => (e.EndDate - e.StartDate).TotalSeconds).ToList(),
-                    "-time" => rankings.OrderByDescending(e => (e.EndDate - e.StartDate).TotalSeconds).ToList(),
+                    "score" => rankings.OrderBy(e => e.TotalScore).ToList(),
+                    "-score" => rankings.OrderByDescending(e => e.TotalScore).ToList(),
+                    "time" => rankings.OrderBy(e => e.AverageTime).ToList(),
+                    "-time" => rankings.OrderByDescending(e => e.AverageTime).ToList(),
                     _ => rankings
                 };
             }
 
             return rankings;
         }
+
 
         private int CalculateScore(int correctAnswer, int incorrectAnswer)
         {
@@ -189,6 +214,11 @@ namespace ServiceLearningApp.Data
             if (!string.IsNullOrEmpty(queryParams.Search))
             {
                 query = query.Where(e => EF.Functions.ILike(e.User.FullName, "%" + queryParams.Search + "%"));
+            }
+
+            if (queryParams.ChapterId.HasValue)
+            {
+                query = query.Where(e => e.SubChapter.FkChapterId == queryParams.ChapterId);
             }
 
             // Sorting

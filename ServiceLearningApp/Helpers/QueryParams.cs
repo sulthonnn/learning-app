@@ -16,5 +16,8 @@
         //for option
         public int? FkQuestionId { get; set; }
 
+        public int? ChapterId { get; set; }
+
+
     }
 }

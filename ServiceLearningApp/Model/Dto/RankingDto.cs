@@ -2,10 +2,10 @@
 {
     public class RankingDto
     {
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-        public int Score { get; set; }
-        public required string SubChapter { get; set; }
+        public int TotalScore { get; set; }
+        public decimal AverageTime { get; set; }
+        public int ChapterId { get; set; }
         public required string UserFullName { get; set; }
+        public List<ExerciseTransactionDto> ExerciseTransactions { get; set; }
     }
 }

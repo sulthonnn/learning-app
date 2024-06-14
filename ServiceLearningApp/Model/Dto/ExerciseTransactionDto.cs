@@ -11,7 +11,6 @@ namespace ServiceLearningApp.Model.Dto
         public int IncorrectAnswer { get; set; }
         public int Score { get; set; }
         public required string SubChapter { get; set; }
-        public int FkUserId { get; set; }
         public required string UserFullName { get; set; }
 
         public List<HistoryAnswerDto> HistoryAnswer { get; set; }
