@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Linq;
 using ServiceLearningApp.Helpers;
 using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
+using Microsoft.AspNetCore.Mvc;
+using ServiceLearningApp.Model.Dto;
 
 namespace ServiceLearningApp.Data
 {
@@ -17,6 +19,7 @@ namespace ServiceLearningApp.Data
         {
             this.dbContext = dbContext;
         }
+
         public async Task<IReadOnlyList<ExerciseTransaction>> GetAllAsync(QueryParams? queryParams)
         {
             IQueryable<ExerciseTransaction> query = this.dbContext.ExerciseTransactions;
@@ -24,12 +27,49 @@ namespace ServiceLearningApp.Data
             // Filtering&Sorting
             query = ApplyFilterAndSort(query, queryParams);
             // Pagination
-            query = ApplyPagination(query, queryParams);            
+            query = ApplyPagination(query, queryParams);
 
             return await query
                 .AsNoTracking()
                 .ToListAsync();
         }
+        public async Task<IReadOnlyList<ExerciseTransactionDto>> GetAllAsyncDto(QueryParams? queryParams)
+        {
+            // Ambil query dari DbContext
+            IQueryable<ExerciseTransaction> query = this.dbContext.ExerciseTransactions
+                .Include(e => e.SubChapter)
+                .Include(e => e.User)
+                .Include(e => e.HistoryAnswer);
+
+            // Filtering & Sorting
+            query = ApplyFilterAndSort(query, queryParams);
+            query = ApplyPagination(query, queryParams);
+
+            // Projection ke ExerciseTransactionDto
+            var exerciseTransactions = await query
+                .Select(e => new ExerciseTransactionDto
+                {
+                    Id = e.Id,
+                    StartDate = e.StartDate,
+                    EndDate = e.EndDate,
+                    CorrectAnswer = e.CorrectAnswer,
+                    IncorrectAnswer = e.IncorrectAnswer,
+                    Score = e.Score,
+                    SubChapter = e.SubChapter.Title,
+                    UserFullName = e.User.FullName,
+                    HistoryAnswer = e.HistoryAnswer.Select(h => new HistoryAnswerDto
+                    {
+                        FkQuestionId = h.FkQuestionId,
+                        FkOptionId = h.FkOptionId,
+                        FkExerciseTransactionId = h.FkExerciseTransactionId
+                    }).ToList()
+                })
+                .AsNoTracking()
+                .ToListAsync();
+
+            return exerciseTransactions;
+        }
+
 
         public async Task<ExerciseTransaction> GetAsync(int id)
         {
@@ -86,6 +126,52 @@ namespace ServiceLearningApp.Data
                 .ToListAsync();
         }
 
+        public async Task<IReadOnlyList<RankingDto>> GetRankAsync(QueryParams queryParams)
+        {
+
+            // Ambil query dari DbContext
+            IQueryable<ExerciseTransaction> query = this.dbContext.ExerciseTransactions
+                .Include(e => e.SubChapter)
+                .Include(e => e.User);
+
+            // Filtering & Sorting
+            query = ApplyFilterAndSort(query, queryParams);
+            query = ApplyPagination(query, queryParams);
+
+            var maxScoreTransactions = await query
+                .GroupBy(e => e.FkUserId)
+                .Select(g => g.OrderByDescending(e => e.Score)
+                             .ThenBy(e => (e.EndDate - e.StartDate).TotalSeconds)
+                             .FirstOrDefault())
+                .ToListAsync();
+
+            // Projection ke ExerciseTransactionDto
+            var rankings = maxScoreTransactions
+                .Select(e => new RankingDto
+                {
+                    StartDate = e.StartDate,
+                    EndDate = e.EndDate,
+                    Score = e.Score,
+                    SubChapter = e.SubChapter.Title,
+                    UserFullName = e.User.FullName
+                })
+                .ToList();
+
+            if (!string.IsNullOrEmpty(queryParams.Sort))
+            {
+                rankings = queryParams.Sort switch
+                {
+                    "score" => rankings.OrderBy(e => e.Score).ToList(),
+                    "-score" => rankings.OrderByDescending(e => e.Score).ToList(),
+                    "time" => rankings.OrderBy(e => (e.EndDate - e.StartDate).TotalSeconds).ToList(),
+                    "-time" => rankings.OrderByDescending(e => (e.EndDate - e.StartDate).TotalSeconds).ToList(),
+                    _ => rankings
+                };
+            }
+
+            return rankings;
+        }
+
         private int CalculateScore(int correctAnswer, int incorrectAnswer)
         {
             var totalQuestion = correctAnswer + incorrectAnswer;
@@ -99,11 +185,10 @@ namespace ServiceLearningApp.Data
 
         private IQueryable<ExerciseTransaction> ApplyFilterAndSort(IQueryable<ExerciseTransaction> query, QueryParams? queryParams)
         {
-
             // Filtering
             if (!string.IsNullOrEmpty(queryParams.Search))
             {
-                query = query.Where(e => EF.Functions.ILike(e.User.UserName, "%" + queryParams.Search + "%"));
+                query = query.Where(e => EF.Functions.ILike(e.User.FullName, "%" + queryParams.Search + "%"));
             }
 
             // Sorting
@@ -115,6 +200,8 @@ namespace ServiceLearningApp.Data
                     "-startDate" => query.OrderByDescending(e => e.StartDate),
                     "score" => query.OrderBy(e => e.Score),
                     "-score" => query.OrderByDescending(e => e.Score),
+                    "time" => query.OrderBy(e => (e.EndDate - e.StartDate).TotalSeconds),
+                    "-time" => query.OrderByDescending(e => e.Score),
                     _ => query.OrderBy(e => e.Id),
                 };
             }

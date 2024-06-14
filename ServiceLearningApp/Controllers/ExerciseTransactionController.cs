@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ServiceLearningApp.Data;
 using ServiceLearningApp.Helpers;
 using ServiceLearningApp.Interfaces;
 using ServiceLearningApp.Model;
 using ServiceLearningApp.Model.Dto;
-using ServiceLearningApp.Security;
 
 namespace ServiceLearningApp.Controllers
 {
@@ -26,15 +24,15 @@ namespace ServiceLearningApp.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> GetAllExerciseTransaction([FromQuery] QueryParams? queryParams)
+        public async Task<IActionResult> GetAllExerciseTransactionDto([FromQuery] QueryParams? queryParams)
         {
-            var ExerciseTransactions = await this.exerciseTransactionRepository.GetAllAsync(queryParams);
+            var exerciseTransactions = await this.exerciseTransactionRepository.GetAllAsyncDto(queryParams);
 
             return new OkObjectResult(new
             {
                 StatusCode = StatusCodes.Status200OK,
                 Message = "Success",
-                Data = ExerciseTransactions
+                Data = exerciseTransactions
             });
         }
 
@@ -42,8 +40,8 @@ namespace ServiceLearningApp.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetExerciseTransaction(int id)
         {
-            var ExerciseTransaction = await this.exerciseTransactionRepository.GetAsync(id);
-            if (ExerciseTransaction == null)
+            var exerciseTransaction = await this.exerciseTransactionRepository.GetAsync(id);
+            if (exerciseTransaction == null)
             {
                 return new BadRequestObjectResult(new
                 {
@@ -56,7 +54,7 @@ namespace ServiceLearningApp.Controllers
             {
                 StatusCode = StatusCodes.Status200OK,
                 Message = "Success",
-                Data = ExerciseTransaction
+                Data = exerciseTransaction
             });
         }
 
@@ -129,6 +127,28 @@ namespace ServiceLearningApp.Controllers
                 StatusCode = StatusCodes.Status200OK,
                 Message = "Success",
                 Data = historyAnswers
+            });
+        }
+
+        [HttpGet("ranking")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetRankAsync([FromQuery] QueryParams? queryParams)
+        {
+            var rankings = await this.exerciseTransactionRepository.GetRankAsync(queryParams);
+            if (rankings == null || rankings.Count == 0)
+            {
+                return new BadRequestObjectResult(new
+                {
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = "Data tidak ditemukan"
+                });
+            }
+
+            return new OkObjectResult(new
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = "Success",
+                Data = rankings
             });
         }
 
