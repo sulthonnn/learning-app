@@ -10,6 +10,9 @@ namespace ServiceLearningApp.Interfaces
         Task PostHistoryAnswerAsync(List<HistoryAnswer> historyAnswer);
         Task<IReadOnlyList<HistoryAnswer>> GetHistoryAnswerByExerciseId(int id);
         Task<IReadOnlyList<RankingDto>> GetRankAsync(QueryParams queryParams);
+        Task<IReadOnlyList<AllRankingDto>> GetAllRankingAsync(QueryParams queryParams);
+
+
 
     }
 }

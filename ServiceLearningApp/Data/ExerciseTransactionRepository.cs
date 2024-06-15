@@ -128,12 +128,10 @@ namespace ServiceLearningApp.Data
 
         public async Task<IReadOnlyList<RankingDto>> GetRankAsync(QueryParams queryParams)
         {
-            // Ambil query dari DbContext
             IQueryable<ExerciseTransaction> query = this.dbContext.ExerciseTransactions
                 .Include(e => e.SubChapter)
                 .Include(e => e.User);
 
-            // Filtering & Sorting
             query = ApplyFilterAndSort(query, queryParams);
             query = ApplyPagination(query, queryParams);
 
@@ -196,6 +194,84 @@ namespace ServiceLearningApp.Data
             return rankings;
         }
 
+        public async Task<IReadOnlyList<AllRankingDto>> GetAllRankingAsync(QueryParams queryParams)
+        {
+            IQueryable<ExerciseTransaction> query = this.dbContext.ExerciseTransactions
+                .Include(e => e.SubChapter)
+                .Include(e => e.User);
+
+            query = ApplyFilterAndSort(query, queryParams);
+            query = ApplyPagination(query, queryParams);
+
+            // Grouping berdasarkan FkUserId dan SubChapterId, lalu mengambil nilai tertinggi untuk setiap subchapter
+            var maxScoreTransactionsBySubChapter = await query
+                .GroupBy(e => new { e.FkUserId, e.FkSubChapterId, e.SubChapter.FkChapterId })
+                .Select(g => g.OrderByDescending(e => e.Score)
+                             .ThenBy(e => (e.EndDate - e.StartDate).TotalSeconds)
+                             .FirstOrDefault())
+                .ToListAsync();
+
+            // Grouping hasil berdasarkan FkUserId dan ChapterId, lalu menjumlahkan skor tiap subchapter
+            var userScoresByChapter = maxScoreTransactionsBySubChapter
+                .GroupBy(e => new { e.FkUserId, e.SubChapter.FkChapterId })
+                .Select(g => new
+                {
+                    User = g.First().User,
+                    ChapterId = g.Key.FkChapterId,
+                    TotalScore = g.Sum(e => e.Score),
+                    TotalSeconds = g.Sum(e => (decimal)(e.EndDate - e.StartDate).TotalSeconds),
+                    Transactions = g.ToList()
+                })
+                .ToList();
+
+            // Grouping hasil berdasarkan FkUserId untuk mendapatkan total semua skor chapter
+            var userTotalScores = userScoresByChapter
+                .GroupBy(u => u.User.Id)
+                .Select(g => new
+                {
+                    User = g.First().User,
+                    TotalScore = g.Sum(x => x.TotalScore),
+                    TotalSeconds = g.Sum(x => x.TotalSeconds),
+                    Chapters = g.ToList()
+                })
+                .ToList();
+
+            // Projection ke RankingDto
+            var rankings = userTotalScores
+                .Select(u => new AllRankingDto
+                {
+                    UserFullName = u.User.FullName,
+                    TotalScore = u.TotalScore,
+                    AverageTime = u.Chapters.Count > 0 ? (u.TotalSeconds / u.Chapters.Count) : 0m,
+                    ExerciseTransactions = u.Chapters.SelectMany(c => c.Transactions.Select(t => new ExerciseTransactionDto
+                    {
+                        Id = t.Id,
+                        StartDate = t.StartDate,
+                        EndDate = t.EndDate,
+                        CorrectAnswer = t.CorrectAnswer,
+                        IncorrectAnswer = t.IncorrectAnswer,
+                        Score = t.Score,
+                        SubChapter = t.SubChapter.Title,
+                        UserFullName = t.User.FullName
+                    })).ToList()
+                })
+                .ToList();
+
+            // Sorting berdasarkan queryParams.Sort
+            if (!string.IsNullOrEmpty(queryParams.Sort))
+            {
+                rankings = queryParams.Sort switch
+                {
+                    "score" => rankings.OrderBy(e => e.TotalScore).ToList(),
+                    "-score" => rankings.OrderByDescending(e => e.TotalScore).ToList(),
+                    "time" => rankings.OrderBy(e => e.AverageTime).ToList(),
+                    "-time" => rankings.OrderByDescending(e => e.AverageTime).ToList(),
+                    _ => rankings
+                };
+            }
+
+            return rankings;
+        }
 
         private int CalculateScore(int correctAnswer, int incorrectAnswer)
         {

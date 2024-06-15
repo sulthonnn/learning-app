@@ -152,6 +152,28 @@ namespace ServiceLearningApp.Controllers
             });
         }
 
+        [HttpGet("all-ranking")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllRankingAsync([FromQuery] QueryParams? queryParams)
+        {
+            var rankings = await this.exerciseTransactionRepository.GetAllRankingAsync(queryParams);
+            if (rankings == null || rankings.Count == 0)
+            {
+                return new BadRequestObjectResult(new
+                {
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = "Data tidak ditemukan"
+                });
+            }
+
+            return new OkObjectResult(new
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = "Success",
+                Data = rankings
+            });
+        }
+
         //[HttpPut("{id}")]
         //[Authorize(Policy = "Student")]
         //public async Task<IActionResult> UpdateExerciseTransaction(int id, [FromBody] ExerciseTransaction updatedExerciseTransaction)
