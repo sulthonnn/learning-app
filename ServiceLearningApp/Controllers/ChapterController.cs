@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ServiceLearningApp.Data;
 using ServiceLearningApp.Helpers;
 using ServiceLearningApp.Interfaces;
 using ServiceLearningApp.Model;
 using ServiceLearningApp.Model.Dto;
-using ServiceLearningApp.Security;
 
 namespace ServiceLearningApp.Controllers
 {
@@ -24,8 +22,8 @@ namespace ServiceLearningApp.Controllers
             this.mapper = mapper;
         }
 
+        [Authorize(Policy = "Student")]
         [HttpGet]
-        [AllowAnonymous]
         public async Task<IActionResult> GetAllChapter([FromQuery] QueryParams? queryParams)
         {
             var chapters = await this.chapterRepository.GetAllAsync(queryParams);
@@ -39,7 +37,7 @@ namespace ServiceLearningApp.Controllers
         }
 
         [HttpGet("{id}")]
-        [AllowAnonymous]
+        [Authorize(Policy = "Student")]
         public async Task<IActionResult> GetChapter(int id)
         {
             var chapter = await this.chapterRepository.GetAsync(id);

@@ -26,7 +26,7 @@ namespace ServiceLearningApp.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Policy = "Teacher")]
         public async Task<IActionResult> GetAllUpload([FromQuery] QueryParams? queryParams)
         {
             var uploads = await this.uploadRepository.GetAllAsync(queryParams);
@@ -40,7 +40,7 @@ namespace ServiceLearningApp.Controllers
         }
 
         [HttpGet("{id}")]
-        [AllowAnonymous]
+        [Authorize(Policy = "Teacher")]
         public async Task<IActionResult> GetUpload(int id)
         {
             var upload = await this.uploadRepository.GetAsync(id);
@@ -132,6 +132,7 @@ namespace ServiceLearningApp.Controllers
         }
 
         [HttpGet("download/{folder}/{file}")]
+        [Authorize(Policy = "Student")]
         [ResponseCache(Duration = 31536000)]
         public async Task<FileStreamResult> DownloadAsync(string folder, string file)
         {
@@ -140,7 +141,7 @@ namespace ServiceLearningApp.Controllers
         }
 
         [HttpPost("upload/image")]
-        [Authorize(Policy = "Teacher")]
+        [Authorize(Policy = "Student")]
         public async Task<IActionResult> UploadImageAsync([FromForm] UploadType type, [FromForm] IFormFile file, [FromForm] bool compress = false)
         {
             var upload = await this.uploadRepository.UploadImageAsync(type, file, compress);

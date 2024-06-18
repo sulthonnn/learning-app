@@ -25,7 +25,7 @@ namespace ServiceLearningApp.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Policy = "Teacher")]
         public async Task<IActionResult> GetAllOption([FromQuery] QueryParams? queryParams)
         {
             var Options = await this.optionRepository.GetAllAsync(queryParams);
@@ -39,7 +39,7 @@ namespace ServiceLearningApp.Controllers
         }
 
         [HttpGet("{id}")]
-        [AllowAnonymous]
+        [Authorize(Policy = "Teacher")]
         public async Task<IActionResult> GetOption(int id)
         {
             var Option = await this.optionRepository.GetAsync(id);

@@ -23,7 +23,7 @@ namespace ServiceLearningApp.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Policy = "Teacher")]
         public async Task<IActionResult> GetAllExerciseTransactionDto([FromQuery] QueryParams? queryParams)
         {
             var exerciseTransactions = await this.exerciseTransactionRepository.GetAllAsyncDto(queryParams);
@@ -37,7 +37,7 @@ namespace ServiceLearningApp.Controllers
         }
 
         [HttpGet("{id}")]
-        [AllowAnonymous]
+        [Authorize(Policy = "Student")]
         public async Task<IActionResult> GetExerciseTransaction(int id)
         {
             var exerciseTransaction = await this.exerciseTransactionRepository.GetAsync(id);
@@ -109,7 +109,7 @@ namespace ServiceLearningApp.Controllers
         }
 
         [HttpGet("{id}/history-answer")]
-        [AllowAnonymous]
+        [Authorize(Policy = "Student")]
         public async Task<IActionResult> GetHistoryAnswerByExerciseId(int id)
         {
             var historyAnswers = await this.exerciseTransactionRepository.GetHistoryAnswerByExerciseId(id);
@@ -131,7 +131,7 @@ namespace ServiceLearningApp.Controllers
         }
 
         [HttpGet("ranking")]
-        [AllowAnonymous]
+        [Authorize(Policy = "Student")]
         public async Task<IActionResult> GetRankAsync([FromQuery] QueryParams? queryParams)
         {
             var rankings = await this.exerciseTransactionRepository.GetRankAsync(queryParams);
@@ -153,7 +153,7 @@ namespace ServiceLearningApp.Controllers
         }
 
         [HttpGet("all-ranking")]
-        [AllowAnonymous]
+        [Authorize(Policy = "Student")]
         public async Task<IActionResult> GetAllRankingAsync([FromQuery] QueryParams? queryParams)
         {
             var rankings = await this.exerciseTransactionRepository.GetAllRankingAsync(queryParams);

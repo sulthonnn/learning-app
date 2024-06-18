@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using ServiceLearningApp.Helpers;
 using ServiceLearningApp.Model;
 using System.Security.Claims;
 
@@ -22,18 +23,8 @@ namespace ServiceLearningApp.Security
 
             options.AddPolicy("Student", policy =>
             {
-                policy.RequireRole(Role.Student);
+                policy.RequireRole(Role.Teacher, Role.Student);
             });
-
-            options.AddPolicy("EditPassword", policy =>
-                policy.RequireRole(Role.Student)
-                        .RequireAssertion(context =>
-                            context.User.HasClaim(c =>
-                                (c.Type == ClaimTypes.Role && c.Value == Role.Student) &&
-                                (c.Type == ClaimTypes.NameIdentifier && c.Value == context.User.FindFirstValue(ClaimTypes.NameIdentifier))
-                            )
-                        )
-            );
 
         }
     }

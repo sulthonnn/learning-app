@@ -12,7 +12,7 @@ namespace ServiceLearningApp.Controllers
 {
     [Produces("application/json")]
     [Route("api/sub-chapter")]
-    //[Authorize(Policy = "Bearer")]
+    [Authorize(Policy = "Bearer")]
     public class SubChapterController : Controller
     {
         private readonly ISubChapterRepository subChapterRepository;
@@ -27,7 +27,7 @@ namespace ServiceLearningApp.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Policy = "Teacher")]
         public async Task<IActionResult> GetAllSubChapter(QueryParams? queryParams)
         {
             var SubChapters = await this.subChapterRepository.GetAllAsync(queryParams);
@@ -41,7 +41,7 @@ namespace ServiceLearningApp.Controllers
         }
 
         [HttpGet("{id}")]
-        [AllowAnonymous]
+        [Authorize(Policy = "Teacher")]
         public async Task<IActionResult> GetSubChapter(int id)
         {
             var SubChapter = await this.subChapterRepository.GetAsync(id);
@@ -132,6 +132,7 @@ namespace ServiceLearningApp.Controllers
         }
 
         [HttpPost("upload")]
+        [Authorize(Policy = "Teacher")]
         public async Task<ActionResult<Upload>> Upload([FromForm] UploadDto model)
         {
             try
@@ -154,6 +155,7 @@ namespace ServiceLearningApp.Controllers
         }
 
         [HttpGet("download/{folder}/{file}")]
+        [Authorize(Policy = "Student")]
         [ResponseCache(Duration = 3600)]
         public async Task<FileStreamResult> Download(string folder, string file)
         {

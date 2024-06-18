@@ -27,7 +27,7 @@ namespace ServiceLearningApp.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Policy = "Teacher")]
         public async Task<IActionResult> GetAllQuestion([FromQuery] QueryParams? queryParams)
         {
             var Questions = await this.questionRepository.GetAllAsync(queryParams);
@@ -41,7 +41,7 @@ namespace ServiceLearningApp.Controllers
         }
 
         [HttpGet("{id}")]
-        [AllowAnonymous]
+        [Authorize(Policy = "Teacher")]
         public async Task<IActionResult> GetQuestion(int id)
         {
             var Question = await this.questionRepository.GetAsync(id);
@@ -137,7 +137,7 @@ namespace ServiceLearningApp.Controllers
         }
 
         [HttpGet("random/sub-chapter/{subChapterId}/count/{count}")]
-        [AllowAnonymous]
+        [Authorize(Policy = "Student")]
         public async Task<ActionResult<Question>> GetRandomQuestionsBySubChapter(int subChapterId, int count)
         {
             var randomQuestion = await this.questionRepository.GetRandomQuestionsBySubChapterIdAsync(subChapterId, count);
@@ -150,7 +150,7 @@ namespace ServiceLearningApp.Controllers
         }
 
         [HttpGet("random/chapter/{chapterId}/count/{count}")]
-        [AllowAnonymous]
+        [Authorize(Policy = "Student")]
         public async Task<ActionResult<Question>> GetRandomQuestionByChapter(int chapterId, int count)
         {
             var randomQuestion = await this.questionRepository.GetRandomQuestionsByChapterIdAsync(chapterId, count);
@@ -189,7 +189,7 @@ namespace ServiceLearningApp.Controllers
 
 
         [HttpGet("image/{folder}/{file}")]
-        [AllowAnonymous]
+        [Authorize(Policy = "Student")]
         [ResponseCache(Duration = 3600)]
         public async Task<FileStreamResult> Download(string folder, string file)
         {
