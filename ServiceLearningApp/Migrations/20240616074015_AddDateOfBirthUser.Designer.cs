@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ServiceLearningApp.Data;
@@ -11,9 +12,11 @@ using ServiceLearningApp.Data;
 namespace ServiceLearningApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240616074015_AddDateOfBirthUser")]
+    partial class AddDateOfBirthUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -221,8 +224,6 @@ namespace ServiceLearningApp.Migrations
                         .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("FkImageId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -542,15 +543,6 @@ namespace ServiceLearningApp.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("ServiceLearningApp.Model.ApplicationUser", b =>
-                {
-                    b.HasOne("ServiceLearningApp.Model.Upload", "Image")
-                        .WithMany()
-                        .HasForeignKey("FkImageId");
-
-                    b.Navigation("Image");
                 });
 
             modelBuilder.Entity("ServiceLearningApp.Model.ExerciseTransaction", b =>

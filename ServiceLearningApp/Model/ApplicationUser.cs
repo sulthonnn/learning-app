@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ServiceLearningApp.Model
 {
@@ -9,6 +10,11 @@ namespace ServiceLearningApp.Model
         public override string PasswordHash { get => base.PasswordHash; set => base.PasswordHash = value; }
         public string? NISN { get; set; }
         public string? FullName { get; set; }
+        public DateTime? DateOfBirth { get; set; }
+
+        [ForeignKey("FkImageId")]
+        public Upload Image { get; set; }
+        public int? FkImageId { get; set; }
 
     }
 }

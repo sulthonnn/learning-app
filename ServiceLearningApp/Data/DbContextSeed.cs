@@ -10,12 +10,6 @@ namespace ServiceLearningApp.Data
     {
         public static async Task SeedAsync(ApplicationDbContext dbContext)
         {
-            // Deleting existing data and resetting identity columns
-            //await ResetTableAsync<Chapter>(dbContext, "Chapters");
-            //await ResetTableAsync<SubChapter>(dbContext, "SubChapters");
-            //await ResetTableAsync<Exercise>(dbContext, "Exercises");
-            //await ResetTableAsync<Question>(dbContext, "Questions");
-            //await ResetTableAsync<Option>(dbContext, "Options");
 
             var basePath = AppContext.BaseDirectory; // Get the current application directory
 

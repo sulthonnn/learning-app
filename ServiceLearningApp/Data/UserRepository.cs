@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Model.Common.Dto;
 using ServiceLearningApp.Interfaces;
 using ServiceLearningApp.Model;
 using ServiceLearningApp.Model.Dto;
@@ -15,19 +16,22 @@ using System.Security.Claims;
 
 namespace ServiceLearningApp.Data
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : ControllerBase, IUserRepository
     {
         private readonly ApplicationDbContext dbContext;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly IConfiguration configuration;
         private readonly TokenAuthOptions tokenOptions;
+        private readonly IAuthorizationService authorizationService;
+
 
         public UserRepository(
             ApplicationDbContext dbContext,
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
-            IOptions<TokenAuthOptions> tokenOptions
+            IOptions<TokenAuthOptions> tokenOptions,
+            IAuthorizationService authorizationService
             //IConfiguration configuration
             )
         {
@@ -36,6 +40,7 @@ namespace ServiceLearningApp.Data
             this.roleManager = roleManager;
             //this.configuration = configuration;
             this.tokenOptions = tokenOptions.Value;
+            this.authorizationService = authorizationService;
         }
 
         public async Task<IActionResult> Login([FromBody] LoginDto model)
@@ -108,6 +113,100 @@ namespace ServiceLearningApp.Data
             }
         }
 
+        public async Task<UserDto> GetById(string id)
+        {
+            var user = await this.dbContext.Users
+                .SingleAsync(e => e.Id == id);
+
+            var roles = await userManager.GetRolesAsync(user);
+
+            var roleString = string.Join(", ", roles);
+
+            return new UserDto
+            {
+                Id = user.Id,
+                UserName = user.UserName,
+                FullName = user.FullName,
+                Email = user.Email,
+                NISN = user.NISN,
+                Role = roleString,
+                Image = user.Image,
+                FkImageId = user.FkImageId,
+                DateOfBirth = user.DateOfBirth
+            };
+        }
+
+
+        public async Task<IActionResult> UpdateProfile(UserDto model)
+        {
+
+            using(var transaction = dbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    var existingUser = await userManager.FindByIdAsync(model.Id);
+                    if (existingUser == null)
+                    {
+                        return new NotFoundObjectResult(new { StatusCode = StatusCodes.Status404NotFound, Message = "User tidak ditemukan" });
+
+                    }
+
+                    existingUser.FullName = model.FullName;
+                    existingUser.UserName = model.UserName;
+                    existingUser.NISN = model.NISN;
+                    existingUser.DateOfBirth = model.DateOfBirth;
+                    existingUser.Email = model.Email;
+
+                    dbContext.Update(existingUser);
+                    await dbContext.SaveChangesAsync();
+
+
+                    if (model.FkImageId != null)
+                    {
+                        existingUser.FkImageId = model.FkImageId;
+                        await userManager.UpdateAsync(existingUser);
+                    }
+
+                    transaction.Commit();
+                    return new OkObjectResult(new { StatusCode = StatusCodes.Status200OK, Message = "Sukses mengubah profil" });
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+            }
+
+        }
+
+        public async Task<IActionResult> UpdatePassword(UpdatePasswordDto model)
+        {
+
+            // Validasi input menggunakan FluentValidation
+            var validator = new UpdatePasswordValidators();
+            var validationResult = validator.Validate(model);
+            if (!validationResult.IsValid)
+            {
+                return new BadRequestObjectResult(new { StatusCode = StatusCodes.Status400BadRequest, Message = validationResult.Errors.First().ErrorMessage });
+            }
+
+            // Temukan pengguna berdasarkan UserId
+            var user = await userManager.FindByIdAsync(model.Id);
+            if (user == null)
+            {
+                return new NotFoundObjectResult(new { StatusCode = StatusCodes.Status404NotFound, Message = "User tidak ditemukan" });
+            }
+
+            // Perbarui kata sandi
+            var changePasswordResult = await userManager.ChangePasswordAsync(user, model.PasswordOld, model.Password);
+            if (!changePasswordResult.Succeeded)
+            {
+                return new BadRequestObjectResult(new { StatusCode = StatusCodes.Status400BadRequest, Message = "Gagal mengubah password" });
+            }
+
+            return new OkObjectResult(new { StatusCode = StatusCodes.Status200OK, Message = "Sukses mengubah password" });
+        }
+
         private async Task<ApplicationUser> CreateStudentUser(RegistrationDto model)
         {
             var existingUser = await userManager.FindByNameAsync(model.UserName);
@@ -176,8 +275,8 @@ namespace ServiceLearningApp.Data
             }
 
             var id = new ClaimsIdentity(claims);
-            id.AddClaim(new Claim(ClaimTypes.Email, user.Email ?? string.Empty));
             id.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id));
+            id.AddClaim(new Claim(ClaimTypes.Email, user.Email ?? string.Empty));
             id.AddClaim(new Claim("NISN", user.NISN ?? string.Empty));
             id.AddClaim(new Claim("fullName", user.FullName ?? string.Empty));
 
