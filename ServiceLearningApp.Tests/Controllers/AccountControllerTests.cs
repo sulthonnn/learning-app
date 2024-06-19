@@ -86,6 +86,7 @@ namespace ServiceLearningApp.Tests.Controllers
         {
             // Arrange
             var userRepository = A.Fake<IUserRepository>();
+            var authorizationService = A.Fake<IAuthorizationService>();
 
             var loginDto = new LoginDto
             {
@@ -104,7 +105,7 @@ namespace ServiceLearningApp.Tests.Controllers
 
             A.CallTo(() => userRepository.Login(loginDto)).Returns(Task.FromResult<IActionResult>(new BadRequestObjectResult(errorResponse)));
 
-            var controller = new AccountController(userRepository);
+            var controller = new AccountController(userRepository, authorizationService);
 
             // Act
             var result = await controller.Login(loginDto);
@@ -123,6 +124,7 @@ namespace ServiceLearningApp.Tests.Controllers
         {
             // Arrange
             var userRepository = A.Fake<IUserRepository>();
+            var authorizationService = A.Fake<IAuthorizationService>();
 
             var registrationDto = new RegistrationDto
             {
@@ -158,7 +160,7 @@ namespace ServiceLearningApp.Tests.Controllers
 
             A.CallTo(() => userRepository.Register(registrationDto)).Returns(Task.FromResult<IActionResult>(new OkObjectResult(successResponse)));
 
-            var controller = new AccountController(userRepository);
+            var controller = new AccountController(userRepository, authorizationService);
 
             // Act
             var result = await controller.Register(registrationDto);
@@ -178,6 +180,7 @@ namespace ServiceLearningApp.Tests.Controllers
         {
             // Arrange
             var userRepository = A.Fake<IUserRepository>();
+            var authorizationService = A.Fake<IAuthorizationService>();
 
             var registrationDto = new RegistrationDto
             {
@@ -198,7 +201,7 @@ namespace ServiceLearningApp.Tests.Controllers
 
             A.CallTo(() => userRepository.Register(registrationDto)).Returns(Task.FromResult<IActionResult>(new BadRequestObjectResult(errorResponse)));
 
-            var controller = new AccountController(userRepository);
+            var controller = new AccountController(userRepository, authorizationService);
 
             // Act
             var result = await controller.Register(registrationDto);
@@ -216,6 +219,7 @@ namespace ServiceLearningApp.Tests.Controllers
         {
             // Arrange
             var userRepository = A.Fake<IUserRepository>();
+            var authorizationService = A.Fake<IAuthorizationService>();
 
             var registrationDto = new RegistrationDto
             {
@@ -237,7 +241,7 @@ namespace ServiceLearningApp.Tests.Controllers
 
             A.CallTo(() => userRepository.Register(registrationDto)).Returns(Task.FromResult<IActionResult>(new BadRequestObjectResult(errorResponse)));
 
-            var controller = new AccountController(userRepository);
+            var controller = new AccountController(userRepository, authorizationService);
 
             // Act
             var result = await controller.Register(registrationDto);
@@ -255,6 +259,7 @@ namespace ServiceLearningApp.Tests.Controllers
         {
             // Arrange
             var userRepository = A.Fake<IUserRepository>();
+            var authorizationService = A.Fake<IAuthorizationService>();
 
             var registrationDto = new RegistrationDto
             {
@@ -276,7 +281,7 @@ namespace ServiceLearningApp.Tests.Controllers
 
             A.CallTo(() => userRepository.Register(registrationDto)).Returns(Task.FromResult<IActionResult>(new BadRequestObjectResult(errorResponse)));
 
-            var controller = new AccountController(userRepository);
+            var controller = new AccountController(userRepository, authorizationService);
 
             // Act
             var result = await controller.Register(registrationDto);
@@ -295,6 +300,8 @@ namespace ServiceLearningApp.Tests.Controllers
         {
             // Arrange
             var userRepository = A.Fake<IUserRepository>();
+            var authorizationService = A.Fake<IAuthorizationService>();
+
 
             var registrationDto = new RegistrationDto
             {
@@ -315,7 +322,7 @@ namespace ServiceLearningApp.Tests.Controllers
 
             A.CallTo(() => userRepository.Register(registrationDto)).Returns(Task.FromResult<IActionResult>(new BadRequestObjectResult(errorResponse)));
 
-            var controller = new AccountController(userRepository);
+            var controller = new AccountController(userRepository, authorizationService);
 
             // Act
             var result = await controller.Register(registrationDto);
