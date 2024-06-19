@@ -1,17 +1,15 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ServiceLearningApp.Data;
 using ServiceLearningApp.Helpers;
 using ServiceLearningApp.Interfaces;
 using ServiceLearningApp.Model;
 using ServiceLearningApp.Model.Dto;
-using ServiceLearningApp.Security;
 
 namespace ServiceLearningApp.Controllers
 {
     [Produces("application/json")]
-    [Route("api/sub-chapter")]
+    [Route("api/v1/sub-chapter")]
     [Authorize(Policy = "Bearer")]
     public class SubChapterController : Controller
     {
@@ -27,7 +25,7 @@ namespace ServiceLearningApp.Controllers
         }
 
         [HttpGet]
-        [Authorize(Policy = "Teacher")]
+        [Authorize(Policy = "Student")]
         public async Task<IActionResult> GetAllSubChapter(QueryParams? queryParams)
         {
             var SubChapters = await this.subChapterRepository.GetAllAsync(queryParams);
@@ -41,7 +39,7 @@ namespace ServiceLearningApp.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Policy = "Teacher")]
+        [Authorize(Policy = "Student")]
         public async Task<IActionResult> GetSubChapter(int id)
         {
             var SubChapter = await this.subChapterRepository.GetAsync(id);

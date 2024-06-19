@@ -1,24 +1,16 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using Model.Common.Dto;
-using ServiceLearningApp.Data;
 using ServiceLearningApp.Interfaces;
 using ServiceLearningApp.Model;
 using ServiceLearningApp.Model.Dto;
 using ServiceLearningApp.Security;
-using ServiceLearningApp.Validators;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace ServiceLearningApp.Controllers
 {
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [Authorize(Policy = "Bearer")]
     public class AccountController : Controller
     {
@@ -83,7 +75,6 @@ namespace ServiceLearningApp.Controllers
         {
             try
             {
-                // Periksa apakah pengguna memiliki hak untuk memperbarui informasi ini
                 var authorizationResult = await this.authorizationService.AuthorizeAsync(User, new ApplicationUser { Id = model.Id }, new EditUserRequirement());
                 if (!authorizationResult.Succeeded)
                 {

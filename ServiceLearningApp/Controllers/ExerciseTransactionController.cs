@@ -9,7 +9,7 @@ using ServiceLearningApp.Model.Dto;
 namespace ServiceLearningApp.Controllers
 {
     [Produces("application/json")]
-    [Route("api/exercise-transaction")]
+    [Route("api/v1/exercise-transaction")]
     [Authorize(Policy = "Bearer")]
     public class ExerciseTransactionController : Controller
     {
@@ -23,15 +23,16 @@ namespace ServiceLearningApp.Controllers
         }
 
         [HttpGet]
-        [Authorize(Policy = "Teacher")]
+        [Authorize(Policy = "Student")]
         public async Task<IActionResult> GetAllExerciseTransactionDto([FromQuery] QueryParams? queryParams)
         {
             var exerciseTransactions = await this.exerciseTransactionRepository.GetAllAsyncDto(queryParams);
 
             return new OkObjectResult(new
             {
-                StatusCode = StatusCodes.Status200OK,
-                Message = "Success",
+                Code = StatusCodes.Status200OK,
+                Status = "Ok",
+                Message = "Data latihan soal yang sudah dikerjakan berhasil didapatkan",
                 Data = exerciseTransactions
             });
         }
@@ -45,15 +46,17 @@ namespace ServiceLearningApp.Controllers
             {
                 return new BadRequestObjectResult(new
                 {
-                    StatusCode = StatusCodes.Status404NotFound,
+                    Code = StatusCodes.Status404NotFound,
+                    Status = "Not Found",
                     Message = "Data tidak ditemukan"
                 });
             }
 
             return new OkObjectResult(new
             {
-                StatusCode = StatusCodes.Status200OK,
-                Message = "Success",
+                Code = StatusCodes.Status200OK,
+                Status = "Ok",
+                Message = "Data latihan soal yang sudah dikerjakan berhasil didapatkan",
                 Data = exerciseTransaction
             });
         }
@@ -66,47 +69,29 @@ namespace ServiceLearningApp.Controllers
             {
                 await this.exerciseTransactionRepository.PostAsync(exerciseTransaction);
 
-                var exercisceTransactionId = exerciseTransaction.Id;
-
-                var historyAnswers = exerciseTransaction.HistoryAnswer;
-                exerciseTransaction.HistoryAnswer = [];
-
-                foreach (var historyAnswer in historyAnswers)
-                {
-                    historyAnswer.FkExerciseTransactionId = exercisceTransactionId;
-                }
-
-                await this.exerciseTransactionRepository.PostHistoryAnswerAsync(historyAnswers);
-
-                var historyAnswerDtos = historyAnswers.Select(ha => new HistoryAnswerDto
-                {
-                    FkQuestionId = ha.FkQuestionId,
-                    FkOptionId = ha.FkOptionId,
-                    FkExerciseTransactionId = ha.FkExerciseTransactionId
-                }).ToList();
+                var ex = await this.exerciseTransactionRepository.GetAsync(exerciseTransaction.Id);
 
                 var exerciseTransactionDto = this.mapper.Map<ExerciseTransaction, ExerciseTransactionDto>(exerciseTransaction);
-                exerciseTransactionDto.HistoryAnswer = historyAnswerDtos;
-
-                exerciseTransaction.HistoryAnswer = historyAnswers;
+                exerciseTransactionDto.SubChapter = ex.SubChapter.Title; // Example assuming SubChapterDto has a Title property
+                exerciseTransactionDto.UserFullName = ex.User.FullName;
 
                 return new OkObjectResult(new
                 {
-                    StatusCode = StatusCodes.Status200OK,
-                    Message = "Success",
+                    Code = StatusCodes.Status200OK,
+                    Message = "Berhasil mengerjakan latihan soal",
                     Data = exerciseTransactionDto
                 });
             }
             catch (Exception ex)
             {
-
                 return new BadRequestObjectResult(new
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    Code = StatusCodes.Status400BadRequest,
                     Message = ex.Message
                 });
             }
         }
+
 
         [HttpGet("{id}/history-answer")]
         [Authorize(Policy = "Student")]
@@ -117,15 +102,17 @@ namespace ServiceLearningApp.Controllers
             {
                 return new BadRequestObjectResult(new
                 {
-                    StatusCode = StatusCodes.Status404NotFound,
+                    Code = StatusCodes.Status404NotFound,
+                    Status = "Not Found",
                     Message = "Data tidak ditemukan"
                 });
             }
 
             return new OkObjectResult(new
             {
-                StatusCode = StatusCodes.Status200OK,
-                Message = "Success",
+                Code = StatusCodes.Status200OK,
+                Status = "Ok",
+                Message = "History jawaban pertanyaan berhasil didapatkan",
                 Data = historyAnswers
             });
         }
@@ -139,15 +126,17 @@ namespace ServiceLearningApp.Controllers
             {
                 return new BadRequestObjectResult(new
                 {
-                    StatusCode = StatusCodes.Status404NotFound,
+                    Code = StatusCodes.Status404NotFound,
+                    Status = "Not Found",
                     Message = "Data tidak ditemukan"
                 });
             }
 
             return new OkObjectResult(new
             {
-                StatusCode = StatusCodes.Status200OK,
-                Message = "Success",
+                Code = StatusCodes.Status200OK,
+                Status = "Ok",
+                Message = "Data ranking berhasil didapatkan",
                 Data = rankings
             });
         }
@@ -161,15 +150,17 @@ namespace ServiceLearningApp.Controllers
             {
                 return new BadRequestObjectResult(new
                 {
-                    StatusCode = StatusCodes.Status404NotFound,
+                    Code = StatusCodes.Status404NotFound,
+                    Status = "Not Found",
                     Message = "Data tidak ditemukan"
                 });
             }
 
             return new OkObjectResult(new
             {
-                StatusCode = StatusCodes.Status200OK,
-                Message = "Success",
+                Code = StatusCodes.Status200OK,
+                Status = "Ok",
+                Message = "Data ranking berhasil didapatkan",
                 Data = rankings
             });
         }
@@ -184,7 +175,7 @@ namespace ServiceLearningApp.Controllers
         //    {
         //        return new BadRequestObjectResult(new
         //        {
-        //            StatusCode = StatusCodes.Status404NotFound,
+        //            Code = StatusCodes.Status404NotFound,
         //            Message = "Data tidak ditemukan"
         //        });
         //    }
@@ -196,34 +187,34 @@ namespace ServiceLearningApp.Controllers
 
         //    return new OkObjectResult(new
         //    {
-        //        StatusCode = StatusCodes.Status200OK,
+        //        Code = StatusCodes.Status200OK,
         //        Message = "Success",
         //        Data = existingExerciseTransaction
         //    });
         //}
 
-        [HttpDelete("{id}")]
-        [Authorize(Policy = "Teacher")]
-        public async Task<IActionResult> DeleteExerciseTransaction(int id)
-        {
-            var ExerciseTransaction = await this.exerciseTransactionRepository.GetAsync(id);
-            if (ExerciseTransaction == null)
-            {
-                return new BadRequestObjectResult(new
-                {
-                    StatusCode = StatusCodes.Status404NotFound,
-                    Message = "Data tidak ditemukan"
-                });
-            }
+        // [HttpDelete("{id}")]
+        // [Authorize(Policy = "Teacher")]
+        // public async Task<IActionResult> DeleteExerciseTransaction(int id)
+        // {
+        //     var ExerciseTransaction = await this.exerciseTransactionRepository.GetAsync(id);
+        //     if (ExerciseTransaction == null)
+        //     {
+        //         return new BadRequestObjectResult(new
+        //         {
+        //             Code = StatusCodes.Status404NotFound,
+        //             Message = "Data tidak ditemukan"
+        //         });
+        //     }
 
-            await this.exerciseTransactionRepository.DeleteAsync(ExerciseTransaction.Id);
+        //     await this.exerciseTransactionRepository.DeleteAsync(ExerciseTransaction.Id);
             
-            return new OkObjectResult(new
-            {
-                StatusCode = StatusCodes.Status200OK,
-                Message = "Success",
-                Data = this.mapper.Map<ExerciseTransaction, ExerciseTransactionDto>(ExerciseTransaction)
-            });
-        }
+        //     return new OkObjectResult(new
+        //     {
+        //         Code = StatusCodes.Status200OK,
+        //         Message = "Success",
+        //         Data = this.mapper.Map<ExerciseTransaction, ExerciseTransactionDto>(ExerciseTransaction)
+        //     });
+        // }
     }
 }

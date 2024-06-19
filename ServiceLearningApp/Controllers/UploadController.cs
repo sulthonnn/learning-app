@@ -10,7 +10,7 @@ using ServiceLearningApp.Storage;
 namespace ServiceLearningApp.Controllers
 {
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [Authorize(Policy = "Bearer")]
     public class UploadController : Controller
     {

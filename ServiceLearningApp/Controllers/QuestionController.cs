@@ -1,17 +1,15 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ServiceLearningApp.Data;
 using ServiceLearningApp.Helpers;
 using ServiceLearningApp.Interfaces;
 using ServiceLearningApp.Model;
 using ServiceLearningApp.Model.Dto;
-using ServiceLearningApp.Security;
 
 namespace ServiceLearningApp.Controllers
 {
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [Authorize(Policy = "Bearer")]
     public class QuestionController : Controller
     {
@@ -34,8 +32,9 @@ namespace ServiceLearningApp.Controllers
 
             return new OkObjectResult(new
             {
-                StatusCode = StatusCodes.Status200OK,
-                Message = "Success",
+                Code = StatusCodes.Status200OK,
+                Status = "Ok",
+                Message = "Data pertanyaan berhasil didapatkan",
                 Data = Questions
             });
         }
@@ -49,15 +48,17 @@ namespace ServiceLearningApp.Controllers
             {
                 return new BadRequestObjectResult(new
                 {
-                    StatusCode = StatusCodes.Status404NotFound,
+                    Code = StatusCodes.Status404NotFound,
+                    Status = "Not Found",
                     Message = "Data tidak ditemukan"
                 });
             }
 
             return new OkObjectResult(new
             {
-                StatusCode = StatusCodes.Status200OK,
-                Message = "Success",
+                Code = StatusCodes.Status200OK,
+                Status = "Ok",
+                Message = "Data pertanyaan berhasil didapatkan",
                 Data = Question
             });
         }
@@ -75,8 +76,9 @@ namespace ServiceLearningApp.Controllers
 
             return new OkObjectResult(new
             {
-                StatusCode = StatusCodes.Status200OK,
-                Message = "Success",
+                Code = StatusCodes.Status201Created,
+                Status = "Created",
+                Message = "Data pertanyaan berhasil dibuat",
                 Data = this.mapper.Map<Question, QuestionDto>(Question)
             });
         }
@@ -91,7 +93,8 @@ namespace ServiceLearningApp.Controllers
             {
                 return new BadRequestObjectResult(new
                 {
-                    StatusCode = StatusCodes.Status404NotFound,
+                    Code = StatusCodes.Status404NotFound,
+                    Status = "Not Found",
                     Message = "Data tidak ditemukan"
                 });
             }
@@ -100,14 +103,14 @@ namespace ServiceLearningApp.Controllers
             existingQuestion.FeedBack = updatedQuestion.FeedBack;
             existingQuestion.FkImageId = updatedQuestion.FkImageId;
             existingQuestion.FkSubChapterId = updatedQuestion.FkSubChapterId;
-            //this.mapper.Map(updatedQuestion, existingQuestion);
 
             await this.questionRepository.PutAsync(existingQuestion);
 
             return new OkObjectResult(new
             {
-                StatusCode = StatusCodes.Status200OK,
-                Message = "Success",
+                Code = StatusCodes.Status200OK,
+                Status = "Ok",
+                Message = "Data pertanyaan berhasil diubah",
                 Data = this.mapper.Map<Question, QuestionDto>(existingQuestion)
             });
         }
@@ -121,7 +124,8 @@ namespace ServiceLearningApp.Controllers
             {
                 return new BadRequestObjectResult(new
                 {
-                    StatusCode = StatusCodes.Status404NotFound,
+                    Code = StatusCodes.Status404NotFound,
+                    Status = "Not Found",
                     Message = "Data tidak ditemukan"
                 });
             }
@@ -130,8 +134,9 @@ namespace ServiceLearningApp.Controllers
             
             return new OkObjectResult(new
             {
-                StatusCode = StatusCodes.Status200OK,
-                Message = "Success",
+                Code = StatusCodes.Status200OK,
+                Status = "Ok",
+                Message = "Data pertanyaan berhasil dihapus",
                 Data = this.mapper.Map<Question, QuestionDto>(Question)
             });
         }
@@ -143,8 +148,9 @@ namespace ServiceLearningApp.Controllers
             var randomQuestion = await this.questionRepository.GetRandomQuestionsBySubChapterIdAsync(subChapterId, count);
             return new OkObjectResult(new
             {
-                StatusCode = StatusCodes.Status200OK,
-                Message = "Success",
+                Code = StatusCodes.Status200OK,
+                Status = "Ok",
+                Message = "Data pertanyaan acak berdasarkan subbab berhasil didapatkan",
                 Data = randomQuestion
             });
         }
@@ -156,8 +162,9 @@ namespace ServiceLearningApp.Controllers
             var randomQuestion = await this.questionRepository.GetRandomQuestionsByChapterIdAsync(chapterId, count);
             return new OkObjectResult(new
             {
-                StatusCode = StatusCodes.Status200OK,
-                Message = "Success",
+                Code = StatusCodes.Status200OK,
+                Status = "Ok",
+                Message = "Data pertanyaan acak berdasarkan bab berhasil didapatkan",
                 Data = randomQuestion
             });
         }
@@ -172,8 +179,9 @@ namespace ServiceLearningApp.Controllers
                 var upload = await this.uploadRepository.UploadImageAsync(UploadType.QuestionImage, model.File);
                 return new OkObjectResult(new
                 {
-                    StatusCode = StatusCodes.Status200OK,
-                    Message = "Success",
+                    Code = StatusCodes.Status200OK,
+                    Status = "Ok",
+                    Message = "Gambar berhasil di-upload",
                     Data = upload
                 }); ;
             }
@@ -181,7 +189,8 @@ namespace ServiceLearningApp.Controllers
             {
                 return new BadRequestObjectResult(new
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = "Bad Request",
                     Message = ex.Message,
                 });
             }

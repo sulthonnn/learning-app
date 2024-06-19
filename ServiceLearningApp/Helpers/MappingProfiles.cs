@@ -9,14 +9,20 @@ namespace ServiceLearningApp.Helpers
         public MappingProfiles() 
         {
             CreateMap<Chapter, Chapter>();
+
             CreateMap<SubChapter, SubChapterDto>();
+            
             CreateMap<Question, QuestionDto>();
+            
             CreateMap<Option, OptionDto>();
+            
             CreateMap<ExerciseTransaction, ExerciseTransactionDto>()
                 .ForMember(dest => dest.HistoryAnswer, opt => opt.MapFrom(src => src.HistoryAnswer))
                 .ForMember(dest => dest.SubChapter, opt => opt.MapFrom(src => src.SubChapter.Title))
                 .ForMember(dest => dest.UserFullName, opt => opt.MapFrom(src => src.User.FullName));
-            ;
+            
+            CreateMap<HistoryAnswer, HistoryAnswerDto>();
+
         }
     }
 }

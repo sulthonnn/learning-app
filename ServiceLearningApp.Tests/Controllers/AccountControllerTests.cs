@@ -2,6 +2,7 @@
 using FakeItEasy;
 using FluentAssertions;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -30,8 +31,10 @@ namespace ServiceLearningApp.Tests.Controllers
         {
             // Arrange
             var userRepository = A.Fake<IUserRepository>();
+            var authorizationService = A.Fake<IAuthorizationService>();
 
-            var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("bdkajbd72i31kjn1ep;.d/sadmsaldnajndsKSnjnakdnas"));
+
+        var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("bdkajbd72i31kjn1ep;.d/sadmsaldnajndsKSnjnakdnas"));
             var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var tokenAuthOptions = new
             {
@@ -65,7 +68,7 @@ namespace ServiceLearningApp.Tests.Controllers
 
             A.CallTo(() => userRepository.Login(loginDto)).Returns(Task.FromResult<IActionResult>(new OkObjectResult(tokenResponse)));
 
-            var controller = new AccountController(userRepository);
+            var controller = new AccountController(userRepository, authorizationService);
 
             // Act
             var result = await controller.Login(loginDto);

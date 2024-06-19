@@ -74,9 +74,9 @@ namespace ServiceLearningApp.Data
                 query = query.Where(e => EF.Functions.ILike(e.Title, "%" + queryParams.Search + "%"));
             }
 
-            if (queryParams.FkChapterId.HasValue)
+            if (queryParams.ChapterId.HasValue)
             {
-                query = query.Where(e => e.FkChapterId == queryParams.FkChapterId);
+                query = query.Where(e => e.FkChapterId == queryParams.ChapterId);
             }
 
             // Sorting

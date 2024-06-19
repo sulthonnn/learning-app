@@ -1,12 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ServiceLearningApp.Interfaces;
 using ServiceLearningApp.Model;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Linq;
 using ServiceLearningApp.Helpers;
-using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
-using Microsoft.AspNetCore.Mvc;
 using ServiceLearningApp.Model.Dto;
 
 namespace ServiceLearningApp.Data
@@ -61,7 +56,6 @@ namespace ServiceLearningApp.Data
                     {
                         FkQuestionId = h.FkQuestionId,
                         FkOptionId = h.FkOptionId,
-                        FkExerciseTransactionId = h.FkExerciseTransactionId
                     }).ToList()
                 })
                 .AsNoTracking()
@@ -74,16 +68,52 @@ namespace ServiceLearningApp.Data
         public async Task<ExerciseTransaction> GetAsync(int id)
         {
             return await this.dbContext.ExerciseTransactions
+                .Include(e => e.User)
+                .Include(e => e.SubChapter)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
+
         public async Task PostAsync(ExerciseTransaction entity)
         {
-            entity.Score = CalculateScore(entity.CorrectAnswer, entity.IncorrectAnswer);
-            await this.dbContext.ExerciseTransactions.AddAsync(entity);
-            await this.dbContext.SaveChangesAsync();
+            if (entity.HistoryAnswer == null || !entity.HistoryAnswer.Any())
+            {
+                throw new ArgumentException("History Answer tidak boleh kosong");
+            }
+
+            using (var transaction = await dbContext.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    entity.Score = CalculateScore(entity.CorrectAnswer, entity.IncorrectAnswer);
+                    await this.dbContext.ExerciseTransactions.AddAsync(entity);
+                    await this.dbContext.SaveChangesAsync();
+
+                    var exerciseTransactionId = entity.Id;
+
+                    var historyAnswers = entity.HistoryAnswer;
+                    entity.HistoryAnswer = [];
+
+                    foreach (var historyAnswer in historyAnswers)
+                    {
+                        historyAnswer.FkExerciseTransactionId = exerciseTransactionId;
+                    }
+
+                    await this.PostHistoryAnswerAsync(historyAnswers);
+                    entity.HistoryAnswer = historyAnswers;
+
+
+                    await transaction.CommitAsync();
+                }
+                catch
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            }
         }
+
 
         public async Task<int> CountAsync()
         {
@@ -290,6 +320,11 @@ namespace ServiceLearningApp.Data
             if (!string.IsNullOrEmpty(queryParams.Search))
             {
                 query = query.Where(e => EF.Functions.ILike(e.User.FullName, "%" + queryParams.Search + "%"));
+            }
+
+            if (queryParams.SubChapterId.HasValue)
+            {
+                query = query.Where(e => e.FkSubChapterId == queryParams.SubChapterId);
             }
 
             if (queryParams.ChapterId.HasValue)

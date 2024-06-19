@@ -1,17 +1,15 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ServiceLearningApp.Data;
 using ServiceLearningApp.Helpers;
 using ServiceLearningApp.Interfaces;
 using ServiceLearningApp.Model;
 using ServiceLearningApp.Model.Dto;
-using ServiceLearningApp.Security;
 
 namespace ServiceLearningApp.Controllers
 {
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [Authorize(Policy = "Bearer")]
     public class OptionController : Controller
     {
@@ -32,8 +30,9 @@ namespace ServiceLearningApp.Controllers
 
             return new OkObjectResult(new
             {
-                StatusCode = StatusCodes.Status200OK,
-                Message = "Success",
+                Code = StatusCodes.Status200OK,
+                Status = "Ok",
+                Message = "Data opsi berhasil didapatkan",
                 Data = Options
             });
         }
@@ -47,15 +46,17 @@ namespace ServiceLearningApp.Controllers
             {
                 return new BadRequestObjectResult(new
                 {
-                    StatusCode = StatusCodes.Status404NotFound,
+                    Code = StatusCodes.Status404NotFound,
+                    Status = "Not Found",
                     Message = "Data tidak ditemukan"
                 });
             }
 
             return new OkObjectResult(new
             {
-                StatusCode = StatusCodes.Status200OK,
-                Message = "Success",
+                Code = StatusCodes.Status200OK,
+                Status = "Ok",
+                Message = "Data opsi berhasil didapatkan",
                 Data = Option
             });
         }
@@ -70,8 +71,9 @@ namespace ServiceLearningApp.Controllers
 
                 return new OkObjectResult(new
                 {
-                    StatusCode = StatusCodes.Status200OK,
-                    Message = "Success",
+                    Code = StatusCodes.Status201Created,
+                    Status = "Created",
+                    Message = "Data opsi berhasil dibuat",
                     Data = this.mapper.Map<Option, OptionDto>(Option)
                 });
             }
@@ -79,7 +81,8 @@ namespace ServiceLearningApp.Controllers
             {
                 return new OkObjectResult(new
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = "Bad Request",
                     Message = ex.Message
                 });
             }
@@ -95,7 +98,8 @@ namespace ServiceLearningApp.Controllers
             {
                 return new BadRequestObjectResult(new
                 {
-                    StatusCode = StatusCodes.Status404NotFound,
+                    Code = StatusCodes.Status404NotFound,
+                    Status = "Not Found",
                     Message = "Data tidak ditemukan"
                 });
             }
@@ -110,8 +114,9 @@ namespace ServiceLearningApp.Controllers
 
                 return new OkObjectResult(new
                 {
-                    StatusCode = StatusCodes.Status200OK,
-                    Message = "Success",
+                    Code = StatusCodes.Status200OK,
+                    Status = "Ok",
+                    Message = "Data opsi berhasil diubah",
                     Data = this.mapper.Map<Option, OptionDto>(existingOption)
                 });
             }
@@ -119,7 +124,8 @@ namespace ServiceLearningApp.Controllers
             {
                 return new OkObjectResult(new
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = "Bad Request",
                     Message = ex.Message
                 });
             }
@@ -134,7 +140,8 @@ namespace ServiceLearningApp.Controllers
             {
                 return new BadRequestObjectResult(new
                 {
-                    StatusCode = StatusCodes.Status404NotFound,
+                    Code = StatusCodes.Status404NotFound,
+                    Status = "Not Found",
                     Message = "Data tidak ditemukan"
                 });
             }
@@ -143,8 +150,9 @@ namespace ServiceLearningApp.Controllers
             
             return new OkObjectResult(new
             {
-                StatusCode = StatusCodes.Status200OK,
-                Message = "Success",
+                Code = StatusCodes.Status200OK,
+                Status = "Ok",
+                Message = "Data opsi berhasil dihapus",
                 Data = this.mapper.Map<Option, OptionDto>(Option)
             });
         }

@@ -4,12 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using ServiceLearningApp.Helpers;
 using ServiceLearningApp.Interfaces;
 using ServiceLearningApp.Model;
-using ServiceLearningApp.Model.Dto;
 
 namespace ServiceLearningApp.Controllers
 {
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [Authorize(Policy = "Bearer")]
     public class ChapterController : Controller
     {
@@ -22,16 +21,17 @@ namespace ServiceLearningApp.Controllers
             this.mapper = mapper;
         }
 
-        [Authorize(Policy = "Student")]
         [HttpGet]
+        [Authorize(Policy = "Student")]
         public async Task<IActionResult> GetAllChapter([FromQuery] QueryParams? queryParams)
         {
             var chapters = await this.chapterRepository.GetAllAsync(queryParams);
 
             return new OkObjectResult(new
             {
-                StatusCode = StatusCodes.Status200OK,
-                Message = "Success",
+                Code = StatusCodes.Status200OK,
+                Status = "Ok",
+                Message = "Data bab berhasil didapatkan",
                 Data = chapters
             });
         }
@@ -45,15 +45,17 @@ namespace ServiceLearningApp.Controllers
             {
                 return new BadRequestObjectResult(new
                 {
-                    StatusCode = StatusCodes.Status404NotFound,
+                    Code = StatusCodes.Status404NotFound,
+                    Status = "Not Found",
                     Message = "Data tidak ditemukan"
                 });
             }
 
             return new OkObjectResult(new
             {
-                StatusCode = StatusCodes.Status200OK,
-                Message = "Success",
+                Code = StatusCodes.Status200OK,
+                Status = "Ok",
+                Message = "Data bab berhasil didapatkan",
                 Data = chapter
             });
         }
@@ -66,9 +68,10 @@ namespace ServiceLearningApp.Controllers
 
             return new OkObjectResult(new
             {
-                StatusCode = StatusCodes.Status200OK,
-                Message = "Success",
-                Data = this.mapper.Map<Chapter, ChapterDto>(chapter)
+                Code = StatusCodes.Status201Created,
+                Status = "Created",
+                Message = "Data bab berhasil dibuat",
+                Data = chapter
             });
         }
 
@@ -82,20 +85,21 @@ namespace ServiceLearningApp.Controllers
             {
                 return new BadRequestObjectResult(new
                 {
-                    StatusCode = StatusCodes.Status404NotFound,
+                    Code = StatusCodes.Status404NotFound,
+                    Status = "Not Found",
                     Message = "Data tidak ditemukan"
                 });
             }
 
             existingChapter.Title = updatedChapter.Title;
-            //this.mapper.Map(updatedChapter, existingChapter);
 
             await this.chapterRepository.PutAsync(existingChapter);
 
             return new OkObjectResult(new
             {
-                StatusCode = StatusCodes.Status200OK,
-                Message = "Success",
+                Code = StatusCodes.Status200OK,
+                Status = "Ok",
+                Message = "Data Bab berhasil diubah",
                 Data = existingChapter
             });
         }
@@ -109,7 +113,8 @@ namespace ServiceLearningApp.Controllers
             {
                 return new BadRequestObjectResult(new
                 {
-                    StatusCode = StatusCodes.Status404NotFound,
+                    Code = StatusCodes.Status404NotFound,
+                    Status = "Not Found",
                     Message = "Data tidak ditemukan"
                 });
             }
@@ -118,9 +123,10 @@ namespace ServiceLearningApp.Controllers
             
             return new OkObjectResult(new
             {
-                StatusCode = StatusCodes.Status200OK,
-                Message = "Success",
-                Data = this.mapper.Map<Chapter, ChapterDto>(chapter)
+                Code = StatusCodes.Status200OK,
+                Status = "Ok",
+                Message = "Data bab berhasil dihapus",
+                Data = chapter
             });
         }
     }

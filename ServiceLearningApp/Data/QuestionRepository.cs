@@ -1,11 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ServiceLearningApp.Interfaces;
 using ServiceLearningApp.Model;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Linq;
 using ServiceLearningApp.Helpers;
-using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 
 namespace ServiceLearningApp.Data
 {
@@ -136,9 +132,9 @@ namespace ServiceLearningApp.Data
                 query = query.Where(e => EF.Functions.ILike(e.QuestionText, "%" + queryParams.Search + "%"));
             }
 
-            if (queryParams.FkSubChapterId.HasValue)
+            if (queryParams.SubChapterId.HasValue)
             {
-                query = query.Where(e => e.FkSubChapterId == queryParams.FkQuestionId);
+                query = query.Where(e => e.FkSubChapterId == queryParams.SubChapterId);
             }
 
             // Sorting
