@@ -14,7 +14,7 @@ namespace Model.Common.Dto
         //public string PasswordRepeat { get; set; }
         //public string PasswordOld { get; set; }
         //public List<ClaimDto> Claims { get; set; }
-        public required string Role {  get; set; }
+        //public string? Role {  get; set; }
         public Upload? Image { get; set; }
         public int? FkImageId { get; set; }
         public required string NISN { get; set; }

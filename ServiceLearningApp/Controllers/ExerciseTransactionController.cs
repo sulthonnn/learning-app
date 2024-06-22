@@ -24,16 +24,16 @@ namespace ServiceLearningApp.Controllers
 
         [HttpGet]
         [Authorize(Policy = "Student")]
-        public async Task<IActionResult> GetAllExerciseTransactionDto([FromQuery] QueryParams? queryParams)
+        public async Task<IActionResult> GetAllExerciseTransaction([FromQuery] QueryParams? queryParams)
         {
-            var exerciseTransactions = await this.exerciseTransactionRepository.GetAllAsyncDto(queryParams);
-
+            var exerciseTransactions = await this.exerciseTransactionRepository.GetAllAsync(queryParams);
+            
             return new OkObjectResult(new
             {
                 Code = StatusCodes.Status200OK,
                 Status = "Ok",
                 Message = "Data latihan soal yang sudah dikerjakan berhasil didapatkan",
-                Data = exerciseTransactions
+                Data = this.mapper.Map<IReadOnlyList<ExerciseTransactionDto>>(exerciseTransactions)
             });
         }
 
@@ -57,7 +57,7 @@ namespace ServiceLearningApp.Controllers
                 Code = StatusCodes.Status200OK,
                 Status = "Ok",
                 Message = "Data latihan soal yang sudah dikerjakan berhasil didapatkan",
-                Data = exerciseTransaction
+                Data = this.mapper.Map<ExerciseTransaction, ExerciseTransactionDto>(exerciseTransaction)
             });
         }
 
@@ -65,6 +65,11 @@ namespace ServiceLearningApp.Controllers
         [Authorize(Policy = "Student")]
         public async Task<IActionResult> CreateExerciseTransaction([FromBody] ExerciseTransaction exerciseTransaction)
         {
+            if (exerciseTransaction.HistoryAnswer == null || !exerciseTransaction.HistoryAnswer.Any())
+            {
+                return new BadRequestObjectResult(new { Code = StatusCodes.Status400BadRequest, Status = "Bad Request", Message = "History Answer tidak boleh kosong" });
+            }
+
             try
             {
                 await this.exerciseTransactionRepository.PostAsync(exerciseTransaction);
@@ -75,9 +80,10 @@ namespace ServiceLearningApp.Controllers
                 exerciseTransactionDto.SubChapter = ex.SubChapter.Title; // Example assuming SubChapterDto has a Title property
                 exerciseTransactionDto.UserFullName = ex.User.FullName;
 
-                return new OkObjectResult(new
+                return new CreatedResult("", new
                 {
-                    Code = StatusCodes.Status200OK,
+                    Code = StatusCodes.Status201Created,
+                    Status = "Created",
                     Message = "Berhasil mengerjakan latihan soal",
                     Data = exerciseTransactionDto
                 });
@@ -87,6 +93,7 @@ namespace ServiceLearningApp.Controllers
                 return new BadRequestObjectResult(new
                 {
                     Code = StatusCodes.Status400BadRequest,
+                    Status = "Bad Request",
                     Message = ex.Message
                 });
             }

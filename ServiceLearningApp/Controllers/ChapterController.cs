@@ -66,7 +66,7 @@ namespace ServiceLearningApp.Controllers
         {
             await this.chapterRepository.PostAsync(chapter);
 
-            return new OkObjectResult(new
+            return new CreatedResult("", new
             {
                 Code = StatusCodes.Status201Created,
                 Status = "Created",

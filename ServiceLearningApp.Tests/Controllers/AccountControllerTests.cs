@@ -1,26 +1,15 @@
-﻿using Castle.Components.DictionaryAdapter.Xml;
-using FakeItEasy;
+﻿using FakeItEasy;
 using FluentAssertions;
-using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using ServiceEsgDataHub.Services;
 using ServiceLearningApp.Controllers;
 using ServiceLearningApp.Interfaces;
-using ServiceLearningApp.Model;
 using ServiceLearningApp.Model.Dto;
-using ServiceLearningApp.Security;
-using ServiceLearningApp.Validators;
-using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace ServiceLearningApp.Tests.Controllers
 {
@@ -32,9 +21,9 @@ namespace ServiceLearningApp.Tests.Controllers
             // Arrange
             var userRepository = A.Fake<IUserRepository>();
             var authorizationService = A.Fake<IAuthorizationService>();
+            var userResolverService = A.Fake<UserResolverService>();
 
-
-        var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("bdkajbd72i31kjn1ep;.d/sadmsaldnajndsKSnjnakdnas"));
+            var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("bdkajbd72i31kjn1ep;.d/sadmsaldnajndsKSnjnakdnas"));
             var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var tokenAuthOptions = new
             {
@@ -54,6 +43,9 @@ namespace ServiceLearningApp.Tests.Controllers
 
             var tokenResponse = new
             {
+                Code = StatusCodes.Status200OK,
+                Status = "Ok",
+                Message = "Berhasil login",
                 requestAt = DateTime.Now,
                 expiresIn = tokenAuthOptions.ExpiresSpan.TotalSeconds,
                 tokenType = tokenAuthOptions.TokenType,
@@ -68,7 +60,7 @@ namespace ServiceLearningApp.Tests.Controllers
 
             A.CallTo(() => userRepository.Login(loginDto)).Returns(Task.FromResult<IActionResult>(new OkObjectResult(tokenResponse)));
 
-            var controller = new AccountController(userRepository, authorizationService);
+            var controller = new AccountController(userRepository, authorizationService, userResolverService);
 
             // Act
             var result = await controller.Login(loginDto);
@@ -87,6 +79,7 @@ namespace ServiceLearningApp.Tests.Controllers
             // Arrange
             var userRepository = A.Fake<IUserRepository>();
             var authorizationService = A.Fake<IAuthorizationService>();
+            var userResolverService = A.Fake<UserResolverService>();
 
             var loginDto = new LoginDto
             {
@@ -99,13 +92,14 @@ namespace ServiceLearningApp.Tests.Controllers
 
             var errorResponse = new
             {
-                StatusCode = StatusCodes.Status400BadRequest,
+                Code = StatusCodes.Status400BadRequest,
+                Status = "Bad Request",
                 Message = "Username atau password salah"
             };
 
             A.CallTo(() => userRepository.Login(loginDto)).Returns(Task.FromResult<IActionResult>(new BadRequestObjectResult(errorResponse)));
 
-            var controller = new AccountController(userRepository, authorizationService);
+            var controller = new AccountController(userRepository, authorizationService, userResolverService);
 
             // Act
             var result = await controller.Login(loginDto);
@@ -125,6 +119,7 @@ namespace ServiceLearningApp.Tests.Controllers
             // Arrange
             var userRepository = A.Fake<IUserRepository>();
             var authorizationService = A.Fake<IAuthorizationService>();
+            var userResolverService = A.Fake<UserResolverService>();
 
             var registrationDto = new RegistrationDto
             {
@@ -149,30 +144,38 @@ namespace ServiceLearningApp.Tests.Controllers
             registrationDto.NISN.Should().NotMatch(existingNISN);
             registrationDto.PasswordRepeat.Should().Match(registrationDto.Password);
 
+            var id = new Guid();
 
-            var userId = "123";
-            var successResponse = new
+            var responseData = new
             {
-                StatusCode = StatusCodes.Status200OK,
-                Message = "Success",
-                Data = userId
+                Id = id,
+                registrationDto.UserName,
+                registrationDto.NISN,
+                registrationDto.FullName
             };
 
-            A.CallTo(() => userRepository.Register(registrationDto)).Returns(Task.FromResult<IActionResult>(new OkObjectResult(successResponse)));
+            var successResponse = new
+            {
+                Code = StatusCodes.Status201Created,
+                Status = "Created",
+                Message = "Berhasil melakukan registrasi",
+                Data = registrationDto
+            };
 
-            var controller = new AccountController(userRepository, authorizationService);
+            A.CallTo(() => userRepository.Register(registrationDto)).Returns(Task.FromResult<IActionResult>(new CreatedResult("", successResponse)));
+
+            var controller = new AccountController(userRepository, authorizationService, userResolverService);
 
             // Act
             var result = await controller.Register(registrationDto);
 
             // Assert
-            var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
+            var okResult = result.Should().BeOfType<CreatedResult>().Subject;
             okResult.Value.Should().NotBeNull();
-            okResult.StatusCode.Should().Be(StatusCodes.Status200OK);
+            okResult.StatusCode.Should().Be(StatusCodes.Status201Created);
             var actualResponse = okResult.Value.Should().BeAssignableTo<object>().Subject;
             actualResponse.Should().BeEquivalentTo(successResponse);
         }
-
 
 
         [Fact]
@@ -181,6 +184,7 @@ namespace ServiceLearningApp.Tests.Controllers
             // Arrange
             var userRepository = A.Fake<IUserRepository>();
             var authorizationService = A.Fake<IAuthorizationService>();
+            var userResolverService = A.Fake<UserResolverService>();
 
             var registrationDto = new RegistrationDto
             {
@@ -195,13 +199,14 @@ namespace ServiceLearningApp.Tests.Controllers
 
             var errorResponse = new
             {
-                StatusCode = StatusCodes.Status400BadRequest,
+                Code = StatusCodes.Status400BadRequest,
+                Status = "Bad Request",
                 Message = "Nama lengkap tidak boleh kosong" // Pesan kesalahan validasi
             };
 
             A.CallTo(() => userRepository.Register(registrationDto)).Returns(Task.FromResult<IActionResult>(new BadRequestObjectResult(errorResponse)));
 
-            var controller = new AccountController(userRepository, authorizationService);
+            var controller = new AccountController(userRepository, authorizationService, userResolverService);
 
             // Act
             var result = await controller.Register(registrationDto);
@@ -220,6 +225,7 @@ namespace ServiceLearningApp.Tests.Controllers
             // Arrange
             var userRepository = A.Fake<IUserRepository>();
             var authorizationService = A.Fake<IAuthorizationService>();
+            var userResolverService = A.Fake<UserResolverService>();
 
             var registrationDto = new RegistrationDto
             {
@@ -235,13 +241,14 @@ namespace ServiceLearningApp.Tests.Controllers
 
             var errorResponse = new
             {
-                StatusCode = StatusCodes.Status400BadRequest,
+                Code = StatusCodes.Status400BadRequest,
+                Status = "Bad Request",
                 Message = "Username sudah digunakan." // Pesan kesalahan validasi
             };
 
             A.CallTo(() => userRepository.Register(registrationDto)).Returns(Task.FromResult<IActionResult>(new BadRequestObjectResult(errorResponse)));
 
-            var controller = new AccountController(userRepository, authorizationService);
+            var controller = new AccountController(userRepository, authorizationService, userResolverService);
 
             // Act
             var result = await controller.Register(registrationDto);
@@ -260,6 +267,8 @@ namespace ServiceLearningApp.Tests.Controllers
             // Arrange
             var userRepository = A.Fake<IUserRepository>();
             var authorizationService = A.Fake<IAuthorizationService>();
+            var userResolverService = A.Fake<UserResolverService>();
+
 
             var registrationDto = new RegistrationDto
             {
@@ -275,13 +284,14 @@ namespace ServiceLearningApp.Tests.Controllers
 
             var errorResponse = new
             {
-                StatusCode = StatusCodes.Status400BadRequest,
+                Code = StatusCodes.Status400BadRequest,
+                Status = "Bad Request",
                 Message = "NISN sudah digunakan." // Pesan kesalahan validasi
             };
 
             A.CallTo(() => userRepository.Register(registrationDto)).Returns(Task.FromResult<IActionResult>(new BadRequestObjectResult(errorResponse)));
 
-            var controller = new AccountController(userRepository, authorizationService);
+            var controller = new AccountController(userRepository, authorizationService, userResolverService);
 
             // Act
             var result = await controller.Register(registrationDto);
@@ -301,6 +311,7 @@ namespace ServiceLearningApp.Tests.Controllers
             // Arrange
             var userRepository = A.Fake<IUserRepository>();
             var authorizationService = A.Fake<IAuthorizationService>();
+            var userResolverService = A.Fake<UserResolverService>();
 
 
             var registrationDto = new RegistrationDto
@@ -316,13 +327,14 @@ namespace ServiceLearningApp.Tests.Controllers
 
             var errorResponse = new
             {
-                StatusCode = StatusCodes.Status400BadRequest,
+                Code = StatusCodes.Status400BadRequest,
+                Status = "Bad Request",
                 Message = "Kata sandi dan ulangi kata sandi harus sama." // Pesan kesalahan validasi
             };
 
             A.CallTo(() => userRepository.Register(registrationDto)).Returns(Task.FromResult<IActionResult>(new BadRequestObjectResult(errorResponse)));
 
-            var controller = new AccountController(userRepository, authorizationService);
+            var controller = new AccountController(userRepository, authorizationService, userResolverService);
 
             // Act
             var result = await controller.Register(registrationDto);

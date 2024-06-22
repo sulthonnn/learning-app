@@ -7,7 +7,7 @@ namespace ServiceLearningApp.Interfaces
 {
     public interface IUserRepository
     {
-        Task<UserDto> GetById(string id);
+        Task<ActionResult<UserDto>> GetById(string id);
         Task<IActionResult> Login(LoginDto loginDto);
         Task<IActionResult> Register(RegistrationDto loginDto);
         Task<IActionResult> UpdatePassword(UpdatePasswordDto model);

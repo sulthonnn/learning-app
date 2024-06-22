@@ -18,5 +18,12 @@ namespace ServiceEsgDataHub.Services
 
             return context.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         }
+        public string GetRole()
+        {
+            if (context.HttpContext == null || context.HttpContext.User == null)
+                return null;
+
+            return context.HttpContext.User.Claims.FirstOrDefault(e => e.Type == ClaimTypes.Role)?.Value;
+        }
     }
 }

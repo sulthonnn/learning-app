@@ -69,7 +69,7 @@ namespace ServiceLearningApp.Controllers
             {
                 await this.optionRepository.PostAsync(Option);
 
-                return new OkObjectResult(new
+                return new CreatedResult("", new
                 {
                     Code = StatusCodes.Status201Created,
                     Status = "Created",

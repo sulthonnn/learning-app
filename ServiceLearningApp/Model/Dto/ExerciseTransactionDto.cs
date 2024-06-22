@@ -10,6 +10,7 @@ namespace ServiceLearningApp.Model.Dto
         public int CorrectAnswer { get; set; }
         public int IncorrectAnswer { get; set; }
         public int Score { get; set; }
+        public int FkSubChapterId { get; set; }
         public required string SubChapter { get; set; }
         public required string UserFullName { get; set; }
 

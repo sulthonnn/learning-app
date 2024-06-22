@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.Common.Dto;
+using ServiceEsgDataHub.Services;
 using ServiceLearningApp.Interfaces;
 using ServiceLearningApp.Model;
 using ServiceLearningApp.Model.Dto;
@@ -16,11 +17,13 @@ namespace ServiceLearningApp.Controllers
     {
         private readonly IUserRepository userRepository;
         private readonly IAuthorizationService authorizationService;
+        private readonly UserResolverService userResolverService;
 
-        public AccountController(IUserRepository userRepository, IAuthorizationService authorizationService)
+        public AccountController(IUserRepository userRepository, IAuthorizationService authorizationService, UserResolverService userResolverService)
         {
             this.userRepository = userRepository;
             this.authorizationService = authorizationService;
+            this.userResolverService = userResolverService;
         }
 
         [HttpPost("login")]
@@ -43,7 +46,12 @@ namespace ServiceLearningApp.Controllers
             var authorizationResult = await authorizationService.AuthorizeAsync(User, new ApplicationUser { Id = id }, new EditUserRequirement());
             if (!authorizationResult.Succeeded)
             {
-                return new ForbidResult();
+                return new BadRequestObjectResult(new
+                {
+                    Code = StatusCodes.Status403Forbidden,
+                    Status = "Forbidden",
+                    Message = "Anda tidak memiliki izin untuk mengakses sumber daya ini."
+                });
             }
 
             return await this.userRepository.GetById(id);
@@ -52,41 +60,30 @@ namespace ServiceLearningApp.Controllers
         [HttpPut("user/profile")]
         public async Task<IActionResult> UpdateProfile([FromBody] UserDto model)
         {
-            try
-            {
-                var userId = User.Claims.First(e => e.Type == ClaimTypes.NameIdentifier).Value;
-                var authorizationResult = await this.authorizationService.AuthorizeAsync(User, new ApplicationUser { Id = userId }, new EditUserRequirement());
-                if (!authorizationResult.Succeeded)
-                {
-                    return new ForbidResult();
-                }
+            var userId = User.Claims.First(e => e.Type == ClaimTypes.NameIdentifier).Value;
 
-                return await this.userRepository.UpdateProfile(model);
-            }
-            catch (Exception ex)
+            var authorizationResult = await this.authorizationService.AuthorizeAsync(User, new ApplicationUser { Id = userId }, new EditUserRequirement());
+            if (!authorizationResult.Succeeded)
             {
-
-                return BadRequest(ex.Message);
+                return new ForbidResult();
             }
+            return await this.userRepository.UpdateProfile(model);
         }
 
         [HttpPut("user/profile/password")]
         public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordDto model)
         {
-            try
-            {
-                var authorizationResult = await this.authorizationService.AuthorizeAsync(User, new ApplicationUser { Id = model.Id }, new EditUserRequirement());
-                if (!authorizationResult.Succeeded)
-                {
-                    return new ForbidResult();
-                }
-                return await this.userRepository.UpdatePassword(model);
-            }
-            catch (Exception ex)
-            {
+            var userId = this.userResolverService.GetNameIdentifier();
+            if (userId != null)
+                model.Id = userId;
 
-                return BadRequest(ex.Message);
+            var authorizationResult = await this.authorizationService.AuthorizeAsync(User, new ApplicationUser { Id = model.Id }, new EditUserRequirement());
+            if (!authorizationResult.Succeeded)
+            {
+                return new ForbidResult();
             }
+
+            return await this.userRepository.UpdatePassword(model);
         }
     }
 }

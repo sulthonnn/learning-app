@@ -47,7 +47,6 @@ namespace ServiceLearningApp.Data
         {
             ApplicationUser? user = null;
 
-            // Attempt to find user by username
             if (!string.IsNullOrEmpty(model.UserName))
             {
                 user = await userManager.FindByNameAsync(model.UserName);
@@ -64,7 +63,8 @@ namespace ServiceLearningApp.Data
             {
                 return new BadRequestObjectResult(new
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = "Bad Request",
                     Message = "Username atau password salah"
                 });
             }
@@ -73,7 +73,8 @@ namespace ServiceLearningApp.Data
             if (checkPasswordResult != PasswordVerificationResult.Success)
                 return new BadRequestObjectResult(new
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = "Bad Request",
                     Message = "Username atau password salah"
                 });
 
@@ -82,6 +83,9 @@ namespace ServiceLearningApp.Data
 
             return new OkObjectResult(new
             {
+                Code = StatusCodes.Status200OK,
+                Status = "Ok",
+                Message = "Berhasil login",
                 requestAt,
                 expiresIn = TokenAuthOptions.ExpiresSpan.TotalSeconds,
                 tokenType = TokenAuthOptions.TokenType,
@@ -98,42 +102,68 @@ namespace ServiceLearningApp.Data
 
                 var user = await CreateStudentUser(model);
 
-                return new OkObjectResult(new { StatusCode = StatusCodes.Status200OK, Message = "Success", Data = user.Id });
+                var responseData = new
+                {
+                    user.Id,
+                    user.UserName,
+                    user.NISN,
+                    user.FullName
+                };
+
+                return new CreatedResult("", new 
+                { 
+                    Code = StatusCodes.Status201Created,
+                    Status = "Created",
+                    Message = "Berhasil melakukan registrasi", 
+                    Data = responseData 
+                });
             }
             catch (ValidationException ex)
             {
                 var errorMessage = ex.Errors.FirstOrDefault()?.ErrorMessage;
-                return new BadRequestObjectResult(new { StatusCode = StatusCodes.Status400BadRequest, Message = errorMessage });
+                return new BadRequestObjectResult(new 
+                { 
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = "Bad Request",
+                    Message = errorMessage 
+                });
             }
             catch (BadHttpRequestException ex)
             {
-                var statusCode = ex.StatusCode;
-                var errorMessage = ex.Message;
-                return new BadRequestObjectResult(new { StatusCode = statusCode, Message = errorMessage });
+                return new BadRequestObjectResult(new 
+                { 
+                    Code = ex.StatusCode,
+                    Status = "Bad Request",
+                    Message = ex.Message 
+                });
             }
         }
 
-        public async Task<UserDto> GetById(string id)
+        public async Task<ActionResult<UserDto>> GetById(string id)
         {
             var user = await this.dbContext.Users
+                .Include(e => e.Image)
                 .SingleAsync(e => e.Id == id);
 
-            var roles = await userManager.GetRolesAsync(user);
-
-            var roleString = string.Join(", ", roles);
-
-            return new UserDto
+            var userDto = new UserDto
             {
                 Id = user.Id,
                 UserName = user.UserName,
                 FullName = user.FullName,
                 Email = user.Email,
                 NISN = user.NISN,
-                Role = roleString,
                 Image = user.Image,
                 FkImageId = user.FkImageId,
                 DateOfBirth = user.DateOfBirth
             };
+
+            return new OkObjectResult(new
+            {
+                Code = StatusCodes.Status200OK,
+                Status = "Ok",
+                Message = "Data user berhasil didapatkan",
+                Data = userDto
+            });
         }
 
 
@@ -147,7 +177,12 @@ namespace ServiceLearningApp.Data
                     var existingUser = await userManager.FindByIdAsync(model.Id);
                     if (existingUser == null)
                     {
-                        return new NotFoundObjectResult(new { StatusCode = StatusCodes.Status404NotFound, Message = "User tidak ditemukan" });
+                        return new NotFoundObjectResult(new 
+                        { 
+                            Code = StatusCodes.Status404NotFound, 
+                            Status = "Not Found",
+                            Message = "User tidak ditemukan"
+                        });
 
                     }
 
@@ -168,12 +203,22 @@ namespace ServiceLearningApp.Data
                     }
 
                     transaction.Commit();
-                    return new OkObjectResult(new { StatusCode = StatusCodes.Status200OK, Message = "Sukses mengubah profil" });
+
+                    return new OkObjectResult(new 
+                    { 
+                        Code = StatusCodes.Status200OK,
+                        Status = "Ok",
+                        Message = "Berhasil mengubah profil",
+                        Data = model
+                    });
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     transaction.Rollback();
-                    throw;
+                    return new ObjectResult(new
+                    {
+                        Message = ex.Message,
+                    });
                 }
             }
 
@@ -181,30 +226,46 @@ namespace ServiceLearningApp.Data
 
         public async Task<IActionResult> UpdatePassword(UpdatePasswordDto model)
         {
-
-            // Validasi input menggunakan FluentValidation
             var validator = new UpdatePasswordValidators();
             var validationResult = validator.Validate(model);
             if (!validationResult.IsValid)
             {
-                return new BadRequestObjectResult(new { StatusCode = StatusCodes.Status400BadRequest, Message = validationResult.Errors.First().ErrorMessage });
+                return new BadRequestObjectResult(new 
+                { 
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = "Bad Request",
+                    Message = validationResult.Errors.First().ErrorMessage 
+                });
             }
 
-            // Temukan pengguna berdasarkan UserId
             var user = await userManager.FindByIdAsync(model.Id);
             if (user == null)
             {
-                return new NotFoundObjectResult(new { StatusCode = StatusCodes.Status404NotFound, Message = "User tidak ditemukan" });
+                return new NotFoundObjectResult(new 
+                { 
+                    Code = StatusCodes.Status404NotFound,
+                    Status = "Bad Request",
+                    Message = "User tidak ditemukan" 
+                });
             }
 
-            // Perbarui kata sandi
             var changePasswordResult = await userManager.ChangePasswordAsync(user, model.PasswordOld, model.Password);
             if (!changePasswordResult.Succeeded)
             {
-                return new BadRequestObjectResult(new { StatusCode = StatusCodes.Status400BadRequest, Message = "Gagal mengubah password" });
+                return new BadRequestObjectResult(new 
+                { 
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = "Bad Request",
+                    Message = "Gagal mengubah password"
+                });
             }
 
-            return new OkObjectResult(new { StatusCode = StatusCodes.Status200OK, Message = "Sukses mengubah password" });
+            return new OkObjectResult(new 
+            { 
+                Code = StatusCodes.Status200OK,
+                Status = "Ok",
+                Message = "Sukses mengubah password"
+            });
         }
 
         private async Task<ApplicationUser> CreateStudentUser(RegistrationDto model)

@@ -32,8 +32,9 @@ namespace ServiceLearningApp.Controllers
 
             return new OkObjectResult(new
             {
-                StatusCode = StatusCodes.Status200OK,
-                Message = "Success",
+                Code = StatusCodes.Status200OK,
+                Status = "Ok",
+                Message = "Data subbab berhasil didapatkan",
                 Data = SubChapters
             });
         }
@@ -47,15 +48,17 @@ namespace ServiceLearningApp.Controllers
             {
                 return new BadRequestObjectResult(new
                 {
-                    StatusCode = StatusCodes.Status404NotFound,
+                    Code = StatusCodes.Status404NotFound,
+                    Status = "Not Found",
                     Message = "Data tidak ditemukan"
                 });
             }
 
             return new OkObjectResult(new
             {
-                StatusCode = StatusCodes.Status200OK,
-                Message = "Success",
+                Code = StatusCodes.Status200OK,
+                Status = "Ok",
+                Message = "Data subbab berhasil didapatkan",
                 Data = SubChapter
             });
         }
@@ -67,10 +70,11 @@ namespace ServiceLearningApp.Controllers
 
             await this.subChapterRepository.PostAsync(SubChapter);
 
-            return new OkObjectResult(new
+            return new CreatedResult("", new
             {
-                StatusCode = StatusCodes.Status200OK,
-                Message = "Success",
+                Code = StatusCodes.Status201Created,
+                Status = "Ok",
+                Message = "Data subbab berhasil dibuat",
                 Data = this.mapper.Map<SubChapter, SubChapterDto>(SubChapter)
             });
         }
@@ -85,7 +89,8 @@ namespace ServiceLearningApp.Controllers
             {
                 return new BadRequestObjectResult(new
                 {
-                    StatusCode = StatusCodes.Status404NotFound,
+                    Code = StatusCodes.Status404NotFound,
+                    Status = "Not Found",
                     Message = "Data tidak ditemukan"
                 });
             }
@@ -99,8 +104,9 @@ namespace ServiceLearningApp.Controllers
 
             return new OkObjectResult(new
             {
-                StatusCode = StatusCodes.Status200OK,
-                Message = "Success",
+                Code = StatusCodes.Status200OK,
+                Status = "Ok",
+                Message = "Data subbab berhasil diubah",
                 Data = this.mapper.Map<SubChapter, SubChapterDto>(existingSubChapter)
             });
         }
@@ -114,7 +120,8 @@ namespace ServiceLearningApp.Controllers
             {
                 return new BadRequestObjectResult(new
                 {
-                    StatusCode = StatusCodes.Status404NotFound,
+                    Code = StatusCodes.Status404NotFound,
+                    Status = "Not Found",
                     Message = "Data tidak ditemukan"
                 });
             }
@@ -123,8 +130,9 @@ namespace ServiceLearningApp.Controllers
 
             return new OkObjectResult(new
             {
-                StatusCode = StatusCodes.Status200OK,
-                Message = "Success",
+                Code = StatusCodes.Status200OK,
+                Status = "Ok",
+                Message = "Data subbab berhasil dihapus",
                 Data = this.mapper.Map<SubChapter, SubChapterDto>(SubChapter)
             });
         }
@@ -138,8 +146,9 @@ namespace ServiceLearningApp.Controllers
                 var upload = await uploadRepository.UploadFileAsync(model);
                 return new OkObjectResult(new
                 {
-                    StatusCode = StatusCodes.Status200OK,
-                    Message = "Success",
+                    Code = StatusCodes.Status200OK,
+                    Status = "Ok",
+                    Message = "File subbab berhasil di-upload",
                     Data = upload
                 });
             }

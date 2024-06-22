@@ -74,7 +74,7 @@ namespace ServiceLearningApp.Controllers
 
             await this.questionRepository.PostAsync(Question);
 
-            return new OkObjectResult(new
+            return new CreatedResult("", new
             {
                 Code = StatusCodes.Status201Created,
                 Status = "Created",

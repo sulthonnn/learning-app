@@ -3,26 +3,44 @@ using ServiceLearningApp.Interfaces;
 using ServiceLearningApp.Model;
 using ServiceLearningApp.Helpers;
 using ServiceLearningApp.Model.Dto;
+using ServiceEsgDataHub.Services;
 
 namespace ServiceLearningApp.Data
 {
     public class ExerciseTransactionRepository : IExerciseTransactionRepository
     {
         private readonly ApplicationDbContext dbContext;
+        private readonly UserResolverService userResolverService;
 
-        public ExerciseTransactionRepository(ApplicationDbContext dbContext)
+        public ExerciseTransactionRepository(ApplicationDbContext dbContext, UserResolverService userResolverService)
         {
             this.dbContext = dbContext;
+            this.userResolverService = userResolverService;
         }
 
         public async Task<IReadOnlyList<ExerciseTransaction>> GetAllAsync(QueryParams? queryParams)
         {
-            IQueryable<ExerciseTransaction> query = this.dbContext.ExerciseTransactions;
+            var userId = this.userResolverService.GetNameIdentifier();
+            var userRole = this.userResolverService.GetRole();
+
+            IQueryable<ExerciseTransaction> query = this.dbContext.ExerciseTransactions
+                .Include(e => e.SubChapter)
+                .Include(e => e.User)
+                .Include(e => e.HistoryAnswer)
+                    .ThenInclude(h => h.Question)  // Include Question in HistoryAnswer
+                .Include(e => e.HistoryAnswer)
+                    .ThenInclude(h => h.Option);
+
+            if (userRole == Role.Student)
+            {
+                query = query.Where(e => e.FkUserId == userId);
+            }
 
             // Filtering&Sorting
             query = ApplyFilterAndSort(query, queryParams);
             // Pagination
             query = ApplyPagination(query, queryParams);
+
 
             return await query
                 .AsNoTracking()
@@ -30,13 +48,14 @@ namespace ServiceLearningApp.Data
         }
         public async Task<IReadOnlyList<ExerciseTransactionDto>> GetAllAsyncDto(QueryParams? queryParams)
         {
-            // Ambil query dari DbContext
             IQueryable<ExerciseTransaction> query = this.dbContext.ExerciseTransactions
                 .Include(e => e.SubChapter)
                 .Include(e => e.User)
-                .Include(e => e.HistoryAnswer);
+                .Include(e => e.HistoryAnswer)
+                    .ThenInclude(h => h.Question)
+                .Include(e => e.HistoryAnswer)
+                    .ThenInclude(h => h.Option);
 
-            // Filtering & Sorting
             query = ApplyFilterAndSort(query, queryParams);
             query = ApplyPagination(query, queryParams);
 
@@ -54,8 +73,11 @@ namespace ServiceLearningApp.Data
                     UserFullName = e.User.FullName,
                     HistoryAnswer = e.HistoryAnswer.Select(h => new HistoryAnswerDto
                     {
+                        Id = h.Id,
                         FkQuestionId = h.FkQuestionId,
+                        Question = h.Question.QuestionText,
                         FkOptionId = h.FkOptionId,
+                        Option = h.Option.OptionText
                     }).ToList()
                 })
                 .AsNoTracking()
@@ -67,21 +89,31 @@ namespace ServiceLearningApp.Data
 
         public async Task<ExerciseTransaction> GetAsync(int id)
         {
-            return await this.dbContext.ExerciseTransactions
-                .Include(e => e.User)
+            var userId = this.userResolverService.GetNameIdentifier();
+            var userRole = this.userResolverService.GetRole();
+
+            IQueryable<ExerciseTransaction> query = this.dbContext.ExerciseTransactions
                 .Include(e => e.SubChapter)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(c => c.Id == id);
+                .Include(e => e.User)
+                .Include(e => e.HistoryAnswer)
+                    .ThenInclude(h => h.Question)  // Include Question in HistoryAnswer
+                .Include(e => e.HistoryAnswer)
+                    .ThenInclude(h => h.Option)
+                .AsNoTracking();
+
+            if (userRole == Role.Student)
+            {
+                query = query.Where(e => e.FkUserId == userId);
+            }
+
+            var exerciseTransaction = await query.FirstOrDefaultAsync(c => c.Id == id);
+
+            return exerciseTransaction;
         }
 
 
         public async Task PostAsync(ExerciseTransaction entity)
         {
-            if (entity.HistoryAnswer == null || !entity.HistoryAnswer.Any())
-            {
-                throw new ArgumentException("History Answer tidak boleh kosong");
-            }
-
             using (var transaction = await dbContext.Database.BeginTransactionAsync())
             {
                 try
@@ -194,17 +226,17 @@ namespace ServiceLearningApp.Data
                     UserFullName = u.User.FullName,
                     TotalScore = u.TotalScore,
                     AverageTime = u.Transactions.Count > 0 ? (u.TotalSeconds / u.Transactions.Count) : 0m,
-                    ExerciseTransactions = u.Transactions.Select(t => new ExerciseTransactionDto
-                    {
-                        Id = t.Id,
-                        StartDate = t.StartDate,
-                        EndDate = t.EndDate,
-                        CorrectAnswer = t.CorrectAnswer,
-                        IncorrectAnswer = t.IncorrectAnswer,
-                        Score = t.Score,
-                        SubChapter = t.SubChapter.Title,
-                        UserFullName = t.User.FullName
-                    }).ToList()
+                    //ExerciseTransactions = u.Transactions.Select(t => new ExerciseTransactionDto
+                    //{
+                    //    Id = t.Id,
+                    //    StartDate = t.StartDate,
+                    //    EndDate = t.EndDate,
+                    //    CorrectAnswer = t.CorrectAnswer,
+                    //    IncorrectAnswer = t.IncorrectAnswer,
+                    //    Score = t.Score,
+                    //    SubChapter = t.SubChapter.Title,
+                    //    UserFullName = t.User.FullName
+                    //}).ToList()
                 })
                 .ToList();
 
@@ -273,17 +305,17 @@ namespace ServiceLearningApp.Data
                     UserFullName = u.User.FullName,
                     TotalScore = u.TotalScore,
                     AverageTime = u.Chapters.Count > 0 ? (u.TotalSeconds / u.Chapters.Count) : 0m,
-                    ExerciseTransactions = u.Chapters.SelectMany(c => c.Transactions.Select(t => new ExerciseTransactionDto
-                    {
-                        Id = t.Id,
-                        StartDate = t.StartDate,
-                        EndDate = t.EndDate,
-                        CorrectAnswer = t.CorrectAnswer,
-                        IncorrectAnswer = t.IncorrectAnswer,
-                        Score = t.Score,
-                        SubChapter = t.SubChapter.Title,
-                        UserFullName = t.User.FullName
-                    })).ToList()
+                    //ExerciseTransactions = u.Chapters.SelectMany(c => c.Transactions.Select(t => new ExerciseTransactionDto
+                    //{
+                    //    Id = t.Id,
+                    //    StartDate = t.StartDate,
+                    //    EndDate = t.EndDate,
+                    //    CorrectAnswer = t.CorrectAnswer,
+                    //    IncorrectAnswer = t.IncorrectAnswer,
+                    //    Score = t.Score,
+                    //    SubChapter = t.SubChapter.Title,
+                    //    UserFullName = t.User.FullName
+                    //})).ToList()
                 })
                 .ToList();
 
@@ -316,6 +348,7 @@ namespace ServiceLearningApp.Data
 
         private IQueryable<ExerciseTransaction> ApplyFilterAndSort(IQueryable<ExerciseTransaction> query, QueryParams? queryParams)
         {
+
             // Filtering
             if (!string.IsNullOrEmpty(queryParams.Search))
             {
