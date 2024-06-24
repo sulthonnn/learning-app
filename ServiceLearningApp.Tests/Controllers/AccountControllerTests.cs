@@ -19,7 +19,7 @@ namespace ServiceLearningApp.Tests.Controllers
         public async Task Login_ValidCredentials_ReturnsToken()
         {
             // Arrange
-            var userRepository = A.Fake<IUserRepository>();
+            var accountRepository = A.Fake<IAccountRepository>();
             var authorizationService = A.Fake<IAuthorizationService>();
             var userResolverService = A.Fake<UserResolverService>();
 
@@ -58,9 +58,9 @@ namespace ServiceLearningApp.Tests.Controllers
             loginDto.UserName.Should().Match(validUsername);
             loginDto.Password.Should().Match(validPassword);
 
-            A.CallTo(() => userRepository.Login(loginDto)).Returns(Task.FromResult<IActionResult>(new OkObjectResult(tokenResponse)));
+            A.CallTo(() => accountRepository.Login(loginDto)).Returns(Task.FromResult<IActionResult>(new OkObjectResult(tokenResponse)));
 
-            var controller = new AccountController(userRepository, authorizationService, userResolverService);
+            var controller = new AccountController(accountRepository, authorizationService, userResolverService);
 
             // Act
             var result = await controller.Login(loginDto);
@@ -77,7 +77,7 @@ namespace ServiceLearningApp.Tests.Controllers
         public async Task Login_InvalidCredentials_ReturnsBadRequest()
         {
             // Arrange
-            var userRepository = A.Fake<IUserRepository>();
+            var accountRepository = A.Fake<IAccountRepository>();
             var authorizationService = A.Fake<IAuthorizationService>();
             var userResolverService = A.Fake<UserResolverService>();
 
@@ -97,9 +97,9 @@ namespace ServiceLearningApp.Tests.Controllers
                 Message = "Username atau password salah"
             };
 
-            A.CallTo(() => userRepository.Login(loginDto)).Returns(Task.FromResult<IActionResult>(new BadRequestObjectResult(errorResponse)));
+            A.CallTo(() => accountRepository.Login(loginDto)).Returns(Task.FromResult<IActionResult>(new BadRequestObjectResult(errorResponse)));
 
-            var controller = new AccountController(userRepository, authorizationService, userResolverService);
+            var controller = new AccountController(accountRepository, authorizationService, userResolverService);
 
             // Act
             var result = await controller.Login(loginDto);
@@ -117,7 +117,7 @@ namespace ServiceLearningApp.Tests.Controllers
         public async Task Register_ValidRegistration_ReturnsOkWithUserId()
         {
             // Arrange
-            var userRepository = A.Fake<IUserRepository>();
+            var accountRepository = A.Fake<IAccountRepository>();
             var authorizationService = A.Fake<IAuthorizationService>();
             var userResolverService = A.Fake<UserResolverService>();
 
@@ -162,9 +162,9 @@ namespace ServiceLearningApp.Tests.Controllers
                 Data = registrationDto
             };
 
-            A.CallTo(() => userRepository.Register(registrationDto)).Returns(Task.FromResult<IActionResult>(new CreatedResult("", successResponse)));
+            A.CallTo(() => accountRepository.Register(registrationDto)).Returns(Task.FromResult<IActionResult>(new CreatedResult("", successResponse)));
 
-            var controller = new AccountController(userRepository, authorizationService, userResolverService);
+            var controller = new AccountController(accountRepository, authorizationService, userResolverService);
 
             // Act
             var result = await controller.Register(registrationDto);
@@ -182,7 +182,7 @@ namespace ServiceLearningApp.Tests.Controllers
         public async Task Register_InvalidNull_ReturnsBadRequest()
         {
             // Arrange
-            var userRepository = A.Fake<IUserRepository>();
+            var accountRepository = A.Fake<IAccountRepository>();
             var authorizationService = A.Fake<IAuthorizationService>();
             var userResolverService = A.Fake<UserResolverService>();
 
@@ -204,9 +204,9 @@ namespace ServiceLearningApp.Tests.Controllers
                 Message = "Nama lengkap tidak boleh kosong" // Pesan kesalahan validasi
             };
 
-            A.CallTo(() => userRepository.Register(registrationDto)).Returns(Task.FromResult<IActionResult>(new BadRequestObjectResult(errorResponse)));
+            A.CallTo(() => accountRepository.Register(registrationDto)).Returns(Task.FromResult<IActionResult>(new BadRequestObjectResult(errorResponse)));
 
-            var controller = new AccountController(userRepository, authorizationService, userResolverService);
+            var controller = new AccountController(accountRepository, authorizationService, userResolverService);
 
             // Act
             var result = await controller.Register(registrationDto);
@@ -223,7 +223,7 @@ namespace ServiceLearningApp.Tests.Controllers
         public async Task Register_InvalidUserName_ReturnsBadRequest()
         {
             // Arrange
-            var userRepository = A.Fake<IUserRepository>();
+            var accountRepository = A.Fake<IAccountRepository>();
             var authorizationService = A.Fake<IAuthorizationService>();
             var userResolverService = A.Fake<UserResolverService>();
 
@@ -246,9 +246,9 @@ namespace ServiceLearningApp.Tests.Controllers
                 Message = "Username sudah digunakan." // Pesan kesalahan validasi
             };
 
-            A.CallTo(() => userRepository.Register(registrationDto)).Returns(Task.FromResult<IActionResult>(new BadRequestObjectResult(errorResponse)));
+            A.CallTo(() => accountRepository.Register(registrationDto)).Returns(Task.FromResult<IActionResult>(new BadRequestObjectResult(errorResponse)));
 
-            var controller = new AccountController(userRepository, authorizationService, userResolverService);
+            var controller = new AccountController(accountRepository, authorizationService, userResolverService);
 
             // Act
             var result = await controller.Register(registrationDto);
@@ -265,7 +265,7 @@ namespace ServiceLearningApp.Tests.Controllers
         public async Task Register_InvalidNISN_ReturnsBadRequest()
         {
             // Arrange
-            var userRepository = A.Fake<IUserRepository>();
+            var accountRepository = A.Fake<IAccountRepository>();
             var authorizationService = A.Fake<IAuthorizationService>();
             var userResolverService = A.Fake<UserResolverService>();
 
@@ -289,9 +289,9 @@ namespace ServiceLearningApp.Tests.Controllers
                 Message = "NISN sudah digunakan." // Pesan kesalahan validasi
             };
 
-            A.CallTo(() => userRepository.Register(registrationDto)).Returns(Task.FromResult<IActionResult>(new BadRequestObjectResult(errorResponse)));
+            A.CallTo(() => accountRepository.Register(registrationDto)).Returns(Task.FromResult<IActionResult>(new BadRequestObjectResult(errorResponse)));
 
-            var controller = new AccountController(userRepository, authorizationService, userResolverService);
+            var controller = new AccountController(accountRepository, authorizationService, userResolverService);
 
             // Act
             var result = await controller.Register(registrationDto);
@@ -309,7 +309,7 @@ namespace ServiceLearningApp.Tests.Controllers
         public async Task Register_InvalidPassword_ReturnsBadRequest()
         {
             // Arrange
-            var userRepository = A.Fake<IUserRepository>();
+            var accountRepository = A.Fake<IAccountRepository>();
             var authorizationService = A.Fake<IAuthorizationService>();
             var userResolverService = A.Fake<UserResolverService>();
 
@@ -332,9 +332,9 @@ namespace ServiceLearningApp.Tests.Controllers
                 Message = "Kata sandi dan ulangi kata sandi harus sama." // Pesan kesalahan validasi
             };
 
-            A.CallTo(() => userRepository.Register(registrationDto)).Returns(Task.FromResult<IActionResult>(new BadRequestObjectResult(errorResponse)));
+            A.CallTo(() => accountRepository.Register(registrationDto)).Returns(Task.FromResult<IActionResult>(new BadRequestObjectResult(errorResponse)));
 
-            var controller = new AccountController(userRepository, authorizationService, userResolverService);
+            var controller = new AccountController(accountRepository, authorizationService, userResolverService);
 
             // Act
             var result = await controller.Register(registrationDto);

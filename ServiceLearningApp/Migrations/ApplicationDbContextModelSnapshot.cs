@@ -260,7 +260,7 @@ namespace ServiceLearningApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Chapters");
+                    b.ToTable("Chapters", (string)null);
                 });
 
             modelBuilder.Entity("ServiceLearningApp.Model.ExerciseTransaction", b =>
@@ -299,7 +299,7 @@ namespace ServiceLearningApp.Migrations
 
                     b.HasIndex("FkUserId");
 
-                    b.ToTable("ExerciseTransactions");
+                    b.ToTable("ExerciseTransactions", (string)null);
                 });
 
             modelBuilder.Entity("ServiceLearningApp.Model.HistoryAnswer", b =>
@@ -327,7 +327,7 @@ namespace ServiceLearningApp.Migrations
 
                     b.HasIndex("FkQuestionId");
 
-                    b.ToTable("HistoryAnswers");
+                    b.ToTable("HistoryAnswers", (string)null);
                 });
 
             modelBuilder.Entity("ServiceLearningApp.Model.Option", b =>
@@ -364,7 +364,7 @@ namespace ServiceLearningApp.Migrations
 
                     b.HasIndex("FkQuestionId");
 
-                    b.ToTable("Options");
+                    b.ToTable("Options", (string)null);
                 });
 
             modelBuilder.Entity("ServiceLearningApp.Model.Question", b =>
@@ -406,7 +406,7 @@ namespace ServiceLearningApp.Migrations
 
                     b.HasIndex("FkSubChapterId");
 
-                    b.ToTable("Questions");
+                    b.ToTable("Questions", (string)null);
                 });
 
             modelBuilder.Entity("ServiceLearningApp.Model.SubChapter", b =>
@@ -448,7 +448,7 @@ namespace ServiceLearningApp.Migrations
 
                     b.HasIndex("FkUploadId");
 
-                    b.ToTable("SubChapters");
+                    b.ToTable("SubChapters", (string)null);
                 });
 
             modelBuilder.Entity("ServiceLearningApp.Model.Upload", b =>
@@ -490,7 +490,7 @@ namespace ServiceLearningApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Uploads");
+                    b.ToTable("Uploads", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

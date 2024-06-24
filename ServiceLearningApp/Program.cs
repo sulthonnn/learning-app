@@ -20,7 +20,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddTransient<UserResolverService, UserResolverService>();
-builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<IAccountRepository, AccountRepository>();
 builder.Services.AddTransient<IStorageService, FileStorageService>();
 
 builder.Services.AddScoped<IChapterRepository, ChapterRepository>();

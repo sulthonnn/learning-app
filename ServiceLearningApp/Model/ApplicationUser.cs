@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ServiceLearningApp.Model
@@ -7,7 +8,7 @@ namespace ServiceLearningApp.Model
     {
         public override string UserName { get => base.UserName; set => base.UserName = value; }
         public override string? Email { get => base.Email; set => base.Email = value; }
-        public override string PasswordHash { get => base.PasswordHash; set => base.PasswordHash = value; }
+        public override string PasswordHash { get => base.PasswordHash; set => base.PasswordHash = value; }        
         public string? NISN { get; set; }
         public string? FullName { get; set; }
         public DateTime? DateOfBirth { get; set; }

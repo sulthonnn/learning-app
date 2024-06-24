@@ -5,7 +5,7 @@ using ServiceLearningApp.Model.Dto;
 
 namespace ServiceLearningApp.Interfaces
 {
-    public interface IUserRepository
+    public interface IAccountRepository
     {
         Task<ActionResult<UserDto>> GetById(string id);
         Task<IActionResult> Login(LoginDto loginDto);

@@ -16,17 +16,17 @@ using System.Security.Claims;
 
 namespace ServiceLearningApp.Data
 {
-    public class UserRepository : ControllerBase, IUserRepository
+    public class AccountRepository : IAccountRepository
     {
         private readonly ApplicationDbContext dbContext;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
-        private readonly IConfiguration configuration;
+        //private readonly IConfiguration configuration;
         private readonly TokenAuthOptions tokenOptions;
         private readonly IAuthorizationService authorizationService;
 
 
-        public UserRepository(
+        public AccountRepository(
             ApplicationDbContext dbContext,
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,

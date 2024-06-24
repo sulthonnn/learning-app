@@ -15,13 +15,13 @@ namespace ServiceLearningApp.Controllers
     [Authorize(Policy = "Bearer")]
     public class AccountController : Controller
     {
-        private readonly IUserRepository userRepository;
+        private readonly IAccountRepository accountRepository;
         private readonly IAuthorizationService authorizationService;
         private readonly UserResolverService userResolverService;
 
-        public AccountController(IUserRepository userRepository, IAuthorizationService authorizationService, UserResolverService userResolverService)
+        public AccountController(IAccountRepository accountRepository, IAuthorizationService authorizationService, UserResolverService userResolverService)
         {
-            this.userRepository = userRepository;
+            this.accountRepository = accountRepository;
             this.authorizationService = authorizationService;
             this.userResolverService = userResolverService;
         }
@@ -30,14 +30,14 @@ namespace ServiceLearningApp.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginDto model)
         {
-            return await this.userRepository.Login(model);
+            return await this.accountRepository.Login(model);
         }
 
         [HttpPost("register")]
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegistrationDto model)
         {
-            return await this.userRepository.Register(model);
+            return await this.accountRepository.Register(model);
         }
 
         [HttpGet("user/{id}")]
@@ -54,7 +54,7 @@ namespace ServiceLearningApp.Controllers
                 });
             }
 
-            return await this.userRepository.GetById(id);
+            return await this.accountRepository.GetById(id);
         }
 
         [HttpPut("user/profile")]
@@ -67,7 +67,7 @@ namespace ServiceLearningApp.Controllers
             {
                 return new ForbidResult();
             }
-            return await this.userRepository.UpdateProfile(model);
+            return await this.accountRepository.UpdateProfile(model);
         }
 
         [HttpPut("user/profile/password")]
@@ -83,7 +83,7 @@ namespace ServiceLearningApp.Controllers
                 return new ForbidResult();
             }
 
-            return await this.userRepository.UpdatePassword(model);
+            return await this.accountRepository.UpdatePassword(model);
         }
     }
 }
