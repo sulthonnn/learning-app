@@ -25,16 +25,16 @@ namespace ServiceLearningApp.Controllers
         [Authorize(Policy = "Student")]
         public async Task<IActionResult> GetAllChapter([FromQuery] QueryParams? queryParams)
         {
-            var chapters = await this.chapterRepository.GetAllAsync(queryParams);
+                var chapters = await this.chapterRepository.GetAllAsync(queryParams);
 
-            return new OkObjectResult(new
-            {
-                Code = StatusCodes.Status200OK,
-                Status = "Ok",
-                Message = "Data bab berhasil didapatkan",
-                Data = chapters
-            });
-        }
+                return new OkObjectResult(new
+                {
+                    Code = StatusCodes.Status200OK,
+                    Status = "Ok",
+                    Message = "Data bab berhasil didapatkan",
+                    Data = chapters
+                });
+            }
 
         [HttpGet("{id}")]
         [Authorize(Policy = "Student")]

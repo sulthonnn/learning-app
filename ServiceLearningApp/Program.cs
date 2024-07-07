@@ -13,7 +13,9 @@ using ServiceLearningApp.Interfaces;
 using ServiceLearningApp.Model;
 using ServiceLearningApp.Security;
 using ServiceLearningApp.Storage;
+using System.Net;
 using System.Text;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -148,6 +150,28 @@ app.UseCors(opt =>
     opt.AllowAnyMethod();
     opt.AllowCredentials(); 
 });
+
+app.Use(async (context, next) =>
+{
+    await next();
+
+    if (context.Response.StatusCode == (int) HttpStatusCode.Unauthorized) // 401
+    {
+        context.Response.ContentType = "application/json";
+
+        var response = new
+        {
+            Code = StatusCodes.Status401Unauthorized,
+            Status = "Unauthorized",
+            Message = "Anda tidak memiliki izin untuk mengakses sumber daya ini."
+        };
+
+        var jsonResponse = JsonSerializer.Serialize(response);
+
+        await context.Response.WriteAsync(jsonResponse);
+    }
+});
+
 app.UseAuthentication();
 app.UseAuthorization();
 
