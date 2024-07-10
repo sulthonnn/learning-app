@@ -14,7 +14,7 @@ namespace ServiceLearningApp.Model
 
         [ForeignKey(nameof(FkUploadId))]
         public Upload? Upload { get; set; }
-        public int? FkUploadId { get; set; }
+        public int FkUploadId { get; set; }
 
     }
 }
