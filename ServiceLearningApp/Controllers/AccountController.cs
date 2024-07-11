@@ -60,12 +60,15 @@ namespace ServiceLearningApp.Controllers
         [HttpPut("user/profile")]
         public async Task<IActionResult> UpdateProfile([FromBody] UserDto model)
         {
-            var userId = User.Claims.First(e => e.Type == ClaimTypes.NameIdentifier).Value;
-
-            var authorizationResult = await this.authorizationService.AuthorizeAsync(User, new ApplicationUser { Id = userId }, new EditUserRequirement());
+            var authorizationResult = await this.authorizationService.AuthorizeAsync(User, new ApplicationUser { Id = model.Id }, new EditUserRequirement());
             if (!authorizationResult.Succeeded)
             {
-                return new ForbidResult();
+                return new BadRequestObjectResult(new
+                {
+                    Code = StatusCodes.Status403Forbidden,
+                    Status = "Forbidden",
+                    Message = "Anda tidak memiliki izin untuk mengakses sumber daya ini."
+                });
             }
             return await this.accountRepository.UpdateProfile(model);
         }
@@ -75,12 +78,19 @@ namespace ServiceLearningApp.Controllers
         {
             var userId = this.userResolverService.GetNameIdentifier();
             if (userId != null)
+            {
                 model.Id = userId;
+            }
 
             var authorizationResult = await this.authorizationService.AuthorizeAsync(User, new ApplicationUser { Id = model.Id }, new EditUserRequirement());
             if (!authorizationResult.Succeeded)
             {
-                return new ForbidResult();
+                return new BadRequestObjectResult(new
+                {
+                    Code = StatusCodes.Status403Forbidden,
+                    Status = "Forbidden",
+                    Message = "Anda tidak memiliki izin untuk mengakses sumber daya ini."
+                });
             }
 
             return await this.accountRepository.UpdatePassword(model);

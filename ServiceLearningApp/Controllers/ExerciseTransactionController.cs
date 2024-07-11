@@ -33,7 +33,7 @@ namespace ServiceLearningApp.Controllers
                 Code = StatusCodes.Status200OK,
                 Status = "Ok",
                 Message = "Data latihan soal yang sudah dikerjakan berhasil didapatkan",
-                Data = this.mapper.Map<IReadOnlyList<ExerciseTransactionDto>>(exerciseTransactions)
+                Data = this.mapper.Map<IReadOnlyList<ExerciseTransactionListDto>>(exerciseTransactions)
             });
         }
 
@@ -120,7 +120,7 @@ namespace ServiceLearningApp.Controllers
                 Code = StatusCodes.Status200OK,
                 Status = "Ok",
                 Message = "History jawaban pertanyaan berhasil didapatkan",
-                Data = historyAnswers
+                Data = this.mapper.Map<IReadOnlyList<HistoryAnswer>, IReadOnlyList<HistoryAnswerDto>>(historyAnswers)
             });
         }
 

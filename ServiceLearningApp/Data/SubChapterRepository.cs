@@ -38,7 +38,12 @@ namespace ServiceLearningApp.Data
 
         public async Task PostAsync(SubChapter entity)
         {
+
             await this.dbContext.SubChapters.AddAsync(entity);
+
+            if (entity.FkUploadId == 0 || entity.FkUploadId == null)
+                throw new ArgumentNullException();
+
             await this.dbContext.SaveChangesAsync();
         }
 

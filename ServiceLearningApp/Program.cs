@@ -155,7 +155,7 @@ app.Use(async (context, next) =>
 {
     await next();
 
-    if (context.Response.StatusCode == (int) HttpStatusCode.Unauthorized) // 401
+    if (context.Response.StatusCode == (int)HttpStatusCode.Unauthorized) // 401
     {
         context.Response.ContentType = "application/json";
 
@@ -163,14 +163,18 @@ app.Use(async (context, next) =>
         {
             Code = StatusCodes.Status401Unauthorized,
             Status = "Unauthorized",
-            Message = "Anda tidak memiliki izin untuk mengakses sumber daya ini."
+            Message = "Kredensial autentikasi tidak valid."
         };
 
         var jsonResponse = JsonSerializer.Serialize(response);
 
-        await context.Response.WriteAsync(jsonResponse);
+        if (context.Response.Body != null)
+        {
+            await context.Response.WriteAsync(jsonResponse);
+        }
     }
 });
+
 
 app.UseAuthentication();
 app.UseAuthorization();

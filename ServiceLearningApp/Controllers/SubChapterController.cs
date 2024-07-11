@@ -65,23 +65,36 @@ namespace ServiceLearningApp.Controllers
 
         [HttpPost]
         [Authorize(Policy = "Teacher")]
-        public async Task<IActionResult> CreateSubChapter([FromBody] SubChapter SubChapter)
+        public async Task<IActionResult> CreateSubChapter([FromBody] SubChapter subChapter)
         {
-
-            await this.subChapterRepository.PostAsync(SubChapter);
-
-            return new CreatedResult("", new
+            try
             {
-                Code = StatusCodes.Status201Created,
-                Status = "Ok",
-                Message = "Data subbab berhasil dibuat",
-                Data = this.mapper.Map<SubChapter, SubChapterDto>(SubChapter)
-            });
+                await this.subChapterRepository.PostAsync(subChapter);
+
+                return new CreatedResult("", new
+                {
+                    Code = StatusCodes.Status201Created,
+                    Status = "Ok",
+                    Message = "Data subbab berhasil dibuat",
+                    Data = this.mapper.Map<SubChapter, SubChapterDto>(subChapter)
+                });
+
+            }
+            catch (Exception)
+            {
+                return BadRequest(new
+                {
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = "Bad Request",
+                    Message = "File upload tidak boleh kosong"
+                });
+            }
+
         }
 
         [HttpPut("{id}")]
         [Authorize(Policy = "Teacher")]
-        public async Task<IActionResult> UpdateSubChapter(int id, [FromBody] SubChapter updatedSubChapter)
+        public async Task<IActionResult> UpdateSubChapter(int id, [FromBody] SubChapter subChapter)
         {
             var existingSubChapter = await this.subChapterRepository.GetAsync(id);
 
@@ -95,10 +108,13 @@ namespace ServiceLearningApp.Controllers
                 });
             }
 
-            existingSubChapter.Title = updatedSubChapter.Title;
-            existingSubChapter.Reference = updatedSubChapter.Reference;
-            existingSubChapter.FkChapterId = updatedSubChapter.FkChapterId;
-            existingSubChapter.FkUploadId = updatedSubChapter.FkUploadId;
+            existingSubChapter.Title = subChapter.Title;
+            existingSubChapter.Reference = subChapter.Reference;
+            existingSubChapter.FkChapterId = subChapter.FkChapterId;
+            if (subChapter.FkUploadId != 0)
+            {
+                existingSubChapter.FkUploadId = subChapter.FkUploadId;
+            }
 
             await this.subChapterRepository.PutAsync(existingSubChapter);
 
@@ -155,7 +171,8 @@ namespace ServiceLearningApp.Controllers
             catch (Exception ex)
             {
                 return new BadRequestObjectResult(new {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = "Bad Request",
                     Message = ex.Message
                 });
             }        
@@ -164,11 +181,26 @@ namespace ServiceLearningApp.Controllers
         [HttpGet("download/{folder}/{file}")]
         [Authorize(Policy = "Student")]
         [ResponseCache(Duration = 3600)]
-        public async Task<FileStreamResult> Download(string folder, string file)
+        public async Task<IActionResult> Download(string folder, string file)
         {
-            var url = Path.Combine(folder, file).Replace("\\", "/");
+            try
+            {
+                var url = Path.Combine(folder, file).Replace("\\", "/");
 
-            return await uploadRepository.DownloadAsync(url, Request.Headers.Range);
+                var fileStreamResult = await uploadRepository.DownloadAsync(url, Request.Headers.Range);
+
+                return fileStreamResult;
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(new
+                {
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = "Bad Request",
+                    Message = ex.Message
+                });
+            }
         }
+
     }
 }

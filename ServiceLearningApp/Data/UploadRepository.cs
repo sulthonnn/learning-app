@@ -95,7 +95,7 @@ namespace ServiceLearningApp.Data
             catch (Exception ex)
             {
                 if (ex is DirectoryNotFoundException || ex is FileNotFoundException)
-                    throw new InvalidOperationException("File not found", ex);
+                    throw new InvalidOperationException("File tidak ditemukan", ex);
                 throw;
             }
         }
@@ -165,11 +165,16 @@ namespace ServiceLearningApp.Data
             {
                 throw new ArgumentNullException("File tidak boleh kosong.");
             }
-
-            // Validasi jika file bukan PDF
-            if (model.File.ContentType.ToLower() != "application/pdf")
+            var allowedContentTypes = new List<string>
             {
-                throw new ArgumentException("Hanya file pdf yang diizinkan.");
+                "application/pdf",
+                "application/vnd.ms-powerpoint",
+                "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+            };
+
+            if (!allowedContentTypes.Contains(model.File.ContentType.ToLower()))
+            {
+                throw new ArgumentException("Hanya file PDF, PPT, atau PPTX yang diizinkan.");
             }
 
             var directoryPath = Path.Combine(uploadPath, Guid.NewGuid().ToString());

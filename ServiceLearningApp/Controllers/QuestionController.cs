@@ -67,10 +67,6 @@ namespace ServiceLearningApp.Controllers
         [Authorize(Policy = "Teacher")]
         public async Task<IActionResult> CreateQuestion([FromBody] Question Question)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
 
             await this.questionRepository.PostAsync(Question);
 
@@ -151,7 +147,7 @@ namespace ServiceLearningApp.Controllers
                 Code = StatusCodes.Status200OK,
                 Status = "Ok",
                 Message = "Data pertanyaan acak berdasarkan subbab berhasil didapatkan",
-                Data = randomQuestion
+                Data = this.mapper.Map<List<Question>, List<RandomQuestionDto>>(randomQuestion)
             });
         }
 
@@ -165,7 +161,7 @@ namespace ServiceLearningApp.Controllers
                 Code = StatusCodes.Status200OK,
                 Status = "Ok",
                 Message = "Data pertanyaan acak berdasarkan bab berhasil didapatkan",
-                Data = randomQuestion
+                Data = this.mapper.Map<List<Question>, List<RandomQuestionDto>>(randomQuestion)
             });
         }
 

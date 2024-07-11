@@ -32,6 +32,7 @@ namespace ServiceLearningApp.Data
             return await this.dbContext.Questions
                 .Include(e => e.SubChapter)
                 .Include(e => e.Image)
+                .Include(e => e.Options)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
@@ -124,7 +125,8 @@ namespace ServiceLearningApp.Data
         {
             query = query
                 .Include(e => e.SubChapter)
-                .Include(e => e.Image);
+                .Include(e => e.Image)
+                .Include(e => e.Options);
 
             // Filtering
             if (!string.IsNullOrEmpty(queryParams.Search))
