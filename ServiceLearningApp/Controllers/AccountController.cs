@@ -76,11 +76,6 @@ namespace ServiceLearningApp.Controllers
         [HttpPut("user/profile/password")]
         public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordDto model)
         {
-            var userId = this.userResolverService.GetNameIdentifier();
-            if (userId != null)
-            {
-                model.Id = userId;
-            }
 
             var authorizationResult = await this.authorizationService.AuthorizeAsync(User, new ApplicationUser { Id = model.Id }, new EditUserRequirement());
             if (!authorizationResult.Succeeded)

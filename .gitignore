@@ -398,4 +398,5 @@ FodyWeavers.xsd
 *.sln.iml
 
 /ServiceLearningApp/appsettings.json
+/ServiceLearningApp/appsettings.Development.json
 /ServiceLearningApp/Assets

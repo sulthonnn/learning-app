@@ -172,56 +172,5 @@ namespace ServiceLearningApp.Controllers
             });
         }
 
-        //[HttpPut("{id}")]
-        //[Authorize(Policy = "Student")]
-        //public async Task<IActionResult> UpdateExerciseTransaction(int id, [FromBody] ExerciseTransaction updatedExerciseTransaction)
-        //{
-        //    var existingExerciseTransaction = await this.exerciseTransactionRepository.GetAsync(id);
-
-        //    if (existingExerciseTransaction == null)
-        //    {
-        //        return new BadRequestObjectResult(new
-        //        {
-        //            Code = StatusCodes.Status404NotFound,
-        //            Message = "Data tidak ditemukan"
-        //        });
-        //    }
-
-        //    existingExerciseTransaction.Title = updatedExerciseTransaction.Title;
-        //    //this.mapper.Map(updatedExerciseTransaction, existingExerciseTransaction);
-
-        //    await this.exerciseTransactionRepository.PutAsync(existingExerciseTransaction);
-
-        //    return new OkObjectResult(new
-        //    {
-        //        Code = StatusCodes.Status200OK,
-        //        Message = "Success",
-        //        Data = existingExerciseTransaction
-        //    });
-        //}
-
-        // [HttpDelete("{id}")]
-        // [Authorize(Policy = "Teacher")]
-        // public async Task<IActionResult> DeleteExerciseTransaction(int id)
-        // {
-        //     var ExerciseTransaction = await this.exerciseTransactionRepository.GetAsync(id);
-        //     if (ExerciseTransaction == null)
-        //     {
-        //         return new BadRequestObjectResult(new
-        //         {
-        //             Code = StatusCodes.Status404NotFound,
-        //             Message = "Data tidak ditemukan"
-        //         });
-        //     }
-
-        //     await this.exerciseTransactionRepository.DeleteAsync(ExerciseTransaction.Id);
-            
-        //     return new OkObjectResult(new
-        //     {
-        //         Code = StatusCodes.Status200OK,
-        //         Message = "Success",
-        //         Data = this.mapper.Map<ExerciseTransaction, ExerciseTransactionDto>(ExerciseTransaction)
-        //     });
-        // }
     }
 }
